@@ -66,7 +66,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
     _playerFocusNode.dispose();
 
     // Stop playback when leaving the screen
-    context.read<PlayerProvider>().stop();
+    try {
+      context.read<PlayerProvider>().stop();
+    } catch (_) {}
 
     // Restore system UI
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -116,6 +118,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
     // Back/Exit
     if (key == LogicalKeyboardKey.escape || key == LogicalKeyboardKey.goBack) {
+      playerProvider.stop();
       Navigator.of(context).pop();
       return KeyEventResult.handled;
     }
@@ -137,51 +140,62 @@ class _PlayerScreenState extends State<PlayerScreen> {
         focusNode: _playerFocusNode,
         autofocus: true,
         onKeyEvent: _handleKeyEvent,
-        child: GestureDetector(
-          onTap: _showControlsTemporarily,
-          onDoubleTap: () {
-            context.read<PlayerProvider>().togglePlayPause();
+        child: MouseRegion(
+          onHover: (_) => _showControlsTemporarily(),
+          onExit: (_) {
+            if (mounted) {
+              _hideControlsTimer?.cancel();
+              _hideControlsTimer = Timer(const Duration(seconds: 1), () {
+                if (mounted) setState(() => _showControls = false);
+              });
+            }
           },
-          child: Stack(
-            children: [
-              // Video Player
-              _buildVideoPlayer(),
+          child: GestureDetector(
+            onTap: _showControlsTemporarily,
+            onDoubleTap: () {
+              context.read<PlayerProvider>().togglePlayPause();
+            },
+            child: Stack(
+              children: [
+                // Video Player
+                _buildVideoPlayer(),
 
-              // Controls Overlay
-              AnimatedOpacity(
-                opacity: _showControls ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 300),
-                child: IgnorePointer(
-                  ignoring: !_showControls,
-                  child: _buildControlsOverlay(),
+                // Controls Overlay
+                AnimatedOpacity(
+                  opacity: _showControls ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: IgnorePointer(
+                    ignoring: !_showControls,
+                    child: _buildControlsOverlay(),
+                  ),
                 ),
-              ),
 
-              // Loading Indicator
-              Consumer<PlayerProvider>(
-                builder: (context, provider, _) {
-                  if (provider.isLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: AppTheme.primaryColor,
-                      ),
-                    );
-                  }
-                  return const SizedBox.shrink();
-                },
-              ),
+                // Loading Indicator
+                Consumer<PlayerProvider>(
+                  builder: (context, provider, _) {
+                    if (provider.isLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppTheme.primaryColor,
+                        ),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
 
-              // Error Display
-              Consumer<PlayerProvider>(
-                builder: (context, provider, _) {
-                  if (provider.hasError) {
-                    return _buildErrorDisplay(
-                        provider.error ?? 'Unknown error');
-                  }
-                  return const SizedBox.shrink();
-                },
-              ),
-            ],
+                // Error Display
+                Consumer<PlayerProvider>(
+                  builder: (context, provider, _) {
+                    if (provider.hasError) {
+                      return _buildErrorDisplay(
+                          provider.error ?? 'Unknown error');
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -244,7 +258,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
         children: [
           // Back Button
           TVFocusable(
-            onSelect: () => Navigator.of(context).pop(),
+            onSelect: () {
+              context.read<PlayerProvider>().stop();
+              Navigator.of(context).pop();
+            },
             focusScale: 1.1,
             child: Container(
               padding: const EdgeInsets.all(8),

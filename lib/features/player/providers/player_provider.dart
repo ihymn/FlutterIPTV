@@ -71,9 +71,22 @@ class PlayerProvider extends ChangeNotifier {
     });
 
     _player!.stream.buffering.listen((buffering) {
-      if (buffering && _state != PlayerState.idle) {
-        _state = PlayerState.buffering;
-        notifyListeners();
+      if (buffering) {
+        if (_state != PlayerState.idle && _state != PlayerState.error) {
+          _state = PlayerState.buffering;
+          notifyListeners();
+        }
+      } else {
+        // Buffering finished
+        if (_state == PlayerState.buffering) {
+          // Check actual playing status
+          if (_player!.state.playing) {
+            _state = PlayerState.playing;
+          } else {
+            _state = PlayerState.paused;
+          }
+          notifyListeners();
+        }
       }
     });
 
