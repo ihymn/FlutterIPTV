@@ -37,7 +37,7 @@ jobs:
         run: flutter pub get
       
       - name: Enable Windows Desktop Support
-        run: flutter create . --platforms=windows
+        run: flutter create . --platforms=windows --project-name flutter_iptv
       
       - name: Build Windows Release
         run: flutter build windows --release

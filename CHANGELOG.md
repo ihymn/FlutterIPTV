@@ -5,6 +5,16 @@ All notable changes to FlutterIPTV will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] - 2024-12-14
+
+### Fixed
+- Fixed critical startup crash (LateInitializationError)
+- Fixed "app not responding" during M3U import using batch database insert
+- Fixed video playback continuing after exiting player screen (audio playing in background)
+- Fixed Windows CI build failure due to package name casing
+- Optimized cold start time significantly by moving heavy initialization to Splash Screen
+- Switched to Dio for more robust playlist downloading
+
 ## [1.0.2] - 2024-12-13
 
 ### Fixed
