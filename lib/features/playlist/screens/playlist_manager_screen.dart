@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
 
+import 'package:flutter_iptv/features/playlist/widgets/qr_import_dialog.dart';
+
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/tv_focusable.dart';
 import '../../../core/i18n/app_strings.dart';
@@ -141,6 +143,7 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
             const SizedBox(height: 16),
 
             // Action Buttons Row
+            // Action Buttons Row
             Row(
               children: [
                 // Add from URL Button - Order 3
@@ -182,6 +185,18 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 12),
+
+            // Scan QR Code Button - Order 5
+            FocusTraversalOrder(
+              order: const NumericFocusOrder(5),
+              child: _buildActionButton(
+                onPressed: () => _showQrImportDialog(context),
+                icon: const Icon(Icons.qr_code_scanner_rounded, size: 20),
+                label: '手机扫码导入',
+                isPrimary: false,
+              ),
             ),
 
             // Progress Indicator
@@ -739,6 +754,22 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
         );
       },
     );
+  }
+
+  Future<void> _showQrImportDialog(BuildContext context) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => const QrImportDialog(),
+    );
+
+    if (result == true && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Playlist imported successfully'),
+          backgroundColor: AppTheme.successColor,
+        ),
+      );
+    }
   }
 
   Future<void> _pickFile(PlaylistProvider provider) async {

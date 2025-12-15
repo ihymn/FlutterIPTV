@@ -1,0 +1,456 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+/// A simple local HTTP server for receiving playlist data from mobile devices
+class LocalServerService {
+  HttpServer? _server;
+  String? _localIp;
+  int _port = 8899;
+
+  // Callbacks
+  Function(String url, String name)? onUrlReceived;
+  Function(String content, String name)? onContentReceived;
+
+  bool get isRunning => _server != null;
+  String get serverUrl => 'http://$_localIp:$_port';
+  String? get localIp => _localIp;
+  int get port => _port;
+
+  /// Start the local HTTP server
+  Future<bool> start() async {
+    try {
+      // Get local IP address
+      _localIp = await _getLocalIpAddress();
+      if (_localIp == null) {
+        return false;
+      }
+
+      // Start HTTP server
+      _server = await HttpServer.bind(InternetAddress.anyIPv4, _port);
+
+      _server!.listen(_handleRequest);
+
+      return true;
+    } catch (e) {
+      print('Failed to start local server: $e');
+      return false;
+    }
+  }
+
+  /// Stop the server
+  Future<void> stop() async {
+    await _server?.close();
+    _server = null;
+  }
+
+  /// Handle incoming HTTP requests
+  void _handleRequest(HttpRequest request) async {
+    // Enable CORS
+    request.response.headers.add('Access-Control-Allow-Origin', '*');
+    request.response.headers
+        .add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    request.response.headers
+        .add('Access-Control-Allow-Headers', 'Content-Type');
+
+    // Handle preflight
+    if (request.method == 'OPTIONS') {
+      request.response.statusCode = 200;
+      await request.response.close();
+      return;
+    }
+
+    try {
+      if (request.uri.path == '/' && request.method == 'GET') {
+        // Serve the web page
+        await _serveWebPage(request);
+      } else if (request.uri.path == '/submit' && request.method == 'POST') {
+        // Handle playlist submission
+        await _handleSubmission(request);
+      } else {
+        request.response.statusCode = 404;
+        request.response.write('Not Found');
+        await request.response.close();
+      }
+    } catch (e) {
+      request.response.statusCode = 500;
+      request.response.write('Error: $e');
+      await request.response.close();
+    }
+  }
+
+  /// Serve the web page for mobile input
+  Future<void> _serveWebPage(HttpRequest request) async {
+    request.response.headers.contentType = ContentType.html;
+    request.response.write(_getWebPageHtml());
+    await request.response.close();
+  }
+
+  /// Handle playlist submission from mobile
+  Future<void> _handleSubmission(HttpRequest request) async {
+    try {
+      final content = await utf8.decoder.bind(request).join();
+      final data = json.decode(content) as Map<String, dynamic>;
+
+      final type = data['type'] as String?;
+      final name = data['name'] as String? ?? 'Imported Playlist';
+
+      if (type == 'url') {
+        final url = data['url'] as String?;
+        if (url != null && url.isNotEmpty) {
+          onUrlReceived?.call(url, name);
+          request.response.headers.contentType = ContentType.json;
+          request.response
+              .write(json.encode({'success': true, 'message': 'URL received'}));
+        } else {
+          request.response.statusCode = 400;
+          request.response.write(
+              json.encode({'success': false, 'message': 'URL is required'}));
+        }
+      } else if (type == 'content') {
+        final fileContent = data['content'] as String?;
+        if (fileContent != null && fileContent.isNotEmpty) {
+          onContentReceived?.call(fileContent, name);
+          request.response.headers.contentType = ContentType.json;
+          request.response.write(
+              json.encode({'success': true, 'message': 'Content received'}));
+        } else {
+          request.response.statusCode = 400;
+          request.response.write(json
+              .encode({'success': false, 'message': 'Content is required'}));
+        }
+      } else {
+        request.response.statusCode = 400;
+        request.response
+            .write(json.encode({'success': false, 'message': 'Invalid type'}));
+      }
+    } catch (e) {
+      request.response.statusCode = 400;
+      request.response.write(
+          json.encode({'success': false, 'message': 'Invalid request: $e'}));
+    }
+
+    await request.response.close();
+  }
+
+  /// Get the local IP address
+  Future<String?> _getLocalIpAddress() async {
+    try {
+      final interfaces = await NetworkInterface.list(
+        type: InternetAddressType.IPv4,
+        includeLinkLocal: false,
+      );
+
+      for (var interface in interfaces) {
+        for (var addr in interface.addresses) {
+          // Skip loopback
+          if (!addr.isLoopback) {
+            return addr.address;
+          }
+        }
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Generate the HTML page for mobile input
+  String _getWebPageHtml() {
+    return r'''
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导入播放列表 - Lotus IPTV</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 24px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .card h2 {
+            font-size: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card h2::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 12px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        input:focus, textarea:focus {
+            background: rgba(255,255,255,0.12);
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.5);
+        }
+        input::placeholder, textarea::placeholder {
+            color: #666;
+        }
+        button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .file-input-wrapper {
+            position: relative;
+            margin-bottom: 12px;
+        }
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        .file-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 40px 16px;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            color: #888;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .file-label.has-file {
+            border-color: #667eea;
+            color: #667eea;
+        }
+        .message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+            text-align: center;
+            font-size: 14px;
+        }
+        .message.success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+        .message.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: #666;
+            font-size: 14px;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+        }
+        .divider span {
+            padding: 0 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Lotus IPTV</h1>
+        <p class="subtitle">导入播放列表到您的电视</p>
+        
+        <div class="card">
+            <h2>从链接导入</h2>
+            <input type="text" id="playlistName" placeholder="播放列表名称 (可选)">
+            <input type="url" id="playlistUrl" placeholder="请输入 M3U/M3U8 链接">
+            <button onclick="submitUrl()" id="urlBtn">导入链接</button>
+            <div id="urlMessage"></div>
+        </div>
+        
+        <div class="divider"><span>或者</span></div>
+        
+        <div class="card">
+            <h2>从文件导入</h2>
+            <input type="text" id="fileName" placeholder="播放列表名称 (可选)">
+            <div class="file-input-wrapper">
+                <input type="file" id="fileInput" accept=".m3u,.m3u8" onchange="handleFileSelect(event)">
+                <div class="file-label" id="fileLabel">
+                    📁 点击选择 M3U/M3U8 文件
+                </div>
+            </div>
+            <button onclick="submitFile()" id="fileBtn" disabled>上传文件</button>
+            <div id="fileMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        let selectedFile = null;
+        
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                selectedFile = file;
+                document.getElementById('fileLabel').textContent = '📄 ' + file.name;
+                document.getElementById('fileLabel').classList.add('has-file');
+                document.getElementById('fileBtn').disabled = false;
+                if (!document.getElementById('fileName').value) {
+                    document.getElementById('fileName').value = file.name.replace(/\\.m3u8?$/i, '');
+                }
+            }
+        }
+        
+        async function submitUrl() {
+            const url = document.getElementById('playlistUrl').value.trim();
+            const name = document.getElementById('playlistName').value.trim() || 'Imported Playlist';
+            const btn = document.getElementById('urlBtn');
+            const msg = document.getElementById('urlMessage');
+            
+            if (!url) {
+                showMessage(msg, '请输入链接', 'error');
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.textContent = '正在导入...';
+            
+            try {
+                const response = await fetch('/submit', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({type: 'url', url: url, name: name})
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage(msg, '✓ 已发送到电视，请在电视上查看', 'success');
+                    document.getElementById('playlistUrl').value = '';
+                    document.getElementById('playlistName').value = '';
+                } else {
+                    showMessage(msg, '发送失败: ' + result.message, 'error');
+                }
+            } catch (e) {
+                showMessage(msg, '网络错误，请确保设备在同一局域网', 'error');
+            }
+            
+            btn.disabled = false;
+            btn.textContent = '导入链接';
+        }
+        
+        async function submitFile() {
+            if (!selectedFile) return;
+            
+            const name = document.getElementById('fileName').value.trim() || selectedFile.name.replace(/\\.m3u8?$/i, '');
+            const btn = document.getElementById('fileBtn');
+            const msg = document.getElementById('fileMessage');
+            
+            btn.disabled = true;
+            btn.textContent = '正在上传...';
+            
+            try {
+                const content = await selectedFile.text();
+                
+                const response = await fetch('/submit', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({type: 'content', content: content, name: name})
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage(msg, '✓ 已发送到电视，请在电视上查看', 'success');
+                    selectedFile = null;
+                    document.getElementById('fileInput').value = '';
+                    document.getElementById('fileLabel').textContent = '📁 点击选择 M3U/M3U8 文件';
+                    document.getElementById('fileLabel').classList.remove('has-file');
+                    document.getElementById('fileName').value = '';
+                } else {
+                    showMessage(msg, '发送失败: ' + result.message, 'error');
+                }
+            } catch (e) {
+                showMessage(msg, '网络错误，请确保设备在同一局域网', 'error');
+            }
+            
+            btn.disabled = false;
+            btn.textContent = '上传文件';
+        }
+        
+        function showMessage(el, text, type) {
+            el.textContent = text;
+            el.className = 'message ' + type;
+            setTimeout(() => { el.textContent = ''; el.className = ''; }, 5000);
+        }
+    </script>
+</body>
+</html>
+''';
+  }
+}

@@ -144,6 +144,69 @@ class PlaylistProvider extends ChangeNotifier {
     }
   }
 
+  // Add a new playlist from M3U content directly (for QR import)
+  Future<Playlist?> addPlaylistFromContent(String name, String content) async {
+    _isLoading = true;
+    _importProgress = 0.0;
+    _error = null;
+    notifyListeners();
+
+    try {
+      // Create playlist record
+      final playlistData = Playlist(
+        name: name,
+        createdAt: DateTime.now(),
+      ).toMap();
+
+      final playlistId =
+          await ServiceLocator.database.insert('playlists', playlistData);
+
+      _importProgress = 0.2;
+      notifyListeners();
+
+      // Parse M3U content directly
+      final channels = M3UParser.parse(content, playlistId);
+
+      _importProgress = 0.6;
+      notifyListeners();
+
+      if (channels.isEmpty) {
+        throw Exception('No channels found in playlist');
+      }
+
+      // Use batch for much faster insertion
+      final batch = ServiceLocator.database.db.batch();
+      for (final channel in channels) {
+        batch.insert('channels', channel.toMap());
+      }
+      await batch.commit(noResult: true);
+
+      // Update playlist with last updated timestamp and counts
+      await ServiceLocator.database.update(
+        'playlists',
+        {
+          'last_updated': DateTime.now().millisecondsSinceEpoch,
+          'channel_count': channels.length,
+        },
+        where: 'id = ?',
+        whereArgs: [playlistId],
+      );
+
+      _importProgress = 1.0;
+      notifyListeners();
+
+      // Reload playlists
+      await loadPlaylists();
+
+      return _playlists.firstWhere((p) => p.id == playlistId);
+    } catch (e) {
+      _error = 'Failed to add playlist: $e';
+      _isLoading = false;
+      notifyListeners();
+      return null;
+    }
+  }
+
   // Add a new playlist from local file
   Future<Playlist?> addPlaylistFromFile(String name, String filePath) async {
     _isLoading = true;
