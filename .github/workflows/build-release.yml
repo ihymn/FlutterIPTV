@@ -109,16 +109,56 @@ jobs:
           # List contents for debugging
           Write-Host "Windows package contents:"
           Get-ChildItem -Path "dist/windows/" -Recurse | ForEach-Object { Write-Host $_.FullName }
+        shell: pwsh
+      
+      - name: Create Inno Setup Script
+        run: |
+          $version = "${{ github.ref_name }}".TrimStart('v')
+          if ([string]::IsNullOrEmpty($version)) { $version = "1.0.0" }
           
-          # Rename exe file for release
-          Copy-Item -Path "dist/windows/flutter_iptv.exe" -Destination "flutteriptv-Windows-x64.exe" -Force
+          $issContent = @"
+          [Setup]
+          AppName=FlutterIPTV
+          AppVersion=$version
+          AppPublisher=FlutterIPTV
+          DefaultDirName={autopf}\FlutterIPTV
+          DefaultGroupName=FlutterIPTV
+          OutputDir=.
+          OutputBaseFilename=flutteriptv-Windows-x64-Setup
+          Compression=lzma2
+          SolidCompression=yes
+          ArchitecturesInstallIn64BitMode=x64
+          PrivilegesRequired=lowest
+          
+          [Files]
+          Source: "dist\windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+          
+          [Icons]
+          Name: "{group}\FlutterIPTV"; Filename: "{app}\flutter_iptv.exe"
+          Name: "{group}\Uninstall FlutterIPTV"; Filename: "{uninstallexe}"
+          Name: "{autodesktop}\FlutterIPTV"; Filename: "{app}\flutter_iptv.exe"; Tasks: desktopicon
+          
+          [Tasks]
+          Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription: "Additional icons:"
+          
+          [Run]
+          Filename: "{app}\flutter_iptv.exe"; Description: "Launch FlutterIPTV"; Flags: nowait postinstall skipifsilent
+          "@
+          
+          $issContent | Out-File -FilePath "installer.iss" -Encoding UTF8
+          Write-Host "Inno Setup script created"
+        shell: pwsh
+      
+      - name: Build Windows Installer
+        run: |
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
         shell: pwsh
       
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows-release
-          path: flutteriptv-Windows-x64.exe
+          path: flutteriptv-Windows-x64-Setup.exe
           retention-days: 5
 
   # ============================================
@@ -281,7 +321,7 @@ jobs:
           #### Windows
           | File | Description |
           |------|-------------|
-          | `flutteriptv-Windows-x64.exe` | Windows 64-bit application |
+          | `flutteriptv-Windows-x64-Setup.exe` | Windows 64-bit installer |
           
           #### Android Mobile
           | File | Description |
@@ -309,8 +349,9 @@ jobs:
           ### 📋 Installation
           
           **Windows:**
-          1. Download `flutteriptv-Windows-x64.exe`
-          2. Run the application directly
+          1. Download `flutteriptv-Windows-x64-Setup.exe`
+          2. Run the installer and follow the prompts
+          3. Launch from Start Menu or Desktop shortcut
           
           **Android Mobile:**
           1. Download the appropriate APK for your device
@@ -336,7 +377,7 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            release-assets/flutteriptv-Windows-x64.exe
+            release-assets/flutteriptv-Windows-x64-Setup.exe
             release-assets/android-mobile/flutteriptv-Android-Mobile-arm64-v8a.apk
             release-assets/android-mobile/flutteriptv-Android-Mobile-armeabi-v7a.apk
             release-assets/android-mobile/flutteriptv-Android-Mobile-x86_64.apk
