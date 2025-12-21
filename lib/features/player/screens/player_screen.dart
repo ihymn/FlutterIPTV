@@ -456,181 +456,181 @@ class _PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver
   }
 
   Widget _buildControlsOverlay() {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.black.withOpacity(0.7),
-            Colors.transparent,
-            Colors.transparent,
-            Colors.black.withOpacity(0.8),
-          ],
-          stops: const [0.0, 0.2, 0.7, 1.0],
+    return Stack(
+      children: [
+        // Top gradient mask
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 160,
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xCC000000), // 80% black
+                  Color(0x66000000), // 40% black
+                  Colors.transparent,
+                ],
+                stops: [0.0, 0.5, 1.0],
+              ),
+            ),
+          ),
         ),
-      ),
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Top Bar
-            _buildTopBar(),
-
-            const Spacer(),
-
-            // Bottom Controls
-            _buildBottomControls(),
-          ],
+        // Bottom gradient mask
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: 200,
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  Color(0x80000000), // 50% black
+                  Color(0xE6000000), // 90% black
+                ],
+                stops: [0.0, 0.4, 1.0],
+              ),
+            ),
+          ),
         ),
-      ),
+        // Content
+        SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildTopBar(),
+              const Spacer(),
+              _buildBottomControls(),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildTopBar() {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: Row(
         children: [
-          // Back Button
+          // Semi-transparent channel logo/back button
           TVFocusable(
             onSelect: () {
               context.read<PlayerProvider>().stop();
               Navigator.of(context).pop();
             },
             focusScale: 1.1,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(
-                Icons.arrow_back_rounded,
-                color: Colors.white,
-                size: 24,
-              ),
-            ),
+            builder: (context, isFocused, child) {
+              return AnimatedContainer(
+                duration: AppTheme.animationFast,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: isFocused ? AppTheme.primaryColor : const Color(0x33FFFFFF),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: isFocused ? AppTheme.focusBorderColor : const Color(0x1AFFFFFF),
+                  ),
+                ),
+                child: child,
+              );
+            },
+            child: const Icon(Icons.arrow_back_rounded, color: Colors.white, size: 22),
           ),
 
           const SizedBox(width: 16),
 
-          // Channel Info
+          // Minimal channel info
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Consumer<PlayerProvider>(
-                  builder: (context, provider, _) {
-                    return Text(
+            child: Consumer<PlayerProvider>(
+              builder: (context, provider, _) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
                       provider.currentChannel?.name ?? widget.channelName,
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                    );
-                  },
-                ),
-                Consumer<PlayerProvider>(
-                  builder: (context, provider, _) {
-                    String statusText = 'Loading...';
-                    Color statusColor = AppTheme.warningColor;
-
-                    switch (provider.state) {
-                      case PlayerState.playing:
-                        statusText = AppStrings.of(context)?.live ?? 'LIVE';
-                        statusColor = AppTheme.successColor;
-                        break;
-                      case PlayerState.buffering:
-                        statusText =
-                            AppStrings.of(context)?.buffering ?? 'Buffering...';
-                        statusColor = AppTheme.warningColor;
-                        break;
-                      case PlayerState.paused:
-                        statusText = AppStrings.of(context)?.paused ?? 'Paused';
-                        statusColor = AppTheme.textMuted;
-                        break;
-                      case PlayerState.error:
-                        statusText = AppStrings.of(context)?.error ?? 'Error';
-                        statusColor = AppTheme.errorColor;
-                        break;
-                      default:
-                        break;
-                    }
-
-                    return Row(
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
                       children: [
-                        Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: statusColor,
-                            shape: BoxShape.circle,
+                        // Live indicator
+                        if (provider.state == PlayerState.playing) ...[
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              gradient: AppTheme.lotusGradient,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.circle, color: Colors.white, size: 6),
+                                SizedBox(width: 4),
+                                Text('LIVE', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          statusText,
-                          style: TextStyle(
-                            color: statusColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
+                          const SizedBox(width: 8),
+                        ],
+                        // Video info
+                        if (provider.videoInfo.isNotEmpty)
+                          Text(
+                            provider.videoInfo,
+                            style: const TextStyle(color: Color(0x99FFFFFF), fontSize: 11),
                           ),
-                        ),
                       ],
-                    );
-                  },
-                ),
-                // Video Info
-                Consumer<PlayerProvider>(
-                  builder: (context, provider, _) {
-                    if (provider.videoInfo.isEmpty)
-                      return const SizedBox.shrink();
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(
-                        provider.videoInfo,
-                        style: TextStyle(
-                            color: Colors.white.withOpacity(0.5), fontSize: 10),
-                      ),
-                    );
-                  },
-                ),
-              ],
+                    ),
+                  ],
+                );
+              },
             ),
           ),
 
-          // Favorite Button
+          // Favorite button - minimal style
           Consumer<FavoritesProvider>(
             builder: (context, favorites, _) {
               final playerProvider = context.read<PlayerProvider>();
               final currentChannel = playerProvider.currentChannel;
-              final isFav = currentChannel != null &&
-                  favorites.isFavorite(currentChannel.id ?? 0);
+              final isFav = currentChannel != null && favorites.isFavorite(currentChannel.id ?? 0);
 
               return TVFocusable(
                 onSelect: () {
-                  if (currentChannel != null) {
-                    favorites.toggleFavorite(currentChannel);
-                  }
+                  if (currentChannel != null) favorites.toggleFavorite(currentChannel);
                 },
                 focusScale: 1.1,
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: isFav
-                        ? AppTheme.accentColor
-                        : Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    isFav ? Icons.favorite : Icons.favorite_border_rounded,
-                    color: Colors.white,
-                    size: 24,
-                  ),
+                builder: (context, isFocused, child) {
+                  return AnimatedContainer(
+                    duration: AppTheme.animationFast,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      gradient: isFav ? AppTheme.lotusGradient : null,
+                      color: isFav ? null : (isFocused ? AppTheme.primaryColor : const Color(0x33FFFFFF)),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: isFocused ? AppTheme.focusBorderColor : const Color(0x1AFFFFFF),
+                      ),
+                    ),
+                    child: child,
+                  );
+                },
+                child: Icon(
+                  isFav ? Icons.favorite : Icons.favorite_border_rounded,
+                  color: Colors.white,
+                  size: 22,
                 ),
               );
             },
@@ -644,103 +644,107 @@ class _PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver
     return Consumer<PlayerProvider>(
       builder: (context, provider, _) {
         return Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              // Volume and Settings
+              // Slim progress bar (if applicable)
+              if (provider.duration.inSeconds > 0)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                      trackHeight: 3,
+                      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 5),
+                      overlayShape: const RoundSliderOverlayShape(overlayRadius: 10),
+                      activeTrackColor: AppTheme.primaryColor,
+                      inactiveTrackColor: const Color(0x33FFFFFF),
+                      thumbColor: AppTheme.primaryColor,
+                    ),
+                    child: Slider(
+                      value: provider.position.inSeconds.toDouble(),
+                      max: provider.duration.inSeconds.toDouble(),
+                      onChanged: (value) => provider.seek(Duration(seconds: value.toInt())),
+                    ),
+                  ),
+                ),
+
+              // Control buttons row
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Volume Control
+                  // Volume control
                   _buildVolumeControl(provider),
 
-                  const SizedBox(width: 32),
+                  const SizedBox(width: 24),
 
-                  // Play/Pause Button
+                  // Play/Pause - Lotus gradient button
                   TVFocusable(
                     autofocus: true,
                     onSelect: provider.togglePlayPause,
-                    focusScale: 1.15,
-                    child: Container(
-                      width: 64,
-                      height: 64,
-                      decoration: BoxDecoration(
-                        color: AppTheme.primaryColor,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppTheme.primaryColor.withOpacity(0.4),
-                            blurRadius: 20,
-                            spreadRadius: 2,
-                          ),
-                        ],
-                      ),
-                      child: Icon(
-                        provider.isPlaying
-                            ? Icons.pause_rounded
-                            : Icons.play_arrow_rounded,
-                        color: Colors.white,
-                        size: 36,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(width: 32),
-
-                  // Fullscreen button removed as per request
-                  /*
-                  TVFocusable(
-                    onSelect: provider.toggleFullscreen,
                     focusScale: 1.1,
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(
-                        provider.isFullscreen
-                            ? Icons.fullscreen_exit_rounded
-                            : Icons.fullscreen_rounded,
-                        color: Colors.white,
-                        size: 24,
-                      ),
+                    builder: (context, isFocused, child) {
+                      return AnimatedContainer(
+                        duration: AppTheme.animationFast,
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          gradient: AppTheme.lotusGradient,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: isFocused ? Colors.white : Colors.transparent,
+                            width: 2,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppTheme.primaryColor.withAlpha(isFocused ? 150 : 80),
+                              blurRadius: isFocused ? 24 : 16,
+                              spreadRadius: isFocused ? 4 : 2,
+                            ),
+                          ],
+                        ),
+                        child: child,
+                      );
+                    },
+                    child: Icon(
+                      provider.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                      color: Colors.white,
+                      size: 28,
                     ),
                   ),
 
-                  const SizedBox(width: 16),
-                  */
+                  const SizedBox(width: 24),
 
-                  // Settings
+                  // Settings button
                   TVFocusable(
                     onSelect: () => _showSettingsSheet(context),
                     focusScale: 1.1,
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Icon(
-                        Icons.settings_rounded,
-                        color: Colors.white,
-                        size: 24,
-                      ),
-                    ),
+                    builder: (context, isFocused, child) {
+                      return AnimatedContainer(
+                        duration: AppTheme.animationFast,
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: isFocused ? AppTheme.primaryColor : const Color(0x33FFFFFF),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: isFocused ? AppTheme.focusBorderColor : const Color(0x1AFFFFFF),
+                          ),
+                        ),
+                        child: child,
+                      );
+                    },
+                    child: const Icon(Icons.settings_rounded, color: Colors.white, size: 22),
                   ),
                 ],
               ),
 
-              const SizedBox(height: 24),
-
-              // Keyboard Shortcuts Hint (for TV/Desktop)
+              // Keyboard hints
               if (PlatformDetector.useDPadNavigation)
-                Text(
-                  AppStrings.of(context)?.shortcutsHint ??
-                      'Left/Right: Seek • Up/Down: Volume • Enter: Play/Pause • M: Mute',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.5),
-                    fontSize: 12,
+                const Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: Text(
+                    '↑↓ 切换频道 · ←→ 快进快退 · OK 播放/暂停',
+                    style: TextStyle(color: Color(0x66FFFFFF), fontSize: 11),
                   ),
                 ),
             ],
@@ -757,104 +761,48 @@ class _PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver
         TVFocusable(
           onSelect: provider.toggleMute,
           focusScale: 1.1,
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(
-              provider.isMuted || provider.volume == 0
-                  ? Icons.volume_off_rounded
-                  : provider.volume < 0.5
-                      ? Icons.volume_down_rounded
-                      : Icons.volume_up_rounded,
-              color: Colors.white,
-              size: 20,
-            ),
+          builder: (context, isFocused, child) {
+            return AnimatedContainer(
+              duration: AppTheme.animationFast,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: isFocused ? AppTheme.primaryColor : const Color(0x33FFFFFF),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: isFocused ? AppTheme.focusBorderColor : const Color(0x1AFFFFFF),
+                ),
+              ),
+              child: child,
+            );
+          },
+          child: Icon(
+            provider.isMuted || provider.volume == 0
+                ? Icons.volume_off_rounded
+                : provider.volume < 0.5
+                    ? Icons.volume_down_rounded
+                    : Icons.volume_up_rounded,
+            color: Colors.white,
+            size: 18,
           ),
         ),
         const SizedBox(width: 8),
         SizedBox(
-          width: 100,
+          width: 80,
           child: SliderTheme(
             data: SliderTheme.of(context).copyWith(
-              trackHeight: 4,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 12),
+              trackHeight: 3,
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 5),
+              overlayShape: const RoundSliderOverlayShape(overlayRadius: 10),
             ),
             child: Slider(
               value: provider.isMuted ? 0 : provider.volume,
               onChanged: (value) => provider.setVolume(value),
               activeColor: AppTheme.primaryColor,
-              inactiveColor: Colors.white.withOpacity(0.3),
+              inactiveColor: const Color(0x33FFFFFF),
             ),
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildErrorDisplay(String error) {
-    return Center(
-      child: Container(
-        margin: const EdgeInsets.all(32),
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: AppTheme.surfaceColor.withOpacity(0.9),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(
-              Icons.error_outline_rounded,
-              color: AppTheme.errorColor,
-              size: 48,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              AppStrings.of(context)?.playbackError ?? 'Playback Error',
-              style: const TextStyle(
-                color: AppTheme.textPrimary,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              error,
-              style: const TextStyle(
-                color: AppTheme.textSecondary,
-                fontSize: 14,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TVFocusable(
-                  onSelect: _startPlayback,
-                  child: ElevatedButton.icon(
-                    onPressed: _startPlayback,
-                    icon: const Icon(Icons.refresh_rounded),
-                    label: Text(AppStrings.of(context)?.retry ?? 'Retry'),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                TVFocusable(
-                  onSelect: () => Navigator.of(context).pop(),
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(AppStrings.of(context)?.goBack ?? 'Go Back'),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
 

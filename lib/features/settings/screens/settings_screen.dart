@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/tv_focusable.dart';
+import '../../../core/widgets/tv_sidebar.dart';
 import '../../../core/platform/platform_detector.dart';
 import '../../../core/i18n/app_strings.dart';
 import '../../../core/services/service_locator.dart';
@@ -13,41 +14,25 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: AppTheme.backgroundColor,
-        title: Text(
-          AppStrings.of(context)?.settings ?? 'Settings',
-          style: const TextStyle(
-            color: AppTheme.textPrimary,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Consumer<SettingsProvider>(
-        builder: (context, settings, _) {
-          return ListView(
-            padding: const EdgeInsets.all(20),
-            children: [
-              // General Settings
-              _buildSectionHeader(
-                  AppStrings.of(context)?.categories ?? 'General'),
-              _buildSettingsCard([
-                _buildSelectTile(
-                  context,
-                  title: AppStrings.of(context)?.language ?? 'Language',
-                  subtitle:
-                      settings.locale?.languageCode == 'zh' ? '中文' : 'English',
-                  icon: Icons.language_rounded,
-                  onTap: () => _showLanguageDialog(context, settings),
-                ),
-              ]),
+    final size = MediaQuery.of(context).size;
+    final isTV = PlatformDetector.isTV || size.width > 1200;
+
+    final content = Consumer<SettingsProvider>(
+      builder: (context, settings, _) {
+        return ListView(
+          padding: const EdgeInsets.all(20),
+          children: [
+            // General Settings
+            _buildSectionHeader(AppStrings.of(context)?.categories ?? 'General'),
+            _buildSettingsCard([
+              _buildSelectTile(
+                context,
+                title: AppStrings.of(context)?.language ?? 'Language',
+                subtitle: settings.locale?.languageCode == 'zh' ? '中文' : 'English',
+                icon: Icons.language_rounded,
+                onTap: () => _showLanguageDialog(context, settings),
+              ),
+            ]),
 
               const SizedBox(height: 24),
 
@@ -236,7 +221,32 @@ class SettingsScreen extends StatelessWidget {
             ],
           );
         },
+      );
+
+    if (isTV) {
+      return Scaffold(
+        backgroundColor: AppTheme.backgroundColor,
+        body: TVSidebar(
+          selectedIndex: 4, // 设置页
+          child: content,
+        ),
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: AppTheme.backgroundColor,
+      appBar: AppBar(
+        backgroundColor: AppTheme.backgroundColor,
+        title: Text(
+          AppStrings.of(context)?.settings ?? 'Settings',
+          style: const TextStyle(color: AppTheme.textPrimary, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
+      body: content,
     );
   }
 

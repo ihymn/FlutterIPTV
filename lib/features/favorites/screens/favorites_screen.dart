@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/navigation/app_router.dart';
 import '../../../core/widgets/tv_focusable.dart';
+import '../../../core/widgets/tv_sidebar.dart';
+import '../../../core/platform/platform_detector.dart';
 import '../../../core/i18n/app_strings.dart';
 import '../providers/favorites_provider.dart';
 
@@ -23,6 +25,21 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isTV = PlatformDetector.isTV || size.width > 1200;
+
+    final content = _buildContent(context);
+
+    if (isTV) {
+      return Scaffold(
+        backgroundColor: AppTheme.backgroundColor,
+        body: TVSidebar(
+          selectedIndex: 2, // 收藏页
+          child: content,
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
@@ -53,23 +70,25 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           ),
         ],
       ),
-      body: Consumer<FavoritesProvider>(
-        builder: (context, provider, _) {
-          if (provider.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: AppTheme.primaryColor,
-              ),
-            );
-          }
+      body: content,
+    );
+  }
 
-          if (provider.favorites.isEmpty) {
-            return _buildEmptyState();
-          }
+  Widget _buildContent(BuildContext context) {
+    return Consumer<FavoritesProvider>(
+      builder: (context, provider, _) {
+        if (provider.isLoading) {
+          return const Center(
+            child: CircularProgressIndicator(color: AppTheme.primaryColor),
+          );
+        }
 
-          return _buildFavoritesList(provider);
-        },
-      ),
+        if (provider.favorites.isEmpty) {
+          return _buildEmptyState();
+        }
+
+        return _buildFavoritesList(provider);
+      },
     );
   }
 

@@ -162,7 +162,7 @@ class _TVFocusableState extends State<TVFocusable>
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: AppTheme.focusColor.withOpacity(0.4),
+                              color: AppTheme.focusColor.withAlpha(102),
                               blurRadius: 16,
                               spreadRadius: 2,
                             ),

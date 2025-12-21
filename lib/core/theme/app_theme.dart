@@ -1,58 +1,90 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  // Brand Colors
-  static const Color primaryColor = Color(0xFF6366F1);
-  static const Color primaryLight = Color(0xFF818CF8);
-  static const Color primaryDark = Color(0xFF4F46E5);
+  // Lotus Theme - Brand Colors
+  // 莲花粉紫渐变作为主色调
+  static const Color primaryColor = Color(0xFFE91E8C); // Lotus Pink
+  static const Color primaryLight = Color(0xFFFF6EB4); // Light Pink
+  static const Color primaryDark = Color(0xFFAD1457); // Deep Pink
 
-  static const Color secondaryColor = Color(0xFF10B981);
-  static const Color accentColor = Color(0xFFF59E0B);
+  static const Color secondaryColor = Color(0xFF9C27B0); // Purple
+  static const Color accentColor = Color(0xFF00BCD4); // Cyan accent
 
-  // Background Colors
-  static const Color backgroundColor = Color(0xFF0F0F23);
-  static const Color surfaceColor = Color(0xFF1A1A2E);
-  static const Color cardColor = Color(0xFF16213E);
-  static const Color cardHoverColor = Color(0xFF1E2A47);
+  // Background Colors - 纯黑/极深灰
+  static const Color backgroundColor = Color(0xFF000000); // Pure Black
+  static const Color surfaceColor = Color(0xFF0A0A0A); // Near Black
+  static const Color cardColor = Color(0xFF121212); // Dark Grey
+  static const Color cardHoverColor = Color(0xFF1A1A1A);
+
+  // Glassmorphism Colors
+  static const Color glassColor = Color(0x1AFFFFFF); // 10% white
+  static const Color glassBorderColor = Color(0x33FFFFFF); // 20% white
+  static const Color glassHighlight = Color(0x0DFFFFFF); // 5% white
 
   // Text Colors
   static const Color textPrimary = Color(0xFFFFFFFF);
-  static const Color textSecondary = Color(0xFFB4B4C7);
-  static const Color textMuted = Color(0xFF6B6B80);
+  static const Color textSecondary = Color(0xFFB0B0B0); // Grey 400
+  static const Color textMuted = Color(0xFF757575); // Grey 500
 
-  // Focus Colors (for TV navigation)
-  static const Color focusColor = Color(0xFF6366F1);
-  static const Color focusBorderColor = Color(0xFF818CF8);
+  // Focus Colors (for TV navigation) - Lotus gradient
+  static const Color focusColor = Color(0xFFE91E8C);
+  static const Color focusBorderColor = Color(0xFFFF6EB4);
 
   // Status Colors
-  static const Color successColor = Color(0xFF10B981);
-  static const Color errorColor = Color(0xFFEF4444);
-  static const Color warningColor = Color(0xFFF59E0B);
-  static const Color infoColor = Color(0xFF3B82F6);
+  static const Color successColor = Color(0xFF4CAF50);
+  static const Color errorColor = Color(0xFFFF5252);
+  static const Color warningColor = Color(0xFFFFB74D);
+  static const Color infoColor = Color(0xFF29B6F6);
 
-  // Gradients
-  static const LinearGradient primaryGradient = LinearGradient(
+  // Lotus Gradient - 莲花渐变
+  static const LinearGradient lotusGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [primaryColor, primaryDark],
+    colors: [
+      Color(0xFFE91E8C), // Pink
+      Color(0xFF9C27B0), // Purple
+    ],
   );
 
+  static const LinearGradient lotusSoftGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0x66E91E8C), // Pink 40%
+      Color(0x669C27B0), // Purple 40%
+    ],
+  );
+
+  // Card Gradient - Glassmorphism
   static const LinearGradient cardGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0xFF1E2A47),
-      Color(0xFF16213E),
+      Color(0x1AFFFFFF), // 10% white
+      Color(0x0DFFFFFF), // 5% white
     ],
   );
 
-  static const LinearGradient overlayGradient = LinearGradient(
+  // Overlay Gradients for Player
+  static const LinearGradient overlayGradientTop = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Color(0xCC000000), // 80% black
+      Colors.transparent,
+    ],
+    stops: [0.0, 1.0],
+  );
+
+  static const LinearGradient overlayGradientBottom = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors: [
       Colors.transparent,
-      Color(0xCC000000),
+      Color(0xE6000000), // 90% black
     ],
+    stops: [0.0, 1.0],
   );
 
   // Border Radius
@@ -60,6 +92,7 @@ class AppTheme {
   static const double radiusMedium = 12.0;
   static const double radiusLarge = 16.0;
   static const double radiusXLarge = 24.0;
+  static const double radiusPill = 50.0;
 
   // Spacing
   static const double spacingXSmall = 4.0;
@@ -80,6 +113,7 @@ class AppTheme {
       brightness: Brightness.dark,
       primaryColor: primaryColor,
       scaffoldBackgroundColor: backgroundColor,
+      fontFamily: 'NotoSansSC', // 思源黑体
       colorScheme: const ColorScheme.dark(
         primary: primaryColor,
         secondary: secondaryColor,
@@ -205,7 +239,7 @@ class AppTheme {
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radiusMedium),
+            borderRadius: BorderRadius.circular(radiusPill),
           ),
         ),
       ),
@@ -215,7 +249,7 @@ class AppTheme {
           side: const BorderSide(color: primaryColor),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radiusMedium),
+            borderRadius: BorderRadius.circular(radiusPill),
           ),
         ),
       ),
@@ -227,16 +261,16 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: surfaceColor,
+        fillColor: glassColor,
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusMedium),
-          borderSide: BorderSide.none,
+          borderSide: const BorderSide(color: glassBorderColor),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusMedium),
-          borderSide: const BorderSide(color: Colors.transparent),
+          borderSide: const BorderSide(color: glassBorderColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusMedium),
@@ -249,13 +283,13 @@ class AppTheme {
         hintStyle: const TextStyle(color: textMuted),
       ),
       dialogTheme: DialogThemeData(
-        backgroundColor: surfaceColor,
+        backgroundColor: cardColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusLarge),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: surfaceColor,
+        backgroundColor: cardColor,
         contentTextStyle: const TextStyle(color: textPrimary),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusMedium),
@@ -263,7 +297,7 @@ class AppTheme {
         behavior: SnackBarBehavior.floating,
       ),
       dividerTheme: const DividerThemeData(
-        color: Color(0xFF2A2A3E),
+        color: Color(0xFF1F1F1F),
         thickness: 1,
         space: 1,
       ),
@@ -272,7 +306,7 @@ class AppTheme {
       ),
       sliderTheme: SliderThemeData(
         activeTrackColor: primaryColor,
-        inactiveTrackColor: surfaceColor,
+        inactiveTrackColor: glassColor,
         thumbColor: primaryColor,
         overlayColor: primaryColor.withAlpha(51),
         trackHeight: 4,
@@ -281,7 +315,34 @@ class AppTheme {
   }
 }
 
-// TV-specific focus decoration
+// Glassmorphism Card Decoration
+class GlassDecoration extends BoxDecoration {
+  GlassDecoration({
+    bool focused = false,
+    double borderRadius = AppTheme.radiusMedium,
+    Color? glowColor,
+  }) : super(
+          borderRadius: BorderRadius.circular(borderRadius),
+          color: AppTheme.glassColor,
+          border: Border.all(
+            color: focused
+                ? (glowColor ?? AppTheme.focusBorderColor)
+                : AppTheme.glassBorderColor,
+            width: focused ? 2 : 1,
+          ),
+          boxShadow: focused
+              ? [
+                  BoxShadow(
+                    color: (glowColor ?? AppTheme.focusColor).withAlpha(102),
+                    blurRadius: 20,
+                    spreadRadius: 2,
+                  ),
+                ]
+              : null,
+        );
+}
+
+// TV-specific focus decoration with Lotus glow
 class TVFocusDecoration extends BoxDecoration {
   TVFocusDecoration({bool focused = false})
       : super(
@@ -294,10 +355,48 @@ class TVFocusDecoration extends BoxDecoration {
               ? [
                   BoxShadow(
                     color: AppTheme.focusColor.withAlpha(102),
-                    blurRadius: 12,
-                    spreadRadius: 2,
+                    blurRadius: 20,
+                    spreadRadius: 4,
                   ),
                 ]
               : null,
         );
+}
+
+// Glass Card Widget
+class GlassCard extends StatelessWidget {
+  final Widget child;
+  final bool focused;
+  final double borderRadius;
+  final EdgeInsetsGeometry? padding;
+  final Color? glowColor;
+
+  const GlassCard({
+    super.key,
+    required this.child,
+    this.focused = false,
+    this.borderRadius = AppTheme.radiusMedium,
+    this.padding,
+    this.glowColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(borderRadius),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: AnimatedContainer(
+          duration: AppTheme.animationFast,
+          decoration: GlassDecoration(
+            focused: focused,
+            borderRadius: borderRadius,
+            glowColor: glowColor,
+          ),
+          padding: padding,
+          child: child,
+        ),
+      ),
+    );
+  }
 }

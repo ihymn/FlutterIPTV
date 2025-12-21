@@ -2,10 +2,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../theme/app_theme.dart';
+import '../platform/platform_detector.dart';
 import 'tv_focusable.dart';
 
-/// A card widget for displaying channel information
-/// with TV-optimized focus support
+/// A 16:9 card widget for displaying channel information
+/// TV端优化：无特效，长按显示菜单
 class ChannelCard extends StatelessWidget {
   final String name;
   final String? logoUrl;
@@ -13,11 +14,11 @@ class ChannelCard extends StatelessWidget {
   final String? currentProgram;
   final bool isFavorite;
   final bool isPlaying;
-  final bool isUnavailable; // 是否是失效频道
+  final bool isUnavailable;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final VoidCallback? onFavoriteToggle;
-  final VoidCallback? onTest; // 测试按钮回调
+  final VoidCallback? onTest;
   final bool autofocus;
   final FocusNode? focusNode;
 
@@ -40,264 +41,130 @@ class ChannelCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isTV = PlatformDetector.isTV;
+
     return TVFocusable(
       autofocus: autofocus,
       focusNode: focusNode,
       onSelect: onTap,
-      focusScale: 1.08,
+      focusScale: isTV ? 1.0 : 1.03, // TV端不缩放
       showFocusBorder: false,
       builder: (context, isFocused, child) {
-        return AnimatedContainer(
-          duration: AppTheme.animationFast,
+        return Container(
           decoration: BoxDecoration(
-            gradient: isFocused
-                ? const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Color(0xFF2A3A5F),
-                      Color(0xFF1E2A47),
-                    ],
-                  )
-                : AppTheme.cardGradient,
+            color: isFocused ? const Color(0xFF1E1E2E) : AppTheme.cardColor,
             borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
             border: Border.all(
               color: isFocused
                   ? AppTheme.focusBorderColor
                   : isPlaying
                       ? AppTheme.successColor
-                      : Colors.transparent,
-              width: isFocused
-                  ? 3
-                  : isPlaying
-                      ? 2
-                      : 0,
+                      : AppTheme.glassBorderColor,
+              width: isFocused ? 2 : 1,
             ),
-            boxShadow: isFocused
-                ? [
-                    BoxShadow(
-                      color: AppTheme.focusColor.withOpacity(0.4),
-                      blurRadius: 20,
-                      spreadRadius: 2,
-                    ),
-                  ]
-                : [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
           ),
           child: child,
         );
       },
       child: GestureDetector(
-        onLongPress: onLongPress,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+        onLongPress: isTV ? () => _showTVMenu(context) : onLongPress,
+        child: AspectRatio(
+          aspectRatio: 16 / 10,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Logo area
               Expanded(
-                flex: 3,
+                flex: 9,
                 child: Stack(
+                  fit: StackFit.expand,
                   children: [
-                    // Logo/Thumbnail
+                    // Logo
                     Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            AppTheme.cardColor.withOpacity(0.5),
-                            AppTheme.cardColor,
-                          ],
-                        ),
-                      ),
+                      color: const Color(0xFF0A0A0A),
                       child: Center(
                         child: logoUrl != null && logoUrl!.isNotEmpty
                             ? _buildChannelLogo(logoUrl!)
                             : _buildPlaceholder(),
                       ),
                     ),
-
                     // Playing indicator
                     if (isPlaying)
                       Positioned(
-                        top: 8,
-                        left: 8,
+                        top: 6,
+                        left: 6,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                           decoration: BoxDecoration(
-                            color: AppTheme.successColor,
-                            borderRadius: BorderRadius.circular(
-                              AppTheme.radiusSmall,
-                            ),
+                            gradient: AppTheme.lotusGradient,
+                            borderRadius: BorderRadius.circular(4),
                           ),
-                          child: Row(
+                          child: const Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Container(
-                                width: 6,
-                                height: 6,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              const SizedBox(width: 4),
-                              const Text(
-                                'LIVE',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              Icon(Icons.circle, color: Colors.white, size: 5),
+                              SizedBox(width: 3),
+                              Text('LIVE', style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
                             ],
                           ),
                         ),
                       ),
-
-                    // Top right buttons row
-                    Positioned(
-                      top: 4,
-                      right: 4,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // Test button (show for unavailable channels or when onTest is provided)
-                          if (onTest != null)
-                            Padding(
-                              padding: const EdgeInsets.only(right: 4),
-                              child: Material(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  onTap: onTest,
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(6),
-                                    decoration: BoxDecoration(
-                                      color: isUnavailable 
-                                          ? Colors.orange.withOpacity(0.8)
-                                          : Colors.black.withOpacity(0.5),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Icon(
-                                      Icons.speed_rounded,
-                                      color: Colors.white.withOpacity(0.9),
-                                      size: 16,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          // Favorite button
-                          Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: onFavoriteToggle,
-                              borderRadius: BorderRadius.circular(20),
-                              child: Container(
-                                padding: const EdgeInsets.all(6),
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.5),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  isFavorite
-                                      ? Icons.favorite
-                                      : Icons.favorite_border_rounded,
-                                  color: isFavorite
-                                      ? AppTheme.accentColor
-                                      : Colors.white.withOpacity(0.7),
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                    // 非TV端显示收藏和测试按钮
+                    if (!isTV)
+                      Positioned(
+                        top: 4,
+                        right: 4,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (onTest != null) _buildTestButton(),
+                            const SizedBox(width: 4),
+                            _buildFavoriteButton(),
+                          ],
+                        ),
                       ),
-                    ),
-                    
+                    // TV端只显示收藏图标（小）
+                    if (isTV && isFavorite)
+                      Positioned(
+                        top: 6,
+                        right: 6,
+                        child: Icon(Icons.favorite, color: AppTheme.primaryColor, size: 16),
+                      ),
                     // Unavailable indicator
                     if (isUnavailable)
                       Positioned(
-                        top: 8,
-                        left: 8,
+                        top: 6,
+                        left: 6,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 3,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                           decoration: BoxDecoration(
-                            color: Colors.orange.withOpacity(0.9),
-                            borderRadius: BorderRadius.circular(4),
+                            color: AppTheme.warningColor,
+                            borderRadius: BorderRadius.circular(3),
                           ),
-                          child: const Text(
-                            '失效',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 9,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          child: const Text('失效', style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold)),
                         ),
                       ),
                   ],
                 ),
               ),
-
               // Info area
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        name,
-                        style: const TextStyle(
-                          color: AppTheme.textPrimary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      if (groupName != null) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          groupName!,
-                          style: const TextStyle(
-                            color: AppTheme.textMuted,
-                            fontSize: 11,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                      if (currentProgram != null) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          currentProgram!,
-                          style: const TextStyle(
-                            color: AppTheme.textSecondary,
-                            fontSize: 11,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(color: AppTheme.textPrimary, fontSize: 12, fontWeight: FontWeight.w600),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    if (groupName != null) ...[
+                      const SizedBox(height: 2),
+                      Text(groupName!, style: const TextStyle(color: AppTheme.textMuted, fontSize: 10), maxLines: 1, overflow: TextOverflow.ellipsis),
                     ],
-                  ),
+                  ],
                 ),
               ),
             ],
@@ -307,31 +174,142 @@ class ChannelCard extends StatelessWidget {
     );
   }
 
-  Widget _buildPlaceholder() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Icon(
-        Icons.live_tv_rounded,
-        size: 48,
-        color: AppTheme.textMuted.withOpacity(0.5),
+  // TV端长按菜单
+  void _showTVMenu(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.surfaceColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        title: Text(name, style: const TextStyle(color: Colors.white, fontSize: 16)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // 收藏/取消收藏
+            TVFocusable(
+              autofocus: true,
+              onSelect: () {
+                Navigator.pop(ctx);
+                onFavoriteToggle?.call();
+              },
+              builder: (context, isFocused, child) {
+                return Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: isFocused ? AppTheme.primaryColor : AppTheme.cardColor,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: child,
+                );
+              },
+              child: Row(
+                children: [
+                  Icon(isFavorite ? Icons.favorite : Icons.favorite_border, color: Colors.white, size: 20),
+                  const SizedBox(width: 12),
+                  Text(isFavorite ? '取消收藏' : '添加收藏', style: const TextStyle(color: Colors.white, fontSize: 14)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            // 测试频道
+            if (onTest != null)
+              TVFocusable(
+                onSelect: () {
+                  Navigator.pop(ctx);
+                  onTest?.call();
+                },
+                builder: (context, isFocused, child) {
+                  return Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: isFocused ? AppTheme.primaryColor : AppTheme.cardColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: child,
+                  );
+                },
+                child: const Row(
+                  children: [
+                    Icon(Icons.speed_rounded, color: Colors.white, size: 20),
+                    SizedBox(width: 12),
+                    Text('测试频道', style: TextStyle(color: Colors.white, fontSize: 14)),
+                  ],
+                ),
+              ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('取消'),
+          ),
+        ],
       ),
+    );
+  }
+
+  Widget _buildTestButton() {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTest,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: isUnavailable ? AppTheme.warningColor.withAlpha(200) : const Color(0x80000000),
+            shape: BoxShape.circle,
+          ),
+          child: const Icon(Icons.speed_rounded, color: Colors.white, size: 12),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFavoriteButton() {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onFavoriteToggle,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.all(5),
+          decoration: const BoxDecoration(color: Color(0x80000000), shape: BoxShape.circle),
+          child: Icon(
+            isFavorite ? Icons.favorite : Icons.favorite_border_rounded,
+            color: isFavorite ? AppTheme.primaryColor : Colors.white,
+            size: 12,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPlaceholder() {
+    // 使用默认台标图片
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Image.asset('assets/images/default_logo.png', fit: BoxFit.contain),
     );
   }
 
   Widget _buildChannelLogo(String url) {
     if (url.startsWith('http')) {
-      return CachedNetworkImage(
-        imageUrl: url,
-        fit: BoxFit.contain,
-        placeholder: (context, url) => _buildPlaceholder(),
-        errorWidget: (context, url, error) => _buildPlaceholder(),
+      return Padding(
+        padding: const EdgeInsets.all(10),
+        child: CachedNetworkImage(
+          imageUrl: url,
+          fit: BoxFit.contain,
+          placeholder: (context, url) => _buildPlaceholder(),
+          errorWidget: (context, url, error) => _buildPlaceholder(),
+        ),
       );
     } else {
-      // Local file
-      return Image.file(
-        File(url),
-        fit: BoxFit.contain,
-        errorBuilder: (context, error, stackTrace) => _buildPlaceholder(),
+      return Padding(
+        padding: const EdgeInsets.all(10),
+        child: Image.file(File(url), fit: BoxFit.contain, errorBuilder: (context, error, stackTrace) => _buildPlaceholder()),
       );
     }
   }

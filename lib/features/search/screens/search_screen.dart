@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/navigation/app_router.dart';
 import '../../../core/widgets/tv_focusable.dart';
+import '../../../core/widgets/tv_sidebar.dart';
 import '../../../core/widgets/channel_card.dart';
 import '../../../core/platform/platform_detector.dart';
 import '../../../core/i18n/app_strings.dart';
@@ -42,19 +43,29 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isTV = PlatformDetector.isTV || size.width > 1200;
+
+    final content = Column(
+      children: [
+        _buildSearchHeader(),
+        Expanded(child: _buildSearchResults()),
+      ],
+    );
+
+    if (isTV) {
+      return Scaffold(
+        backgroundColor: AppTheme.backgroundColor,
+        body: TVSidebar(
+          selectedIndex: 3, // 搜索页
+          child: content,
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
-      body: Column(
-        children: [
-          // Search Header
-          _buildSearchHeader(),
-
-          // Results
-          Expanded(
-            child: _buildSearchResults(),
-          ),
-        ],
-      ),
+      body: content,
     );
   }
 

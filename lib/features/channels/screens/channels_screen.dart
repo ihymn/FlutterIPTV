@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/navigation/app_router.dart';
 import '../../../core/widgets/tv_focusable.dart';
+import '../../../core/widgets/tv_sidebar.dart';
 import '../../../core/widgets/channel_card.dart';
 import '../../../core/platform/platform_detector.dart';
 import '../../../core/i18n/app_strings.dart';
@@ -52,19 +53,28 @@ class _ChannelsScreenState extends State<ChannelsScreen> {
     final size = MediaQuery.of(context).size;
     final isTV = PlatformDetector.isTV || size.width > 1200;
 
+    final content = Row(
+      children: [
+        // Groups Sidebar (for TV and Desktop)
+        if (isTV) _buildGroupsSidebar(),
+        // Channels Grid
+        Expanded(child: _buildChannelsContent()),
+      ],
+    );
+
+    if (isTV) {
+      return Scaffold(
+        backgroundColor: AppTheme.backgroundColor,
+        body: TVSidebar(
+          selectedIndex: 1, // 频道页
+          child: content,
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
-      body: Row(
-        children: [
-          // Groups Sidebar (for TV and Desktop)
-          if (isTV) _buildGroupsSidebar(),
-
-          // Channels Grid
-          Expanded(
-            child: _buildChannelsContent(),
-          ),
-        ],
-      ),
+      body: content,
     );
   }
 
