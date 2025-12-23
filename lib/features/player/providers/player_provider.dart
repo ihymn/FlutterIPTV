@@ -105,21 +105,16 @@ class PlayerProvider extends ChangeNotifier {
   }
 
   PlayerProvider() {
-    debugPrint('PlayerProvider: Constructor called, isTV=${PlatformDetector.isTV}, _useNativePlayer=$_useNativePlayer');
     _initPlayer();
   }
 
   void _initPlayer({bool useSoftwareDecoding = false}) {
     // On Android TV, we use native player - don't initialize any Flutter player
     if (_useNativePlayer) {
-      debugPrint('PlayerProvider: Using Native Player for Android TV (no Flutter player init)');
       return;
     }
     
-    if (_useExoPlayer) {
-      debugPrint('PlayerProvider: Using ExoPlayer for Android phone/tablet');
-    } else {
-      debugPrint('PlayerProvider: Using media_kit for desktop');
+    if (!_useExoPlayer) {
       _initMediaKitPlayer(useSoftwareDecoding: useSoftwareDecoding);
     }
   }
@@ -243,12 +238,10 @@ class PlayerProvider extends ChangeNotifier {
     _position = value.position;
     _duration = value.duration;
 
-    final oldState = _state;
     if (value.hasError) { 
       _state = PlayerState.error; 
       _error = value.errorDescription ?? 'Unknown error'; 
     } else if (value.isPlaying) { 
-      // 优先判断 isPlaying，即使在缓冲也显示播放状态
       _state = PlayerState.playing; 
     } else if (value.isBuffering) { 
       _state = PlayerState.buffering; 
@@ -256,11 +249,6 @@ class PlayerProvider extends ChangeNotifier {
       _state = PlayerState.paused; 
     }
     
-    if (oldState != _state) {
-      debugPrint('PlayerProvider: ExoPlayer state changed: $oldState -> $_state, isLoading=$isLoading');
-    }
-    
-    // 确保每次状态更新都通知 UI
     notifyListeners();
   }
 
@@ -313,9 +301,7 @@ class PlayerProvider extends ChangeNotifier {
   void play() { _useExoPlayer ? _exoPlayer?.play() : _mediaKitPlayer?.play(); }
 
   Future<void> stop() async {
-    debugPrint('PlayerProvider: stop() called, _useExoPlayer=$_useExoPlayer');
     if (_useExoPlayer) {
-      // 完全释放 ExoPlayer 资源
       await _disposeExoPlayer();
     } else {
       _mediaKitPlayer?.stop();
@@ -331,7 +317,6 @@ class PlayerProvider extends ChangeNotifier {
 
   void setVolume(double volume) {
     _volume = volume.clamp(0.0, 1.0);
-    debugPrint('PlayerProvider: setVolume($_volume), boost=$_volumeBoostDb dB');
     _applyVolume();
     if (_volume > 0) _isMuted = false;
     notifyListeners();
@@ -368,12 +353,8 @@ class PlayerProvider extends ChangeNotifier {
     // Convert dB to linear multiplier: multiplier = 10^(dB/20)
     final multiplier = math.pow(10, _volumeBoostDb / 20.0);
     final effectiveVolume = (_volume * multiplier).clamp(0.0, 2.0); // Allow up to 2x volume
-    
-    debugPrint('PlayerProvider: _applyVolume - base=$_volume, boost=$_volumeBoostDb dB, multiplier=$multiplier, effective=$effectiveVolume');
 
     if (_useExoPlayer) {
-      // ExoPlayer 音量范围是 0.0-1.0，但我们允许超过1.0来增益
-      debugPrint('PlayerProvider: ExoPlayer setVolume($effectiveVolume)');
       _exoPlayer?.setVolume(effectiveVolume);
     } else {
       // media_kit uses 0-100 scale, but can go higher for boost

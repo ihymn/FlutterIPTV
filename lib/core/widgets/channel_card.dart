@@ -341,6 +341,8 @@ class ChannelCard extends StatelessWidget {
         child: CachedNetworkImage(
           imageUrl: url,
           fit: BoxFit.contain,
+          memCacheWidth: 160,  // 限制内存缓存大小
+          memCacheHeight: 90,
           placeholder: (context, url) => _buildPlaceholder(),
           errorWidget: (context, url, error) => _buildPlaceholder(),
         ),
@@ -348,7 +350,7 @@ class ChannelCard extends StatelessWidget {
     } else {
       return Padding(
         padding: const EdgeInsets.all(10),
-        child: Image.file(File(url), fit: BoxFit.contain, errorBuilder: (context, error, stackTrace) => _buildPlaceholder()),
+        child: Image.file(File(url), fit: BoxFit.contain, cacheWidth: 160, cacheHeight: 90, errorBuilder: (context, error, stackTrace) => _buildPlaceholder()),
       );
     }
   }

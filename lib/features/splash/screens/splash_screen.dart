@@ -24,9 +24,6 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _textOpacity;
   late Animation<Offset> _textSlide;
 
-  // ignore: unused_field
-  final bool _isInitialized = false;
-
   @override
   void initState() {
     super.initState();

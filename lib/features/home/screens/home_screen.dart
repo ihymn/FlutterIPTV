@@ -225,21 +225,16 @@ class _HomeScreenState extends State<HomeScreen> {
     final activePlaylist = playlistProvider.activePlaylist;
     Channel? lastChannel;
     
-    debugPrint('DEBUG: rememberLastChannel=${settingsProvider.rememberLastChannel}, lastChannelId=${settingsProvider.lastChannelId}');
-    
     if (settingsProvider.rememberLastChannel && settingsProvider.lastChannelId != null) {
       try {
         lastChannel = provider.channels.firstWhere(
           (c) => c.id == settingsProvider.lastChannelId,
         );
-        debugPrint('DEBUG: 找到上次播放的频道: ${lastChannel.name} (ID: ${lastChannel.id})');
       } catch (_) {
         // 频道不存在，使用第一个频道
-        debugPrint('DEBUG: 未找到上次播放的频道ID ${settingsProvider.lastChannelId}，使用第一个频道');
         lastChannel = provider.channels.isNotEmpty ? provider.channels.first : null;
       }
     } else {
-      debugPrint('DEBUG: 未启用记忆功能或无上次频道，使用第一个频道');
       lastChannel = provider.channels.isNotEmpty ? provider.channels.first : null;
     }
 
@@ -394,30 +389,18 @@ class _HomeScreenState extends State<HomeScreen> {
             // 显示数量不能超过实际频道数量，最少显示1个
             final displayCount = maxCards.clamp(1, channels.length);
             
-            // 获取 EPG Provider
-            final epgProvider = context.watch<EpgProvider>();
-            
             return SizedBox(
               height: 140,
               child: Row(
                 children: List.generate(displayCount, (index) {
                   final channel = channels[index];
-                  // 获取 EPG 信息
-                  final currentProgram = epgProvider.getCurrentProgram(channel.epgId, channel.name);
-                  final nextProgram = epgProvider.getNextProgram(channel.epgId, channel.name);
                   
                   return Padding(
                     padding: EdgeInsets.only(right: index < displayCount - 1 ? cardSpacing : 0),
                     child: SizedBox(
                       width: cardWidth,
-                      child: ChannelCard(
-                        name: channel.name,
-                        logoUrl: channel.logoUrl,
-                        groupName: channel.groupName,
-                        currentProgram: currentProgram?.title,
-                        nextProgram: nextProgram?.title,
-                        isFavorite: context.watch<FavoritesProvider>().isFavorite(channel.id ?? 0),
-                        onFavoriteToggle: () => context.read<FavoritesProvider>().toggleFavorite(channel),
+                      child: _OptimizedChannelCard(
+                        channel: channel,
                         onTap: () => _playChannel(channel),
                       ),
                     ),
@@ -514,7 +497,7 @@ class _ResponsiveCategoryChipsState extends State<_ResponsiveCategoryChips> {
         
         // 计算每个 chip 的大致宽度（图标 + 文字 + padding）
         // 估算每个 chip 平均宽度约 100px
-        final estimatedChipWidth = 110.0;
+        const estimatedChipWidth = 110.0;
         final maxVisibleCount = (availableWidth / estimatedChipWidth).floor();
         
         // 如果所有分类都能显示，直接用 Wrap
@@ -648,6 +631,43 @@ class _ResponsiveCategoryChipsState extends State<_ResponsiveCategoryChips> {
           Text('收起', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
         ],
       ),
+    );
+  }
+}
+
+
+/// 优化的频道卡片组件 - 使用 Selector 精确控制重建
+class _OptimizedChannelCard extends StatelessWidget {
+  final Channel channel;
+  final VoidCallback onTap;
+
+  const _OptimizedChannelCard({
+    required this.channel,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // 使用 Selector 只在该频道的收藏状态变化时重建
+    return Selector<FavoritesProvider, bool>(
+      selector: (_, provider) => provider.isFavorite(channel.id ?? 0),
+      builder: (context, isFavorite, _) {
+        // EPG 数据使用 read 而不是 watch，因为 EPG 不会频繁变化
+        final epgProvider = context.read<EpgProvider>();
+        final currentProgram = epgProvider.getCurrentProgram(channel.epgId, channel.name);
+        final nextProgram = epgProvider.getNextProgram(channel.epgId, channel.name);
+        
+        return ChannelCard(
+          name: channel.name,
+          logoUrl: channel.logoUrl,
+          groupName: channel.groupName,
+          currentProgram: currentProgram?.title,
+          nextProgram: nextProgram?.title,
+          isFavorite: isFavorite,
+          onFavoriteToggle: () => context.read<FavoritesProvider>().toggleFavorite(channel),
+          onTap: onTap,
+        );
+      },
     );
   }
 }
