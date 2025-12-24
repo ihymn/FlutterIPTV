@@ -886,7 +886,7 @@ class _PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver
               ),
             ),
             const Spacer(),
-            // 底部：播放/暂停按钮
+            // 底部：静音 + 播放/暂停按钮
             Padding(
               padding: const EdgeInsets.all(8),
               child: Consumer<PlayerProvider>(
@@ -894,11 +894,29 @@ class _PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      // 静音按钮
+                      GestureDetector(
+                        onTap: provider.toggleMute,
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            provider.isMuted ? Icons.volume_off : Icons.volume_up,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      // 播放/暂停按钮
                       GestureDetector(
                         onTap: provider.togglePlayPause,
                         child: Container(
                           padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             gradient: AppTheme.lotusGradient,
                             shape: BoxShape.circle,
                           ),
