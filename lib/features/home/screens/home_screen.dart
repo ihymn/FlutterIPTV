@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../core/theme/app_theme.dart';
 import '../../../core/navigation/app_router.dart';
@@ -29,16 +30,31 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Channel> _recommendedChannels = [];
   int? _lastPlaylistId; // 跟踪上次的播放列表ID
   int _lastChannelCount = 0; // 跟踪上次的频道数量
+  String _appVersion = '';
 
   @override
   void initState() {
     super.initState();
     _loadData();
+    _loadVersion();
     // 监听频道变化
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ChannelProvider>().addListener(_onChannelProviderChanged);
       context.read<PlaylistProvider>().addListener(_onPlaylistProviderChanged);
     });
+  }
+
+  Future<void> _loadVersion() async {
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      if (mounted) {
+        setState(() {
+          _appVersion = packageInfo.version;
+        });
+      }
+    } catch (e) {
+      // ignore
+    }
   }
 
   @override
@@ -302,7 +318,16 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 ShaderMask(
                   shaderCallback: (bounds) => AppTheme.lotusGradient.createShader(bounds),
-                  child: const Text('Lotus IPTV', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      const Text('Lotus IPTV', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
+                      const SizedBox(width: 8),
+                      Text('v${_appVersion}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: Colors.white70)),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
