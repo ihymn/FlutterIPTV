@@ -94,6 +94,18 @@ class NativePlayerFragment : Fragment() {
     private var isHardwareDecoder = false
     private var frameRate = 0f
     
+    // Retry logic
+    private var retryCount = 0
+    private val MAX_RETRIES = 3
+    private val RETRY_DELAY = 2000L
+    private var retryRunnable: Runnable? = null
+    
+    // FPS calculation
+    private var lastRenderedFrameCount = 0L
+    private var lastFpsUpdateTime = 0L
+    private var fpsUpdateRunnable: Runnable? = null
+    private val FPS_UPDATE_INTERVAL = 1000L
+    
     // EPG update
     private var epgUpdateRunnable: Runnable? = null
     private val EPG_UPDATE_INTERVAL = 60000L // 每分钟更新一次
@@ -680,9 +692,17 @@ class NativePlayerFragment : Fragment() {
                         Player.STATE_READY -> {
                             hideLoading()
                             updateStatus("LIVE")
+                            retryCount = 0 // 播放成功，重置重试计数
+                            startFpsCalculation() // 开始计算 FPS
                         }
-                        Player.STATE_ENDED -> updateStatus("Ended")
-                        Player.STATE_IDLE -> updateStatus("Idle")
+                        Player.STATE_ENDED -> {
+                            updateStatus("Ended")
+                            stopFpsCalculation()
+                        }
+                        Player.STATE_IDLE -> {
+                            updateStatus("Idle")
+                            stopFpsCalculation()
+                        }
                     }
                 }
 
@@ -702,8 +722,25 @@ class NativePlayerFragment : Fragment() {
 
                 override fun onPlayerError(error: PlaybackException) {
                     Log.e(TAG, "Player error: ${error.message}", error)
-                    showError("Error: ${error.message}")
-                    updateStatus("Offline")
+                    
+                    // 自动重试逻辑
+                    if (retryCount < MAX_RETRIES) {
+                        retryCount++
+                        Log.d(TAG, "Retrying playback ($retryCount/$MAX_RETRIES)...")
+                        updateStatus("Retrying")
+                        showLoading()
+                        
+                        retryRunnable?.let { handler.removeCallbacks(it) }
+                        retryRunnable = Runnable {
+                            if (currentUrl.isNotEmpty()) {
+                                playUrl(currentUrl)
+                            }
+                        }
+                        handler.postDelayed(retryRunnable!!, RETRY_DELAY)
+                    } else {
+                        showError("Error: ${error.message}")
+                        updateStatus("Offline")
+                    }
                 }
             })
             
@@ -758,6 +795,7 @@ class NativePlayerFragment : Fragment() {
         videoWidth = 0
         videoHeight = 0
         frameRate = 0f
+        stopFpsCalculation()
         updateVideoInfoDisplay()
         
         showLoading()
@@ -768,10 +806,52 @@ class NativePlayerFragment : Fragment() {
         player?.prepare()
     }
     
+    // 通过渲染帧数计算实际 FPS
+    private fun startFpsCalculation() {
+        stopFpsCalculation()
+        lastRenderedFrameCount = 0L
+        lastFpsUpdateTime = System.currentTimeMillis()
+        
+        fpsUpdateRunnable = Runnable {
+            calculateFps()
+            handler.postDelayed(fpsUpdateRunnable!!, FPS_UPDATE_INTERVAL)
+        }
+        handler.postDelayed(fpsUpdateRunnable!!, FPS_UPDATE_INTERVAL)
+    }
+    
+    private fun stopFpsCalculation() {
+        fpsUpdateRunnable?.let { handler.removeCallbacks(it) }
+        fpsUpdateRunnable = null
+    }
+    
+    private fun calculateFps() {
+        val p = player ?: return
+        
+        // 如果已经有帧率信息，不需要计算
+        if (frameRate > 0) return
+        
+        try {
+            // 尝试从 videoFormat 获取帧率
+            val videoFormat = p.videoFormat
+            if (videoFormat != null && videoFormat.frameRate > 0) {
+                frameRate = videoFormat.frameRate
+                updateVideoInfoDisplay()
+                stopFpsCalculation() // 获取到帧率后停止计算
+                return
+            }
+        } catch (e: Exception) {
+            Log.d(TAG, "Failed to get video format: ${e.message}")
+        }
+    }
+    
     private fun switchChannel(newIndex: Int) {
         if (channelUrls.isEmpty() || newIndex < 0 || newIndex >= channelUrls.size) {
             return
         }
+        
+        // 重置重试计数
+        retryCount = 0
+        retryRunnable?.let { handler.removeCallbacks(it) }
         
         currentIndex = newIndex
         currentUrl = channelUrls[newIndex]
@@ -1040,7 +1120,9 @@ class NativePlayerFragment : Fragment() {
         super.onDestroyView()
         Log.d(TAG, "onDestroyView")
         hideControlsRunnable?.let { handler.removeCallbacks(it) }
+        retryRunnable?.let { handler.removeCallbacks(it) }
         stopProgressUpdate() // 停止进度更新
+        stopFpsCalculation() // 停止 FPS 计算
         player?.release()
         player = null
         activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
