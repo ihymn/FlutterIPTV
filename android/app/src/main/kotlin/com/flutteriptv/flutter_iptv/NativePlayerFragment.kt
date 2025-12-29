@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.media3.common.C
 import androidx.media3.common.Format
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
@@ -21,6 +22,7 @@ import androidx.media3.common.Player
 import androidx.media3.common.VideoSize
 import androidx.media3.exoplayer.DecoderReuseEvaluation
 import androidx.media3.exoplayer.DefaultRenderersFactory
+import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.analytics.AnalyticsListener
 import androidx.media3.ui.PlayerView
@@ -677,10 +679,26 @@ class NativePlayerFragment : Fragment() {
         val renderersFactory = DefaultRenderersFactory(requireContext())
             .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER)
         
-        player = ExoPlayer.Builder(requireContext(), renderersFactory).build().also { exoPlayer ->
+        // 配置加载控制 - 增加缓冲区大小
+        val loadControl = DefaultLoadControl.Builder()
+            .setBufferDurationsMs(
+                50000,  // minBufferMs: 最小缓冲 50 秒
+                120000, // maxBufferMs: 最大缓冲 120 秒
+                2500,   // bufferForPlaybackMs: 开始播放需要 2.5 秒缓冲
+                5000    // bufferForPlaybackAfterRebufferMs: 重新缓冲后需要 5 秒
+            )
+            .build()
+        
+        player = ExoPlayer.Builder(requireContext(), renderersFactory)
+            .setLoadControl(loadControl)
+            .setVideoChangeFrameRateStrategy(C.VIDEO_CHANGE_FRAME_RATE_STRATEGY_OFF)
+            .build().also { exoPlayer ->
             playerView.player = exoPlayer
             exoPlayer.playWhenReady = true
             exoPlayer.repeatMode = Player.REPEAT_MODE_OFF
+            
+            // 设置视频缩放模式
+            exoPlayer.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT
 
             exoPlayer.addListener(object : Player.Listener {
                 override fun onPlaybackStateChanged(playbackState: Int) {

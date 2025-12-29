@@ -1,23 +1,23 @@
 {
-  "version": "1.1.79",
-  "build": 79,
+  "version": "1.1.80",
+  "build": 80,
   "releaseDate": "2025-12-29",
   "assets": {
-    "windows": "https://github.com/shnulaa/FlutterIPTV/releases/download/v1.1.79/flutteriptv-Windows-x64-Setup.exe",
+    "windows": "https://github.com/shnulaa/FlutterIPTV/releases/download/v1.1.80/flutteriptv-Windows-x64-Setup.exe",
     "android_mobile": {
-      "arm64-v8a": "https://github.com/shnulaa/FlutterIPTV/releases/download/v1.1.79/flutteriptv-Android-Mobile-arm64-v8a.apk",
-      "armeabi-v7a": "https://github.com/shnulaa/FlutterIPTV/releases/download/v1.1.79/flutteriptv-Android-Mobile-armeabi-v7a.apk",
-      "x86_64": "https://github.com/shnulaa/FlutterIPTV/releases/download/v1.1.79/flutteriptv-Android-Mobile-x86_64.apk"
+      "arm64-v8a": "https://github.com/shnulaa/FlutterIPTV/releases/download/v1.1.80/flutteriptv-Android-Mobile-arm64-v8a.apk",
+      "armeabi-v7a": "https://github.com/shnulaa/FlutterIPTV/releases/download/v1.1.80/flutteriptv-Android-Mobile-armeabi-v7a.apk",
+      "x86_64": "https://github.com/shnulaa/FlutterIPTV/releases/download/v1.1.80/flutteriptv-Android-Mobile-x86_64.apk"
     },
     "android_tv": {
-      "arm64-v8a": "https://github.com/shnulaa/FlutterIPTV/releases/download/v1.1.79/flutteriptv-AndroidTV-arm64-v8a.apk",
-      "armeabi-v7a": "https://github.com/shnulaa/FlutterIPTV/releases/download/v1.1.79/flutteriptv-AndroidTV-armeabi-v7a.apk",
-      "x86_64": "https://github.com/shnulaa/FlutterIPTV/releases/download/v1.1.79/flutteriptv-AndroidTV-x86_64.apk"
+      "arm64-v8a": "https://github.com/shnulaa/FlutterIPTV/releases/download/v1.1.80/flutteriptv-AndroidTV-arm64-v8a.apk",
+      "armeabi-v7a": "https://github.com/shnulaa/FlutterIPTV/releases/download/v1.1.80/flutteriptv-AndroidTV-armeabi-v7a.apk",
+      "x86_64": "https://github.com/shnulaa/FlutterIPTV/releases/download/v1.1.80/flutteriptv-AndroidTV-x86_64.apk"
     }
   },
   "changelog": {
-    "zh": "- TV端播放错误自动重试（最多3次）\n- TV端通过渲染帧数计算实际FPS",
-    "en": "- Auto-retry on TV playback error (up to 3 times)\n- Calculate actual FPS from rendered frame count on TV"
+    "zh": "- 优化DLNA投屏4K视频播放流畅度\n- 增加视频缓冲区大小\n- TV端播放错误自动重试",
+    "en": "- Optimize DLNA casting 4K video playback smoothness\n- Increase video buffer size\n- Auto-retry on TV playback error"
   },
   "minVersion": "1.0.0"
 }
