@@ -70,6 +70,16 @@ class NativePlayerFragment : Fragment() {
     // FPS display
     private lateinit var fpsText: TextView
     private var showFps: Boolean = true
+    
+    // Source indicator
+    private lateinit var sourceIndicator: View
+    private lateinit var sourceText: TextView
+    private var sourceIndicatorHideRunnable: Runnable? = null
+    private val SOURCE_INDICATOR_HIDE_DELAY = 3000L
+    
+    // Long press detection for left key
+    private var leftKeyDownTime = 0L
+    private val LONG_PRESS_THRESHOLD = 500L // 500ms for long press
 
     private var currentUrl: String = ""
     private var currentName: String = ""
@@ -229,6 +239,10 @@ class NativePlayerFragment : Fragment() {
         
         // FPS display
         fpsText = view.findViewById(R.id.fps_text)
+        
+        // Source indicator
+        sourceIndicator = view.findViewById(R.id.source_indicator)
+        sourceText = view.findViewById(R.id.source_text)
 
         channelNameText.text = currentName
         updateStatus("Loading")
@@ -257,10 +271,10 @@ class NativePlayerFragment : Fragment() {
         view.isFocusableInTouchMode = true
         view.requestFocus()
         view.setOnKeyListener { _, keyCode, event ->
-            if (event.action == KeyEvent.ACTION_DOWN) {
-                handleKeyDown(keyCode)
-            } else {
-                false
+            when (event.action) {
+                KeyEvent.ACTION_DOWN -> handleKeyDown(keyCode, event)
+                KeyEvent.ACTION_UP -> handleKeyUp(keyCode, event)
+                else -> false
             }
         }
 
@@ -609,7 +623,7 @@ class NativePlayerFragment : Fragment() {
         return true
     }
 
-    private fun handleKeyDown(keyCode: Int): Boolean {
+    private fun handleKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         Log.d(TAG, "handleKeyDown: keyCode=$keyCode, categoryPanelVisible=$categoryPanelVisible, isDlnaMode=$isDlnaMode")
         
         when (keyCode) {
@@ -644,13 +658,16 @@ class NativePlayerFragment : Fragment() {
                     hideCategoryPanel()
                     return true
                 }
-                // 如果有多个源，切换到上一个源
-                if (hasMultipleSources()) {
-                    previousSource()
+                // 记录按下时间，用于长按检测
+                if (event.repeatCount == 0) {
+                    leftKeyDownTime = System.currentTimeMillis()
+                }
+                // 检测长按 - 显示分类面板
+                if (event.repeatCount > 0 && System.currentTimeMillis() - leftKeyDownTime >= LONG_PRESS_THRESHOLD) {
+                    showCategoryPanel()
+                    leftKeyDownTime = 0L // 重置，防止重复触发
                     return true
                 }
-                // 没有多个源时，显示分类面板
-                showCategoryPanel()
                 return true
             }
             KeyEvent.KEYCODE_DPAD_RIGHT -> {
@@ -706,6 +723,29 @@ class NativePlayerFragment : Fragment() {
         
         if (!categoryPanelVisible) {
             showControls()
+        }
+        return false
+    }
+    
+    private fun handleKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        when (keyCode) {
+            KeyEvent.KEYCODE_DPAD_LEFT -> {
+                // DLNA 模式或分类面板可见时不处理
+                if (isDlnaMode || categoryPanelVisible) {
+                    return false
+                }
+                // 短按左键 - 切换源或显示分类面板
+                val pressDuration = System.currentTimeMillis() - leftKeyDownTime
+                if (leftKeyDownTime > 0 && pressDuration < LONG_PRESS_THRESHOLD) {
+                    if (hasMultipleSources()) {
+                        previousSource()
+                    } else {
+                        showCategoryPanel()
+                    }
+                }
+                leftKeyDownTime = 0L
+                return true
+            }
         }
         return false
     }
@@ -951,23 +991,34 @@ class NativePlayerFragment : Fragment() {
         showControls()
     }
     
-    // 显示源切换指示器 (已移除，因为频道名称已显示源信息)
+    // 显示源切换指示器
     private fun showSourceIndicator() {
-        // 不再显示 Toast，频道名称已显示源信息
         updateSourceIndicator()
+        // 显示源指示器
+        activity?.runOnUiThread {
+            sourceIndicator.visibility = View.VISIBLE
+            // 取消之前的隐藏任务
+            sourceIndicatorHideRunnable?.let { handler.removeCallbacks(it) }
+            // 3秒后自动隐藏
+            sourceIndicatorHideRunnable = Runnable {
+                sourceIndicator.visibility = View.GONE
+            }
+            handler.postDelayed(sourceIndicatorHideRunnable!!, SOURCE_INDICATOR_HIDE_DELAY)
+        }
     }
     
     // 更新源指示器显示
     private fun updateSourceIndicator() {
         val sources = getCurrentSources()
-        if (sources.size > 1) {
-            // 在频道名称后显示源信息
-            activity?.runOnUiThread {
-                channelNameText.text = "$currentName [${currentSourceIndex + 1}/${sources.size}]"
-            }
-        } else {
-            activity?.runOnUiThread {
+        activity?.runOnUiThread {
+            if (sources.size > 1) {
+                // 更新源指示器文本
+                sourceText.text = "源 ${currentSourceIndex + 1}/${sources.size}"
+                // 频道名称不再显示源信息
                 channelNameText.text = currentName
+            } else {
+                channelNameText.text = currentName
+                sourceIndicator.visibility = View.GONE
             }
         }
     }
@@ -1263,6 +1314,7 @@ class NativePlayerFragment : Fragment() {
         Log.d(TAG, "onDestroyView")
         hideControlsRunnable?.let { handler.removeCallbacks(it) }
         retryRunnable?.let { handler.removeCallbacks(it) }
+        sourceIndicatorHideRunnable?.let { handler.removeCallbacks(it) }
         stopProgressUpdate() // 停止进度更新
         stopFpsCalculation() // 停止 FPS 计算
         player?.release()
