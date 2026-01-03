@@ -1,5 +1,6 @@
 package com.flutteriptv.flutter_iptv
 
+import android.net.TrafficStats
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -70,20 +71,12 @@ class NativePlayerFragment : Fragment() {
     // FPS display
     private lateinit var fpsText: TextView
     private var showFps: Boolean = true
-
+    
     // Clock display
     private lateinit var clockText: TextView
     private var showClock: Boolean = true
     private var clockUpdateRunnable: Runnable? = null
     private val CLOCK_UPDATE_INTERVAL = 1000L
-
-    // Network speed display
-    private lateinit var speedText: TextView
-    private var showNetworkSpeed: Boolean = true
-    private var networkSpeedUpdateRunnable: Runnable? = null
-    private val NETWORK_SPEED_UPDATE_INTERVAL = 1000L
-    private var lastBytesLoaded = 0L
-    private var lastSpeedUpdateTime = 0L
     
     // Source indicator
     private lateinit var sourceIndicator: View
@@ -147,6 +140,14 @@ class NativePlayerFragment : Fragment() {
     // Progress update (DLNA mode)
     private var progressUpdateRunnable: Runnable? = null
     private val PROGRESS_UPDATE_INTERVAL = 1000L // 每秒更新一次
+
+    // Network speed display
+    private lateinit var speedText: TextView
+    private var showNetworkSpeed: Boolean = true
+    private var networkSpeedUpdateRunnable: Runnable? = null
+    private val NETWORK_SPEED_UPDATE_INTERVAL = 1000L
+    private var lastRxBytes = 0L
+    private var lastSpeedUpdateTime = 0L
     
     var onCloseListener: (() -> Unit)? = null
 
@@ -1062,12 +1063,12 @@ class NativePlayerFragment : Fragment() {
         }
     }
 
-    // Network speed update
+    // 网速更新
     private fun startNetworkSpeedUpdate() {
         stopNetworkSpeedUpdate()
-        lastBytesLoaded = 0L
+        lastRxBytes = TrafficStats.getTotalRxBytes()
         lastSpeedUpdateTime = System.currentTimeMillis()
-
+        
         networkSpeedUpdateRunnable = Runnable {
             updateNetworkSpeed()
             handler.postDelayed(networkSpeedUpdateRunnable!!, NETWORK_SPEED_UPDATE_INTERVAL)
@@ -1081,48 +1082,48 @@ class NativePlayerFragment : Fragment() {
     }
 
     private fun updateNetworkSpeed() {
-        val p = player ?: return
-
-        if (!p.isPlaying) {
-            lastSpeedUpdateTime = System.currentTimeMillis()
-            lastBytesLoaded = 0L
-            speedText.visibility = View.GONE
+        if (!showNetworkSpeed) {
+            activity?.runOnUiThread {
+                speedText.visibility = View.GONE
+            }
             return
         }
 
-        val currentTime = System.currentTimeMillis()
-        val timeDelta = currentTime - lastSpeedUpdateTime
-
-        if (timeDelta < 800) return
-
         try {
-            // 从 ExoPlayer 的 LoadControl 获取已加载的字节数
-            val currentBytes = p.getTotalBufferedBytes()
+            val currentRxBytes = TrafficStats.getTotalRxBytes()
+            val currentTime = System.currentTimeMillis()
+            val timeDelta = currentTime - lastSpeedUpdateTime
+            
+            val speedStr: String
+            if (timeDelta > 0 && lastRxBytes > 0) {
+                val bytesDelta = currentRxBytes - lastRxBytes
+                val speedBytesPerSecond = bytesDelta * 1000.0 / timeDelta
+                val speedKbps = speedBytesPerSecond / 1024.0 // KB/s
+                val speedMbps = speedKbps / 1024.0 // MB/s
 
-            if (lastBytesLoaded > 0 && currentBytes > lastBytesLoaded) {
-                val bytesDelta = currentBytes - lastBytesLoaded
-                val speedBytesPerSecond = bytesDelta * 1000f / timeDelta
-                val speedKbps = speedBytesPerSecond / 1024f // KB/s
-                val speedMbps = speedKbps / 1024f // MB/s
-
-                val speedText: String = if (speedMbps >= 1.0f) {
-                    "%.2f MB/s".format(speedMbps)
-                } else if (speedKbps >= 1.0f) {
-                    "%.0f KB/s".format(speedKbps)
+                speedStr = if (speedMbps >= 1.0) {
+                    "↓%.1f MB/s".format(speedMbps)
+                } else if (speedKbps >= 1.0) {
+                    "↓%.0f KB/s".format(speedKbps)
                 } else {
-                    "%.0f B/s".format(speedBytesPerSecond)
+                    "↓%.0f B/s".format(speedBytesPerSecond)
                 }
-
-                activity?.runOnUiThread {
-                    this.speedText.text = speedText
-                    this.speedText.visibility = if (showNetworkSpeed) View.VISIBLE else View.GONE
-                }
+            } else {
+                speedStr = "↓--"
             }
-
-            lastBytesLoaded = currentBytes
+            
+            lastRxBytes = currentRxBytes
             lastSpeedUpdateTime = currentTime
+
+            activity?.runOnUiThread {
+                this.speedText.text = speedStr
+                this.speedText.visibility = View.VISIBLE
+            }
         } catch (e: Exception) {
             Log.d(TAG, "Failed to update network speed: ${e.message}")
+            activity?.runOnUiThread {
+                speedText.visibility = View.GONE
+            }
         }
     }
     

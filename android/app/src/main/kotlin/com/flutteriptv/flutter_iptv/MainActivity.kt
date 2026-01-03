@@ -92,7 +92,7 @@ class MainActivity: FlutterFragmentActivity() {
                     val showFps = call.argument<Boolean>("showFps") ?: true
                     val showClock = call.argument<Boolean>("showClock") ?: true
                     val showNetworkSpeed = call.argument<Boolean>("showNetworkSpeed") ?: true
-
+                    
                     if (url != null) {
                         Log.d(TAG, "Launching native player fragment: $name (index $index of ${urls?.size ?: 0}, isDlna=$isDlnaMode, buffer=$bufferStrength, showFps=$showFps, showClock=$showClock, showNetworkSpeed=$showNetworkSpeed)")
                         try {
@@ -188,10 +188,10 @@ class MainActivity: FlutterFragmentActivity() {
         showNetworkSpeed: Boolean = true
     ) {
         Log.d(TAG, "showPlayerFragment isDlnaMode=$isDlnaMode, bufferStrength=$bufferStrength, showFps=$showFps, showClock=$showClock, showNetworkSpeed=$showNetworkSpeed")
-
+        
         // Enable back press callback when player is showing
         backPressedCallback.isEnabled = true
-
+        
         // Hide system UI
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -205,12 +205,12 @@ class MainActivity: FlutterFragmentActivity() {
             or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
             or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         )
-
+        
         playerContainer?.visibility = View.VISIBLE
-
+        
         // 将 sources 转换为 ArrayList<ArrayList<String>>
         val sourcesArrayList = sources?.map { ArrayList(it) }?.let { ArrayList(it) }
-
+        
         playerFragment = NativePlayerFragment.newInstance(
             url,
             name,
@@ -231,7 +231,7 @@ class MainActivity: FlutterFragmentActivity() {
                 }
             }
         }
-
+        
         supportFragmentManager.beginTransaction()
             .replace(playerContainer!!.id, playerFragment!!)
             .commit()
