@@ -177,10 +177,12 @@ class _PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver
 
         debugPrint('PlayerScreen: Launching native player for ${widget.channelName} (isDlna=$isDlnaMode, index $currentIndex of ${urls.length})');
 
-        // 获取缓冲强度设置和FPS显示设置
+        // 获取缓冲强度设置和显示设置
         final settingsProvider = context.read<SettingsProvider>();
         final bufferStrength = settingsProvider.bufferStrength;
         final showFps = settingsProvider.showFps;
+        final showClock = settingsProvider.showClock;
+        final showNetworkSpeed = settingsProvider.showNetworkSpeed;
 
         // Launch native player with channel list and callback for when it closes
         final launched = await NativePlayerChannel.launchPlayer(
@@ -194,6 +196,8 @@ class _PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver
           isDlnaMode: isDlnaMode,
           bufferStrength: bufferStrength,
           showFps: showFps,
+          showClock: showClock,
+          showNetworkSpeed: showNetworkSpeed,
           onClosed: () {
             debugPrint('PlayerScreen: Native player closed callback');
             // 停止 DLNA 同步定时器
