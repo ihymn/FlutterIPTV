@@ -11434,176 +11434,60 @@
 <channel id="74">
 <display-name lang="zh">福建综合</display-name>
 </channel>
-<programme start="20260106000000 +0800" stop="20260106000100 +0800" channel="74">
-<title lang="zh">剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106000100 +0800" stop="20260106002500 +0800" channel="74">
+<programme start="20260106000000 +0800" stop="20260106002500 +0800" channel="74">
 <title lang="zh">剧场</title>
 <desc lang="zh"></desc>
 </programme>
 <programme start="20260106002500 +0800" stop="20260106005200 +0800" channel="74">
-<title lang="zh">福建新闻联播</title>
+<title lang="zh">重播：福建新闻联播</title>
 <desc lang="zh"></desc>
 </programme>
-<programme start="20260106005200 +0800" stop="20260106011400 +0800" channel="74">
-<title lang="zh">帮帮有1套</title>
+<programme start="20260106005200 +0800" stop="20260106021100 +0800" channel="74">
+<title lang="zh">重播：帮帮团</title>
 <desc lang="zh"></desc>
 </programme>
-<programme start="20260106011400 +0800" stop="20260106015700 +0800" channel="74">
-<title lang="zh">1帮帮团</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106015700 +0800" stop="20260106021100 +0800" channel="74">
-<title lang="zh">调解有1套</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106021100 +0800" stop="20260106023200 +0800" channel="74">
-<title lang="zh">凌晨剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106023200 +0800" stop="20260106025700 +0800" channel="74">
-<title lang="zh">凌晨剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106025700 +0800" stop="20260106031800 +0800" channel="74">
-<title lang="zh">凌晨剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106031800 +0800" stop="20260106034300 +0800" channel="74">
-<title lang="zh">凌晨剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106034300 +0800" stop="20260106040400 +0800" channel="74">
-<title lang="zh">凌晨剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106040400 +0800" stop="20260106042900 +0800" channel="74">
-<title lang="zh">凌晨剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106042900 +0800" stop="20260106045500 +0800" channel="74">
-<title lang="zh">凌晨剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106045500 +0800" stop="20260106051900 +0800" channel="74">
-<title lang="zh">凌晨剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106051900 +0800" stop="20260106054000 +0800" channel="74">
-<title lang="zh">凌晨剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106054000 +0800" stop="20260106060200 +0800" channel="74">
-<title lang="zh">凌晨剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106060200 +0800" stop="20260106062500 +0800" channel="74">
-<title lang="zh">凌晨剧场</title>
+<programme start="20260106021100 +0800" stop="20260106062500 +0800" channel="74">
+<title lang="zh">温暖的，甜蜜的</title>
 <desc lang="zh"></desc>
 </programme>
 <programme start="20260106062500 +0800" stop="20260106063500 +0800" channel="74">
-<title lang="zh">新闻启示录</title>
+<title lang="zh">重播：新闻启示录</title>
 <desc lang="zh"></desc>
 </programme>
-<programme start="20260106063500 +0800" stop="20260106070000 +0800" channel="74">
-<title lang="zh">福建新闻联播</title>
+<programme start="20260106063500 +0800" stop="20260106070400 +0800" channel="74">
+<title lang="zh">重播：福建新闻联播</title>
 <desc lang="zh"></desc>
 </programme>
-<programme start="20260106070000 +0800" stop="20260106070600 +0800" channel="74">
-<title lang="zh">中华人民共和国国歌</title>
+<programme start="20260106070400 +0800" stop="20260106120000 +0800" channel="74">
+<title lang="zh">情满九道弯</title>
 <desc lang="zh"></desc>
 </programme>
-<programme start="20260106070600 +0800" stop="20260106074000 +0800" channel="74">
-<title lang="zh">纪录片</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106074000 +0800" stop="20260106081700 +0800" channel="74">
-<title lang="zh">流金剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106081700 +0800" stop="20260106084700 +0800" channel="74">
-<title lang="zh">流金剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106084700 +0800" stop="20260106093300 +0800" channel="74">
-<title lang="zh">医道丹心</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106093300 +0800" stop="20260106100300 +0800" channel="74">
-<title lang="zh">流金剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106100300 +0800" stop="20260106103900 +0800" channel="74">
-<title lang="zh">流金剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106103900 +0800" stop="20260106111500 +0800" channel="74">
-<title lang="zh">流金剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106111500 +0800" stop="20260106115900 +0800" channel="74">
-<title lang="zh">流金剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106115900 +0800" stop="20260106123000 +0800" channel="74">
+<programme start="20260106120000 +0800" stop="20260106123000 +0800" channel="74">
 <title lang="zh">午间新时空</title>
 <desc lang="zh"></desc>
 </programme>
-<programme start="20260106123000 +0800" stop="20260106124300 +0800" channel="74">
+<programme start="20260106123000 +0800" stop="20260106123600 +0800" channel="74">
 <title lang="zh">午间全省天气预报</title>
 <desc lang="zh"></desc>
 </programme>
-<programme start="20260106124300 +0800" stop="20260106130600 +0800" channel="74">
-<title lang="zh">帮帮有1套</title>
+<programme start="20260106123600 +0800" stop="20260106140500 +0800" channel="74">
+<title lang="zh">重播：帮帮团</title>
 <desc lang="zh"></desc>
 </programme>
-<programme start="20260106130600 +0800" stop="20260106134100 +0800" channel="74">
-<title lang="zh">1帮帮团</title>
+<programme start="20260106140500 +0800" stop="20260106180000 +0800" channel="74">
+<title lang="zh">情满九道弯</title>
 <desc lang="zh"></desc>
 </programme>
-<programme start="20260106134100 +0800" stop="20260106141000 +0800" channel="74">
-<title lang="zh">调解有1套</title>
+<programme start="20260106180000 +0800" stop="20260106192600 +0800" channel="74">
+<title lang="zh">帮帮团</title>
 <desc lang="zh"></desc>
 </programme>
-<programme start="20260106141000 +0800" stop="20260106144000 +0800" channel="74">
-<title lang="zh">流金剧场</title>
+<programme start="20260106192600 +0800" stop="20260106193100 +0800" channel="74">
+<title lang="zh">全省天气预报</title>
 <desc lang="zh"></desc>
 </programme>
-<programme start="20260106144000 +0800" stop="20260106152400 +0800" channel="74">
-<title lang="zh">仁心说医事</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106152400 +0800" stop="20260106155400 +0800" channel="74">
-<title lang="zh">流金剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106155400 +0800" stop="20260106163800 +0800" channel="74">
-<title lang="zh">仁心说医事</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106163800 +0800" stop="20260106170800 +0800" channel="74">
-<title lang="zh">流金剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106170800 +0800" stop="20260106180200 +0800" channel="74">
-<title lang="zh">医道丹心</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106180200 +0800" stop="20260106182200 +0800" channel="74">
-<title lang="zh">帮帮有1套</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106182200 +0800" stop="20260106190400 +0800" channel="74">
-<title lang="zh">1帮帮团</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106190400 +0800" stop="20260106193000 +0800" channel="74">
-<title lang="zh">调解有1套</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106193000 +0800" stop="20260106193500 +0800" channel="74">
-<title lang="zh">福建海洋预报</title>
+<programme start="20260106193100 +0800" stop="20260106193500 +0800" channel="74">
+<title lang="zh">全省海洋环境预报</title>
 <desc lang="zh"></desc>
 </programme>
 <programme start="20260106193500 +0800" stop="20260106200500 +0800" channel="74">
@@ -11615,23 +11499,23 @@
 <desc lang="zh"></desc>
 </programme>
 <programme start="20260106202000 +0800" stop="20260106210700 +0800" channel="74">
-<title lang="zh">一剧场</title>
+<title lang="zh">时光正好(6)</title>
 <desc lang="zh"></desc>
 </programme>
 <programme start="20260106210700 +0800" stop="20260106215500 +0800" channel="74">
-<title lang="zh">一剧场</title>
+<title lang="zh">时光正好(7)</title>
 <desc lang="zh"></desc>
 </programme>
-<programme start="20260106215500 +0800" stop="20260106223400 +0800" channel="74">
-<title lang="zh">纪录片</title>
+<programme start="20260106215500 +0800" stop="20260106220100 +0800" channel="74">
+<title lang="zh">闽山烽火密送护航</title>
 <desc lang="zh"></desc>
 </programme>
-<programme start="20260106223400 +0800" stop="20260106232700 +0800" channel="74">
-<title lang="zh">剧场</title>
+<programme start="20260106220100 +0800" stop="20260106223000 +0800" channel="74">
+<title lang="zh">记住乡愁Ⅷ</title>
 <desc lang="zh"></desc>
 </programme>
-<programme start="20260106232700 +0800" stop="20260106235959 +0800" channel="74">
-<title lang="zh">剧场</title>
+<programme start="20260106223000 +0800" stop="20260106235959 +0800" channel="74">
+<title lang="zh">去有风的地方</title>
 <desc lang="zh"></desc>
 </programme>
 <channel id="75">
@@ -12091,48 +11975,20 @@
 <channel id="77">
 <display-name lang="zh">福建电视剧</display-name>
 </channel>
-<programme start="20260106000000 +0800" stop="20260106021000 +0800" channel="77">
-<title lang="zh">午夜剧场</title>
+<programme start="20260106000000 +0800" stop="20260106072000 +0800" channel="77">
+<title lang="zh">谁说我结不了婚</title>
 <desc lang="zh"></desc>
 </programme>
-<programme start="20260106021000 +0800" stop="20260106041000 +0800" channel="77">
-<title lang="zh">阳光剧场</title>
+<programme start="20260106072000 +0800" stop="20260106185000 +0800" channel="77">
+<title lang="zh">悬崖</title>
 <desc lang="zh"></desc>
 </programme>
-<programme start="20260106041000 +0800" stop="20260106061000 +0800" channel="77">
-<title lang="zh">阳光剧场</title>
+<programme start="20260106185000 +0800" stop="20260106220000 +0800" channel="77">
+<title lang="zh">津门飞鹰</title>
 <desc lang="zh"></desc>
 </programme>
-<programme start="20260106061000 +0800" stop="20260106071000 +0800" channel="77">
-<title lang="zh">阳光剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106071000 +0800" stop="20260106100000 +0800" channel="77">
-<title lang="zh">阳光剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106100000 +0800" stop="20260106120000 +0800" channel="77">
-<title lang="zh">阳光剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106120000 +0800" stop="20260106140000 +0800" channel="77">
-<title lang="zh">阳光剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106140000 +0800" stop="20260106160000 +0800" channel="77">
-<title lang="zh">阳光剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106160000 +0800" stop="20260106184500 +0800" channel="77">
-<title lang="zh">阳光剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106184500 +0800" stop="20260106214500 +0800" channel="77">
-<title lang="zh">星月剧场</title>
-<desc lang="zh"></desc>
-</programme>
-<programme start="20260106214500 +0800" stop="20260106235959 +0800" channel="77">
-<title lang="zh">精英剧场</title>
+<programme start="20260106220000 +0800" stop="20260106235959 +0800" channel="77">
+<title lang="zh">无间</title>
 <desc lang="zh"></desc>
 </programme>
 <channel id="78">
