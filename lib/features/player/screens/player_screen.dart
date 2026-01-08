@@ -577,10 +577,10 @@ class _PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver
       // 频道切换指示
       if (_gestureValue < 0) {
         icon = Icons.keyboard_arrow_up;
-        label = '下一频道';
+        label = AppStrings.of(context)?.nextChannel ?? 'Next channel';
       } else {
         icon = Icons.keyboard_arrow_down;
-        label = '上一频道';
+        label = AppStrings.of(context)?.previousChannel ?? 'Previous channel';
       }
     } else {
       return const SizedBox.shrink();
@@ -1276,7 +1276,7 @@ class _PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver
                                 const Icon(Icons.swap_horiz, color: Colors.white, size: 10),
                                 const SizedBox(width: 4),
                                 Text(
-                                  '源 ${provider.currentSourceIndex}/${provider.sourceCount}',
+                                  '${AppStrings.of(context)?.source ?? 'Source'} ${provider.currentSourceIndex}/${provider.sourceCount}',
                                   style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
                                 ),
                               ],
@@ -1459,7 +1459,7 @@ class _PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver
                                       color: AppTheme.primaryColor,
                                       borderRadius: BorderRadius.circular(4),
                                     ),
-                                    child: const Text('正在播放', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+                                    child: Text(AppStrings.of(context)?.nowPlaying ?? 'Now playing', style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
                                   ),
                                   const SizedBox(width: 8),
                                   Expanded(
@@ -1471,7 +1471,7 @@ class _PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver
                                     ),
                                   ),
                                   Text(
-                                    '${currentProgram.remainingMinutes}分钟后结束',
+                                    (AppStrings.of(context)?.endsInMinutes ?? 'Ends in {minutes} min').replaceFirst('{minutes}', '${currentProgram.remainingMinutes}'),
                                     style: const TextStyle(color: Color(0x99FFFFFF), fontSize: 11),
                                   ),
                                 ],
@@ -1486,7 +1486,7 @@ class _PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver
                                       color: const Color(0x66FFFFFF),
                                       borderRadius: BorderRadius.circular(4),
                                     ),
-                                    child: const Text('即将播放', style: TextStyle(color: Colors.white, fontSize: 10)),
+                                    child: Text(AppStrings.of(context)?.upNext ?? 'Up next', style: const TextStyle(color: Colors.white, fontSize: 10)),
                                   ),
                                   const SizedBox(width: 8),
                                   Expanded(
@@ -1763,11 +1763,11 @@ class _PlayerScreenState extends State<PlayerScreen> with WidgetsBindingObserver
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                     child: Text(
-                      '分类',
-                      style: TextStyle(
+                      AppStrings.of(context)?.categories ?? 'Categories',
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

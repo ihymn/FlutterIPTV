@@ -79,7 +79,8 @@ class SettingsScreen extends StatelessWidget {
                 value: settings.autoPlay,
                 onChanged: (value) {
                   settings.setAutoPlay(value);
-                  _showSuccess(context, value ? '已启用自动播放' : '已关闭自动播放');
+                  final strings = AppStrings.of(context);
+                  _showSuccess(context, value ? (strings?.autoPlayEnabled ?? 'Auto-play enabled') : (strings?.autoPlayDisabled ?? 'Auto-play disabled'));
                 },
               ),
               _buildDivider(),
@@ -94,76 +95,81 @@ class SettingsScreen extends StatelessWidget {
               _buildSelectTile(
                 context,
                 title: AppStrings.of(context)?.bufferSize ?? 'Buffer Size',
-                subtitle: '${settings.bufferSize} ${AppStrings.of(context)?.seconds ?? 'seconds'} (未实现)',
+                subtitle: '${settings.bufferSize} ${AppStrings.of(context)?.seconds ?? 'seconds'} ${AppStrings.of(context)?.notImplemented ?? '(Not implemented)'}',
                 icon: Icons.storage_rounded,
                 onTap: () => _showBufferSizeDialog(context, settings),
               ),
               _buildDivider(),
               _buildSelectTile(
                 context,
-                title: '缓冲强度',
-                subtitle: _getBufferStrengthLabel(settings.bufferStrength),
+                title: AppStrings.of(context)?.bufferStrength ?? 'Buffer Strength',
+                subtitle: _getBufferStrengthLabel(context, settings.bufferStrength),
                 icon: Icons.speed_rounded,
                 onTap: () => _showBufferStrengthDialog(context, settings),
               ),
               _buildDivider(),
               _buildSwitchTile(
                 context,
-                title: '显示 FPS',
-                subtitle: '在播放器右上角显示帧率',
+                title: AppStrings.of(context)?.showFps ?? 'Show FPS',
+                subtitle: AppStrings.of(context)?.showFpsSubtitle ?? 'Show frame rate in top-right corner of player',
                 icon: Icons.speed_rounded,
                 value: settings.showFps,
                 onChanged: (value) {
                   settings.setShowFps(value);
-                  _showSuccess(context, value ? '已启用 FPS 显示' : '已关闭 FPS 显示');
+                  final strings = AppStrings.of(context);
+                  _showSuccess(context, value ? (strings?.fpsEnabled ?? 'FPS display enabled') : (strings?.fpsDisabled ?? 'FPS display disabled'));
                 },
               ),
               _buildDivider(),
               _buildSwitchTile(
                 context,
-                title: '显示时间',
-                subtitle: '在播放器右上角显示当前时间',
+                title: AppStrings.of(context)?.showClock ?? 'Show Clock',
+                subtitle: AppStrings.of(context)?.showClockSubtitle ?? 'Show current time in top-right corner of player',
                 icon: Icons.schedule_rounded,
                 value: settings.showClock,
                 onChanged: (value) {
                   settings.setShowClock(value);
-                  _showSuccess(context, value ? '已启用时间显示' : '已关闭时间显示');
+                  final strings = AppStrings.of(context);
+                  _showSuccess(context, value ? (strings?.clockEnabled ?? 'Clock display enabled') : (strings?.clockDisabled ?? 'Clock display disabled'));
                 },
               ),
               _buildDivider(),
               _buildSwitchTile(
                 context,
-                title: '显示网速',
-                subtitle: '在播放器右上角显示下行网速',
+                title: AppStrings.of(context)?.showNetworkSpeed ?? 'Show Network Speed',
+                subtitle: AppStrings.of(context)?.showNetworkSpeedSubtitle ?? 'Show download speed in top-right corner of player',
                 icon: Icons.network_check_rounded,
                 value: settings.showNetworkSpeed,
                 onChanged: (value) {
                   settings.setShowNetworkSpeed(value);
-                  _showSuccess(context, value ? '已启用网速显示' : '已关闭网速显示');
+                  final strings = AppStrings.of(context);
+                  _showSuccess(context, value ? (strings?.networkSpeedEnabled ?? 'Network speed display enabled') : (strings?.networkSpeedDisabled ?? 'Network speed display disabled'));
                 },
               ),
               _buildDivider(),
               _buildSwitchTile(
                 context,
-                title: '显示分辨率',
-                subtitle: '在播放器右上角显示视频分辨率和码率',
+                title: AppStrings.of(context)?.showVideoInfo ?? 'Show Resolution',
+                subtitle: AppStrings.of(context)?.showVideoInfoSubtitle ?? 'Show video resolution and bitrate in top-right corner',
                 icon: Icons.high_quality_rounded,
                 value: settings.showVideoInfo,
                 onChanged: (value) {
                   settings.setShowVideoInfo(value);
-                  _showSuccess(context, value ? '已启用分辨率显示' : '已关闭分辨率显示');
+                  final strings = AppStrings.of(context);
+                  _showSuccess(context, value ? (strings?.videoInfoEnabled ?? 'Resolution display enabled') : (strings?.videoInfoDisabled ?? 'Resolution display disabled'));
                 },
               ),
               _buildDivider(),
               _buildSwitchTile(
                 context,
                 title: AppStrings.of(context)?.volumeNormalization ?? 'Volume Normalization',
-                subtitle: '${AppStrings.of(context)?.volumeNormalizationSubtitle ?? 'Auto-adjust volume differences between channels'} (未实现)',
+                subtitle: '${AppStrings.of(context)?.volumeNormalizationSubtitle ?? 'Auto-adjust volume differences between channels'} ${AppStrings.of(context)?.notImplemented ?? '(Not implemented)'}',
                 icon: Icons.volume_up_rounded,
                 value: settings.volumeNormalization,
                 onChanged: (value) {
                   settings.setVolumeNormalization(value);
-                  _showError(context, '音量标准化尚未实现，设置不会生效');
+                  final strings = AppStrings.of(context);
+                  _showError(context, strings?.volumeNormalizationNotImplemented ?? 'Volume normalization not implemented, setting will not take effect');
                 },
               ),
               if (settings.volumeNormalization) ...[
@@ -186,12 +192,13 @@ class SettingsScreen extends StatelessWidget {
               _buildSwitchTile(
                 context,
                 title: AppStrings.of(context)?.autoRefresh ?? 'Auto-refresh',
-                subtitle: '${AppStrings.of(context)?.autoRefreshSubtitle ?? 'Automatically update playlists periodically'} (未实现)',
+                subtitle: '${AppStrings.of(context)?.autoRefreshSubtitle ?? 'Automatically update playlists periodically'} ${AppStrings.of(context)?.notImplemented ?? '(Not implemented)'}',
                 icon: Icons.refresh_rounded,
                 value: settings.autoRefresh,
                 onChanged: (value) {
                   settings.setAutoRefresh(value);
-                  _showError(context, '自动刷新尚未实现，设置不会生效');
+                  final strings = AppStrings.of(context);
+                  _showError(context, strings?.autoRefreshNotImplemented ?? 'Auto-refresh not implemented, setting will not take effect');
                 },
               ),
               if (settings.autoRefresh) ...[
@@ -199,7 +206,7 @@ class SettingsScreen extends StatelessWidget {
                 _buildSelectTile(
                   context,
                   title: AppStrings.of(context)?.refreshInterval ?? 'Refresh Interval',
-                  subtitle: 'Every ${settings.refreshInterval} ${AppStrings.of(context)?.hours ?? 'hours'} (未实现)',
+                  subtitle: 'Every ${settings.refreshInterval} ${AppStrings.of(context)?.hours ?? 'hours'} ${AppStrings.of(context)?.notImplemented ?? '(Not implemented)'}',
                   icon: Icons.schedule_rounded,
                   onTap: () => _showRefreshIntervalDialog(context, settings),
                 ),
@@ -213,7 +220,8 @@ class SettingsScreen extends StatelessWidget {
                 value: settings.rememberLastChannel,
                 onChanged: (value) {
                   settings.setRememberLastChannel(value);
-                  _showSuccess(context, value ? '已启用记住上次频道' : '已关闭记住上次频道');
+                  final strings = AppStrings.of(context);
+                  _showSuccess(context, value ? (strings?.rememberLastChannelEnabled ?? 'Remember last channel enabled') : (strings?.rememberLastChannelDisabled ?? 'Remember last channel disabled'));
                 },
               ),
             ]),
@@ -231,22 +239,23 @@ class SettingsScreen extends StatelessWidget {
                 value: settings.enableEpg,
                 onChanged: (value) async {
                   await settings.setEnableEpg(value);
+                  final strings = AppStrings.of(context);
                   if (value) {
                     // 启用 EPG 时，如果有配置 URL 则加载
                     if (settings.epgUrl != null && settings.epgUrl!.isNotEmpty) {
                       final success = await context.read<EpgProvider>().loadEpg(settings.epgUrl!);
                       if (success) {
-                        _showSuccess(context, 'EPG 已启用并加载成功');
+                        _showSuccess(context, strings?.epgEnabledAndLoaded ?? 'EPG enabled and loaded successfully');
                       } else {
-                        _showError(context, 'EPG 已启用，但加载失败');
+                        _showError(context, strings?.epgEnabledButFailed ?? 'EPG enabled but failed to load');
                       }
                     } else {
-                      _showSuccess(context, 'EPG 已启用，请配置 EPG 链接');
+                      _showSuccess(context, strings?.epgEnabledPleaseConfigure ?? 'EPG enabled, please configure EPG URL');
                     }
                   } else {
                     // 关闭 EPG 时清除已加载的数据
                     context.read<EpgProvider>().clear();
-                    _showSuccess(context, 'EPG 已关闭');
+                    _showSuccess(context, strings?.epgDisabled ?? 'EPG disabled');
                   }
                 },
               ),
@@ -265,24 +274,25 @@ class SettingsScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // DLNA Settings
-            _buildSectionHeader('DLNA 投屏'),
             Consumer<DlnaProvider>(
               builder: (context, dlnaProvider, _) {
+                final strings = AppStrings.of(context);
                 return _buildSettingsCard([
+                  _buildSectionHeader(strings?.dlnaCasting ?? 'DLNA Casting'),
                   _buildSwitchTile(
                     context,
-                    title: '启用 DLNA 服务',
-                    subtitle: dlnaProvider.isRunning 
-                        ? '已启动: ${dlnaProvider.deviceName}'
-                        : '允许其他设备投屏到本设备',
+                    title: strings?.enableDlnaService ?? 'Enable DLNA Service',
+                    subtitle: dlnaProvider.isRunning
+                        ? (strings?.dlnaServiceStarted ?? 'Started: {deviceName}').replaceFirst('{deviceName}', dlnaProvider.deviceName)
+                        : strings?.allowOtherDevicesToCast ?? 'Allow other devices to cast to this device',
                     icon: Icons.cast_rounded,
                     value: dlnaProvider.isEnabled,
                     onChanged: (value) async {
                       final success = await dlnaProvider.setEnabled(value);
                       if (success) {
-                        _showSuccess(context, value ? 'DLNA 服务已启动' : 'DLNA 服务已停止');
+                        _showSuccess(context, value ? (strings?.dlnaServiceStartedMsg ?? 'DLNA service started') : (strings?.dlnaServiceStoppedMsg ?? 'DLNA service stopped'));
                       } else {
-                        _showError(context, 'DLNA 服务启动失败，请检查网络连接');
+                        _showError(context, strings?.dlnaServiceStartFailed ?? 'Failed to start DLNA service, please check network connection');
                       }
                     },
                   ),
@@ -298,12 +308,13 @@ class SettingsScreen extends StatelessWidget {
               _buildSwitchTile(
                 context,
                 title: AppStrings.of(context)?.enableParentalControl ?? 'Enable Parental Control',
-                subtitle: '${AppStrings.of(context)?.enableParentalControlSubtitle ?? 'Require PIN to access certain content'} (未实现)',
+                subtitle: '${AppStrings.of(context)?.enableParentalControlSubtitle ?? 'Require PIN to access certain content'} ${AppStrings.of(context)?.notImplemented ?? '(Not implemented)'}',
                 icon: Icons.lock_outline_rounded,
                 value: settings.parentalControl,
                 onChanged: (value) {
                   settings.setParentalControl(value);
-                  _showError(context, '家长控制尚未实现，设置不会生效');
+                  final strings = AppStrings.of(context);
+                  _showError(context, strings?.parentalControlNotImplemented ?? 'Parental control not implemented, setting will not take effect');
                 },
               ),
               if (settings.parentalControl) ...[
@@ -311,7 +322,7 @@ class SettingsScreen extends StatelessWidget {
                 _buildActionTile(
                   context,
                   title: AppStrings.of(context)?.changePin ?? 'Change PIN',
-                  subtitle: '${AppStrings.of(context)?.changePinSubtitle ?? 'Update your parental control PIN'} (未实现)',
+                  subtitle: '${AppStrings.of(context)?.changePinSubtitle ?? 'Update your parental control PIN'} ${AppStrings.of(context)?.notImplemented ?? '(Not implemented)'}',
                   icon: Icons.pin_rounded,
                   onTap: () => _showChangePinDialog(context, settings),
                 ),
@@ -400,17 +411,18 @@ class SettingsScreen extends StatelessWidget {
 
   String _getCurrentLanguageLabel(BuildContext context, SettingsProvider settings) {
     final locale = settings.locale;
+    final strings = AppStrings.of(context);
     if (locale == null) {
       // 没有设置，显示"跟随系统"
       final systemLocale = Localizations.localeOf(context);
-      final systemLang = systemLocale.languageCode == 'zh' ? '中文' : 'English';
-      return '${AppStrings.of(context)?.followSystem ?? "跟随系统"} ($systemLang)';
+      final systemLang = systemLocale.languageCode == 'zh' ? (strings?.chinese ?? '中文') : 'English';
+      return '${strings?.followSystem ?? "Follow system"} ($systemLang)';
     }
     // 根据保存的设置显示
     if (locale.languageCode == 'zh') {
-      return '中文';
+      return strings?.chinese ?? '中文';
     }
-    return 'English';
+    return strings?.english ?? 'English';
   }
 
   String _getPlatformName() {
@@ -463,7 +475,8 @@ class SettingsScreen extends StatelessWidget {
                   if (value != null) {
                     settings.setDecodingMode(value);
                     Navigator.pop(dialogContext);
-                    _showSuccess(context, '解码模式已设置为: ${_getDecodingModeLabel(context, value)}');
+                    final strings = AppStrings.of(context);
+                    _showSuccess(context, (strings?.decodingModeSet ?? 'Decoding mode set to: {mode}').replaceFirst('{mode}', _getDecodingModeLabel(context, value)));
                   }
                 },
                 activeColor: AppTheme.primaryColor,
@@ -792,14 +805,15 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  String _getBufferStrengthLabel(String strength) {
+  String _getBufferStrengthLabel(BuildContext context, String strength) {
+    final strings = AppStrings.of(context);
     switch (strength) {
       case 'fast':
-        return '快速 (切换快，可能卡顿)';
+        return strings?.fastBuffer ?? 'Fast (Quick switching, may stutter)';
       case 'balanced':
-        return '平衡';
+        return strings?.balancedBuffer ?? 'Balanced';
       case 'stable':
-        return '稳定 (切换慢，不易卡顿)';
+        return strings?.stableBuffer ?? 'Stable (Slow switching, less stuttering)';
       default:
         return strength;
     }
@@ -807,10 +821,11 @@ class SettingsScreen extends StatelessWidget {
 
   void _showBufferStrengthDialog(BuildContext context, SettingsProvider settings) {
     final options = ['fast', 'balanced', 'stable'];
+    final strings = AppStrings.of(context);
     final labels = {
-      'fast': '快速 (切换快，可能卡顿)',
-      'balanced': '平衡',
-      'stable': '稳定 (切换慢，不易卡顿)',
+      'fast': strings?.fastBuffer ?? 'Fast (Quick switching, may stutter)',
+      'balanced': strings?.balancedBuffer ?? 'Balanced',
+      'stable': strings?.stableBuffer ?? 'Stable (Slow switching, less stuttering)',
     };
 
     showDialog(
@@ -818,9 +833,9 @@ class SettingsScreen extends StatelessWidget {
       builder: (dialogContext) {
         return AlertDialog(
           backgroundColor: AppTheme.surfaceColor,
-          title: const Text(
-            '缓冲强度',
-            style: TextStyle(color: AppTheme.textPrimary),
+          title: Text(
+            strings?.bufferStrength ?? 'Buffer Strength',
+            style: const TextStyle(color: AppTheme.textPrimary),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -873,7 +888,8 @@ class SettingsScreen extends StatelessWidget {
                   if (value != null) {
                     settings.setBufferSize(value);
                     Navigator.pop(dialogContext);
-                    _showError(context, '缓冲大小设置尚未实现，设置不会生效');
+                    final strings = AppStrings.of(context);
+                    _showError(context, strings?.bufferSizeNotImplemented ?? 'Buffer size setting not implemented, setting will not take effect');
                   }
                 },
                 activeColor: AppTheme.primaryColor,
@@ -916,7 +932,9 @@ class SettingsScreen extends StatelessWidget {
                   if (value != null) {
                     settings.setVolumeBoost(value);
                     Navigator.pop(dialogContext);
-                    _showSuccess(context, '音量增益已设置为 ${value == 0 ? "无增益" : "${value > 0 ? '+' : ''}$value dB"}');
+                    final strings = AppStrings.of(context);
+                    final boostValue = value == 0 ? (strings?.noBoostValue ?? 'No boost') : '${value > 0 ? '+' : ''}$value dB';
+                    _showSuccess(context, (strings?.volumeBoostSet ?? 'Volume boost set to {value}').replaceFirst('{value}', boostValue));
                   }
                 },
                 activeColor: AppTheme.primaryColor,
@@ -965,7 +983,8 @@ class SettingsScreen extends StatelessWidget {
                   if (value != null) {
                     settings.setRefreshInterval(value);
                     Navigator.pop(dialogContext);
-                    _showError(context, '自动刷新尚未实现，设置不会生效');
+                    final strings = AppStrings.of(context);
+                    _showError(context, strings?.autoRefreshNotImplemented ?? 'Auto-refresh not implemented, setting will not take effect');
                   }
                 },
                 activeColor: AppTheme.primaryColor,
@@ -1015,18 +1034,19 @@ class SettingsScreen extends StatelessWidget {
                 if (newUrl != oldUrl) {
                   final epgProvider = context.read<EpgProvider>();
                   epgProvider.clear();
+                  final strings = AppStrings.of(context);
 
                   if (newUrl != null && newUrl.isNotEmpty && settings.enableEpg) {
                     final success = await epgProvider.loadEpg(newUrl);
                     if (success) {
-                      _showSuccess(context, 'EPG 链接已保存并加载成功');
+                      _showSuccess(context, strings?.epgUrlSavedAndLoaded ?? 'EPG URL saved and loaded successfully');
                     } else {
-                      _showError(context, 'EPG 链接已保存，但加载失败');
+                      _showError(context, strings?.epgUrlSavedButFailed ?? 'EPG URL saved but failed to load');
                     }
                   } else if (newUrl == null) {
-                    _showSuccess(context, 'EPG 链接已清除');
+                    _showSuccess(context, strings?.epgUrlCleared ?? 'EPG URL cleared');
                   } else {
-                    _showSuccess(context, 'EPG 链接已保存');
+                    _showSuccess(context, strings?.epgUrlSaved ?? 'EPG URL saved');
                   }
                 }
               },
@@ -1068,12 +1088,13 @@ class SettingsScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
+                final strings = AppStrings.of(context);
                 if (controller.text.length == 4) {
                   settings.setParentalPin(controller.text);
                   Navigator.pop(dialogContext);
-                  _showError(context, '家长控制尚未实现，PIN 设置不会生效');
+                  _showError(context, strings?.pinNotImplemented ?? 'Parental control not implemented, PIN setting will not take effect');
                 } else {
-                  _showError(context, '请输入4位数字PIN');
+                  _showError(context, strings?.enter4DigitPin ?? 'Please enter 4-digit PIN');
                 }
               },
               child: Text(AppStrings.of(context)?.save ?? 'Save'),
@@ -1108,7 +1129,8 @@ class SettingsScreen extends StatelessWidget {
                 settings.resetSettings();
                 context.read<EpgProvider>().clear();
                 Navigator.pop(dialogContext);
-                _showSuccess(context, '所有设置已重置为默认值');
+                final strings = AppStrings.of(context);
+                _showSuccess(context, strings?.allSettingsReset ?? 'All settings have been reset to default values');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.errorColor,
@@ -1166,16 +1188,17 @@ class SettingsScreen extends StatelessWidget {
                 activeColor: AppTheme.primaryColor,
               ),
               RadioListTile<String?>(
-                title: const Text(
-                  '中文',
-                  style: TextStyle(color: AppTheme.textPrimary),
+                title: Text(
+                  AppStrings.of(context)?.chinese ?? '中文',
+                  style: const TextStyle(color: AppTheme.textPrimary),
                 ),
                 value: 'zh',
                 groupValue: currentLang,
                 onChanged: (value) {
                   settings.setLocale(const Locale('zh'));
                   Navigator.pop(dialogContext);
-                  _showSuccess(context, '语言已切换为中文');
+                  final strings = AppStrings.of(context);
+                  _showSuccess(context, strings?.languageSwitchedToChinese ?? 'Language switched to Chinese');
                 },
                 activeColor: AppTheme.primaryColor,
               ),
@@ -1225,7 +1248,8 @@ class SettingsScreen extends StatelessWidget {
                   if (value != null) {
                     settings.setThemeMode(value);
                     Navigator.pop(dialogContext);
-                    _showSuccess(context, '${AppStrings.of(context)?.themeChanged ?? "主题已切换"}: ${_getThemeModeLabel(context, value)}');
+                    final strings = AppStrings.of(context);
+                    _showSuccess(context, (strings?.themeChangedMessage ?? 'Theme changed: {theme}').replaceFirst('{theme}', _getThemeModeLabel(context, value)));
                   }
                 },
                 activeColor: AppTheme.primaryColor,

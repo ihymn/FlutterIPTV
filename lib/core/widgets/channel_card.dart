@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../theme/app_theme.dart';
 import '../platform/platform_detector.dart';
+import '../i18n/app_strings.dart';
 import 'tv_focusable.dart';
 
 /// A 16:9 card widget for displaying channel information
@@ -154,7 +155,7 @@ class ChannelCard extends StatelessWidget {
                             color: AppTheme.warningColor,
                             borderRadius: BorderRadius.circular(3),
                           ),
-                          child: const Text('失效', style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold)),
+                          child: Text(AppStrings.of(context)?.unavailable ?? 'Unavailable', style: const TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold)),
                         ),
                       ),
                   ],
@@ -214,6 +215,7 @@ class ChannelCard extends StatelessWidget {
 
   // TV端长按菜单
   void _showTVMenu(BuildContext context) {
+    final strings = AppStrings.of(context);
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -245,7 +247,7 @@ class ChannelCard extends StatelessWidget {
                 children: [
                   Icon(isFavorite ? Icons.favorite : Icons.favorite_border, color: Colors.white, size: 20),
                   const SizedBox(width: 12),
-                  Text(isFavorite ? '取消收藏' : '添加收藏', style: const TextStyle(color: Colors.white, fontSize: 14)),
+                  Text(isFavorite ? (strings?.removeFavorites ?? 'Remove from favorites') : (strings?.addFavorites ?? 'Add to favorites'), style: const TextStyle(color: Colors.white, fontSize: 14)),
                 ],
               ),
             ),
@@ -268,11 +270,11 @@ class ChannelCard extends StatelessWidget {
                     child: child,
                   );
                 },
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.speed_rounded, color: Colors.white, size: 20),
-                    SizedBox(width: 12),
-                    Text('测试频道', style: TextStyle(color: Colors.white, fontSize: 14)),
+                    const Icon(Icons.speed_rounded, color: Colors.white, size: 20),
+                    const SizedBox(width: 12),
+                    Text(strings?.testChannel ?? 'Test channel', style: const TextStyle(color: Colors.white, fontSize: 14)),
                   ],
                 ),
               ),
@@ -281,7 +283,7 @@ class ChannelCard extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('取消'),
+            child: Text(strings?.cancel ?? 'Cancel'),
           ),
         ],
       ),

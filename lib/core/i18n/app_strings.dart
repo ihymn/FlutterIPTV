@@ -195,6 +195,83 @@ class AppStrings {
   String get qrStep2 => _localizedValues['qrStep2']!;
   String get qrStep3 => _localizedValues['qrStep3']!;
 
+  // Player gestures and EPG
+  String get nextChannel => _localizedValues['nextChannel']!;
+  String get previousChannel => _localizedValues['previousChannel']!;
+  String get source => _localizedValues['source']!;
+  String get nowPlaying => _localizedValues['nowPlaying']!;
+  String get endsInMinutes => _localizedValues['endsInMinutes']!;
+  String get upNext => _localizedValues['upNext']!;
+
+  // Update dialog
+  String get newVersionAvailable => _localizedValues['newVersionAvailable']!;
+  String get whatsNew => _localizedValues['whatsNew']!;
+  String get updateLater => _localizedValues['updateLater']!;
+  String get updateNow => _localizedValues['updateNow']!;
+  String get noReleaseNotes => _localizedValues['noReleaseNotes']!;
+
+  // Settings messages
+  String get autoPlayEnabled => _localizedValues['autoPlayEnabled']!;
+  String get autoPlayDisabled => _localizedValues['autoPlayDisabled']!;
+  String get bufferStrength => _localizedValues['bufferStrength']!;
+  String get showFps => _localizedValues['showFps']!;
+  String get showFpsSubtitle => _localizedValues['showFpsSubtitle']!;
+  String get fpsEnabled => _localizedValues['fpsEnabled']!;
+  String get fpsDisabled => _localizedValues['fpsDisabled']!;
+  String get showClock => _localizedValues['showClock']!;
+  String get showClockSubtitle => _localizedValues['showClockSubtitle']!;
+  String get clockEnabled => _localizedValues['clockEnabled']!;
+  String get clockDisabled => _localizedValues['clockDisabled']!;
+  String get showNetworkSpeed => _localizedValues['showNetworkSpeed']!;
+  String get showNetworkSpeedSubtitle => _localizedValues['showNetworkSpeedSubtitle']!;
+  String get networkSpeedEnabled => _localizedValues['networkSpeedEnabled']!;
+  String get networkSpeedDisabled => _localizedValues['networkSpeedDisabled']!;
+  String get showVideoInfo => _localizedValues['showVideoInfo']!;
+  String get showVideoInfoSubtitle => _localizedValues['showVideoInfoSubtitle']!;
+  String get videoInfoEnabled => _localizedValues['videoInfoEnabled']!;
+  String get videoInfoDisabled => _localizedValues['videoInfoDisabled']!;
+  String get notImplemented => _localizedValues['notImplemented']!;
+  String get volumeNormalizationNotImplemented => _localizedValues['volumeNormalizationNotImplemented']!;
+  String get autoRefreshNotImplemented => _localizedValues['autoRefreshNotImplemented']!;
+  String get rememberLastChannelEnabled => _localizedValues['rememberLastChannelEnabled']!;
+  String get rememberLastChannelDisabled => _localizedValues['rememberLastChannelDisabled']!;
+  String get epgEnabledAndLoaded => _localizedValues['epgEnabledAndLoaded']!;
+  String get epgEnabledButFailed => _localizedValues['epgEnabledButFailed']!;
+  String get epgEnabledPleaseConfigure => _localizedValues['epgEnabledPleaseConfigure']!;
+  String get epgDisabled => _localizedValues['epgDisabled']!;
+  String get weak => _localizedValues['weak']!;
+  String get medium => _localizedValues['medium']!;
+  String get strong => _localizedValues['strong']!;
+
+  // More settings messages
+  String get dlnaCasting => _localizedValues['dlnaCasting']!;
+  String get enableDlnaService => _localizedValues['enableDlnaService']!;
+  String get dlnaServiceStarted => _localizedValues['dlnaServiceStarted']!;
+  String get allowOtherDevicesToCast => _localizedValues['allowOtherDevicesToCast']!;
+  String get dlnaServiceStartedMsg => _localizedValues['dlnaServiceStartedMsg']!;
+  String get dlnaServiceStoppedMsg => _localizedValues['dlnaServiceStoppedMsg']!;
+  String get dlnaServiceStartFailed => _localizedValues['dlnaServiceStartFailed']!;
+  String get parentalControlNotImplemented => _localizedValues['parentalControlNotImplemented']!;
+  String get changePinNotImplemented => _localizedValues['changePinNotImplemented']!;
+  String get decodingModeSet => _localizedValues['decodingModeSet']!;
+  String get fastBuffer => _localizedValues['fastBuffer']!;
+  String get balancedBuffer => _localizedValues['balancedBuffer']!;
+  String get stableBuffer => _localizedValues['stableBuffer']!;
+  String get bufferSizeNotImplemented => _localizedValues['bufferSizeNotImplemented']!;
+  String get volumeBoostSet => _localizedValues['volumeBoostSet']!;
+  String get noBoostValue => _localizedValues['noBoostValue']!;
+  String get epgUrlSavedAndLoaded => _localizedValues['epgUrlSavedAndLoaded']!;
+  String get epgUrlSavedButFailed => _localizedValues['epgUrlSavedButFailed']!;
+  String get epgUrlCleared => _localizedValues['epgUrlCleared']!;
+  String get epgUrlSaved => _localizedValues['epgUrlSaved']!;
+  String get pinNotImplemented => _localizedValues['pinNotImplemented']!;
+  String get enter4DigitPin => _localizedValues['enter4DigitPin']!;
+  String get allSettingsReset => _localizedValues['allSettingsReset']!;
+  String get languageSwitchedToChinese => _localizedValues['languageSwitchedToChinese']!;
+  String get languageSwitchedToEnglish => _localizedValues['languageSwitchedToEnglish']!;
+  String get themeChangedMessage => _localizedValues['themeChangedMessage']!;
+  String get defaultVersion => _localizedValues['defaultVersion']!;
+
   // Map access for dynamic keys if needed
   String operator [](String key) => _localizedValues[key] ?? key;
 }
@@ -367,7 +444,7 @@ class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {
     'volumeBoostSlightHigh': '略微提高音量',
     'volumeBoostHigh': '大幅提高音量',
     'chinese': '中文',
-    'english': 'English',
+    'english': '英文',
     'scanToImport': '扫码导入播放列表',
     'importingPlaylist': '正在导入',
     'importSuccess': '导入成功',
@@ -399,6 +476,79 @@ class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {
     'qrStep1': '使用手机扫描左侧二维码',
     'qrStep2': '在网页中输入链接或上传文件',
     'qrStep3': '点击导入，电视自动接收',
+    // Player gestures and EPG
+    'nextChannel': '下一频道',
+    'previousChannel': '上一频道',
+    'source': '源',
+    'nowPlaying': '正在播放',
+    'endsInMinutes': '{minutes}分钟后结束',
+    'upNext': '即将播放',
+    // Update dialog
+    'newVersionAvailable': '发现新版本',
+    'whatsNew': '更新内容',
+    'updateLater': '稍后更新',
+    'updateNow': '立即更新',
+    'noReleaseNotes': '暂无更新说明',
+    // Settings messages
+    'autoPlayEnabled': '已启用自动播放',
+    'autoPlayDisabled': '已关闭自动播放',
+    'bufferStrength': '缓冲强度',
+    'showFps': '显示 FPS',
+    'showFpsSubtitle': '在播放器右上角显示帧率',
+    'fpsEnabled': '已启用 FPS 显示',
+    'fpsDisabled': '已关闭 FPS 显示',
+    'showClock': '显示时间',
+    'showClockSubtitle': '在播放器右上角显示当前时间',
+    'clockEnabled': '已启用时间显示',
+    'clockDisabled': '已关闭时间显示',
+    'showNetworkSpeed': '显示网速',
+    'showNetworkSpeedSubtitle': '在播放器右上角显示下行网速',
+    'networkSpeedEnabled': '已启用网速显示',
+    'networkSpeedDisabled': '已关闭网速显示',
+    'showVideoInfo': '显示分辨率',
+    'showVideoInfoSubtitle': '在播放器右上角显示视频分辨率和码率',
+    'videoInfoEnabled': '已启用分辨率显示',
+    'videoInfoDisabled': '已关闭分辨率显示',
+    'notImplemented': '(未实现)',
+    'volumeNormalizationNotImplemented': '音量标准化尚未实现，设置不会生效',
+    'autoRefreshNotImplemented': '自动刷新尚未实现，设置不会生效',
+    'rememberLastChannelEnabled': '已启用记住上次频道',
+    'rememberLastChannelDisabled': '已关闭记住上次频道',
+    'epgEnabledAndLoaded': 'EPG 已启用并加载成功',
+    'epgEnabledButFailed': 'EPG 已启用，但加载失败',
+    'epgEnabledPleaseConfigure': 'EPG 已启用，请配置 EPG 链接',
+    'epgDisabled': 'EPG 已关闭',
+    'weak': '弱',
+    'medium': '中',
+    'strong': '强',
+    // More settings messages
+    'dlnaCasting': 'DLNA 投屏',
+    'enableDlnaService': '启用 DLNA 服务',
+    'dlnaServiceStarted': '已启动: {deviceName}',
+    'allowOtherDevicesToCast': '允许其他设备投屏到本设备',
+    'dlnaServiceStartedMsg': 'DLNA 服务已启动',
+    'dlnaServiceStoppedMsg': 'DLNA 服务已停止',
+    'dlnaServiceStartFailed': 'DLNA 服务启动失败，请检查网络连接',
+    'parentalControlNotImplemented': '家长控制尚未实现，设置不会生效',
+    'changePinNotImplemented': '(未实现)',
+    'decodingModeSet': '解码模式已设置为: {mode}',
+    'fastBuffer': '快速 (切换快，可能卡顿)',
+    'balancedBuffer': '平衡',
+    'stableBuffer': '稳定 (切换慢，不易卡顿)',
+    'bufferSizeNotImplemented': '缓冲大小设置尚未实现，设置不会生效',
+    'volumeBoostSet': '音量增益已设置为 {value}',
+    'noBoostValue': '无增益',
+    'epgUrlSavedAndLoaded': 'EPG 链接已保存并加载成功',
+    'epgUrlSavedButFailed': 'EPG 链接已保存，但加载失败',
+    'epgUrlCleared': 'EPG 链接已清除',
+    'epgUrlSaved': 'EPG 链接已保存',
+    'pinNotImplemented': '家长控制尚未实现，PIN 设置不会生效',
+    'enter4DigitPin': '请输入4位数字PIN',
+    'allSettingsReset': '所有设置已重置为默认值',
+    'languageSwitchedToChinese': '语言已切换为中文',
+    'languageSwitchedToEnglish': '语言已切换为英文',
+    'themeChangedMessage': '主题已切换: {theme}',
+    'defaultVersion': '默认版本',
   };
 
   static const Map<String, String> _enValues = {
@@ -579,5 +729,78 @@ class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {
     'qrStep1': 'Scan the QR code with your phone',
     'qrStep2': 'Enter URL or upload file on the webpage',
     'qrStep3': 'Click import, TV receives automatically',
+    // Player gestures and EPG
+    'nextChannel': 'Next channel',
+    'previousChannel': 'Previous channel',
+    'source': 'Source',
+    'nowPlaying': 'Now playing',
+    'endsInMinutes': 'Ends in {minutes} min',
+    'upNext': 'Up next',
+    // Update dialog
+    'newVersionAvailable': 'New version available',
+    'whatsNew': 'What\'s new',
+    'updateLater': 'Update later',
+    'updateNow': 'Update now',
+    'noReleaseNotes': 'No release notes',
+    // Settings messages
+    'autoPlayEnabled': 'Auto-play enabled',
+    'autoPlayDisabled': 'Auto-play disabled',
+    'bufferStrength': 'Buffer Strength',
+    'showFps': 'Show FPS',
+    'showFpsSubtitle': 'Show frame rate in top-right corner of player',
+    'fpsEnabled': 'FPS display enabled',
+    'fpsDisabled': 'FPS display disabled',
+    'showClock': 'Show Clock',
+    'showClockSubtitle': 'Show current time in top-right corner of player',
+    'clockEnabled': 'Clock display enabled',
+    'clockDisabled': 'Clock display disabled',
+    'showNetworkSpeed': 'Show Network Speed',
+    'showNetworkSpeedSubtitle': 'Show download speed in top-right corner of player',
+    'networkSpeedEnabled': 'Network speed display enabled',
+    'networkSpeedDisabled': 'Network speed display disabled',
+    'showVideoInfo': 'Show Resolution',
+    'showVideoInfoSubtitle': 'Show video resolution and bitrate in top-right corner',
+    'videoInfoEnabled': 'Resolution display enabled',
+    'videoInfoDisabled': 'Resolution display disabled',
+    'notImplemented': '(Not implemented)',
+    'volumeNormalizationNotImplemented': 'Volume normalization not implemented, setting will not take effect',
+    'autoRefreshNotImplemented': 'Auto-refresh not implemented, setting will not take effect',
+    'rememberLastChannelEnabled': 'Remember last channel enabled',
+    'rememberLastChannelDisabled': 'Remember last channel disabled',
+    'epgEnabledAndLoaded': 'EPG enabled and loaded successfully',
+    'epgEnabledButFailed': 'EPG enabled but failed to load',
+    'epgEnabledPleaseConfigure': 'EPG enabled, please configure EPG URL',
+    'epgDisabled': 'EPG disabled',
+    'weak': 'Weak',
+    'medium': 'Medium',
+    'strong': 'Strong',
+    // More settings messages
+    'dlnaCasting': 'DLNA Casting',
+    'enableDlnaService': 'Enable DLNA Service',
+    'dlnaServiceStarted': 'Started: {deviceName}',
+    'allowOtherDevicesToCast': 'Allow other devices to cast to this device',
+    'dlnaServiceStartedMsg': 'DLNA service started',
+    'dlnaServiceStoppedMsg': 'DLNA service stopped',
+    'dlnaServiceStartFailed': 'Failed to start DLNA service, please check network connection',
+    'parentalControlNotImplemented': 'Parental control not implemented, setting will not take effect',
+    'changePinNotImplemented': '(Not implemented)',
+    'decodingModeSet': 'Decoding mode set to: {mode}',
+    'fastBuffer': 'Fast (Quick switching, may stutter)',
+    'balancedBuffer': 'Balanced',
+    'stableBuffer': 'Stable (Slow switching, less stuttering)',
+    'bufferSizeNotImplemented': 'Buffer size setting not implemented, setting will not take effect',
+    'volumeBoostSet': 'Volume boost set to {value}',
+    'noBoostValue': 'No boost',
+    'epgUrlSavedAndLoaded': 'EPG URL saved and loaded successfully',
+    'epgUrlSavedButFailed': 'EPG URL saved but failed to load',
+    'epgUrlCleared': 'EPG URL cleared',
+    'epgUrlSaved': 'EPG URL saved',
+    'pinNotImplemented': 'Parental control not implemented, PIN setting will not take effect',
+    'enter4DigitPin': 'Please enter 4-digit PIN',
+    'allSettingsReset': 'All settings have been reset to default values',
+    'languageSwitchedToChinese': 'Language switched to Chinese',
+    'languageSwitchedToEnglish': 'Language switched to English',
+    'themeChangedMessage': 'Theme changed: {theme}',
+    'defaultVersion': 'Default version',
   };
 }

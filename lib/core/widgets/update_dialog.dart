@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../models/app_update.dart';
+import '../i18n/app_strings.dart';
 // 注释掉未使用的导入
 // import '../services/update_service.dart';
 
@@ -49,9 +50,9 @@ class UpdateDialog extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        '发现新版本',
-                        style: TextStyle(
+                      Text(
+                        AppStrings.of(context)?.newVersionAvailable ?? 'New version available',
+                        style: const TextStyle(
                           color: AppTheme.textPrimary,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -74,9 +75,9 @@ class UpdateDialog extends StatelessWidget {
             const SizedBox(height: 20),
 
             // 发布说明
-            const Text(
-              '更新内容：',
-              style: TextStyle(
+            Text(
+              AppStrings.of(context)?.whatsNew ?? 'What\'s new',
+              style: const TextStyle(
                 color: AppTheme.textPrimary,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -112,9 +113,9 @@ class UpdateDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
-                      '稍后更新',
-                      style: TextStyle(
+                    child: Text(
+                      AppStrings.of(context)?.updateLater ?? 'Update later',
+                      style: const TextStyle(
                         color: AppTheme.textSecondary,
                         fontSize: 16,
                       ),
@@ -132,9 +133,9 @@ class UpdateDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
-                      '立即更新',
-                      style: TextStyle(
+                    child: Text(
+                      AppStrings.of(context)?.updateNow ?? 'Update now',
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -152,7 +153,8 @@ class UpdateDialog extends StatelessWidget {
 
   String _formatReleaseNotes(String notes) {
     if (notes.isEmpty) {
-      return '暂无更新说明';
+      // Can't access context here directly, use a default
+      return 'No release notes';
     }
 
     // 简单的Markdown格式化
