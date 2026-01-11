@@ -13,7 +13,7 @@
     <img src="https://img.shields.io/github/v/release/shnulaa/FlutterIPTV?include_prereleases" alt="Latest Release">
   </a>
   <a href="https://github.com/shnulaa/FlutterIPTV/actions/workflows/build-release.yml">
-    <img src="https://github.com/shnulaa/FlutterIPTV/actions/workflows/build-release.yml/badge.svg" alt="Build Status">
+    <img src="https://github.com/shnulaa/FlutterIPTV/actions/workflows/build-release.yml/badge.svg?branch=main" alt="Build Status">
   </a>
   <a href="https://github.com/shnulaa/FlutterIPTV/releases">
     <img src="https://img.shields.io/github/downloads/shnulaa/FlutterIPTV/total" alt="Downloads">
@@ -34,8 +34,57 @@ Lotus IPTV is a modern, high-performance IPTV player built with Flutter. Feature
   <img src="assets/screenshots/s5.jpg" width="30%" alt="Player Screen">
   <img src="assets/screenshots/s3.jpg" width="30%" alt="Favorites Screen">
   <img src="assets/screenshots/s4.jpg" width="30%" alt="Setting Screen">
-  
+  <img src="assets/screenshots/s6.jpg" width="30%" alt="Playlist Manager">
 </p>
+
+
+## 🚀 Getting Started
+
+### 📋 Adding IPTV Playlists
+
+To start watching channels, you need to add M3U/M3U8 playlist sources:
+
+#### 🌍 Free Public Playlists
+For testing and demonstration purposes, you can use this free public playlist:
+```
+https://iptv-org.github.io/iptv/index.m3u
+```
+
+**How to add:**
+1. Open Lotus IPTV
+2. Click "Add Playlist" or "+" button
+3. Select "From URL"
+4. Paste the URL above
+5. Click "Add" and wait for channels to load
+
+#### 📁 Other Playlist Sources
+- **Local Files**: Import `.m3u` or `.m3u8` files from your device
+- **Custom URLs**: Add your own IPTV service URLs
+- **QR Code**: Scan QR codes containing playlist URLs
+
+> **Note**: The public playlist above contains channels from various countries and may have varying availability. For the best experience, use playlists from your IPTV service provider.
+
+## 🚀 Download
+
+Download the latest version from [Releases Page](https://github.com/shnulaa/FlutterIPTV/releases/latest).
+
+### Available Platforms
+- **Windows**: x64 Installer (.exe)
+- **Android Mobile**: APK for arm64-v8a, armeabi-v7a, x86_64
+- **Android TV**: APK for arm64-v8a, armeabi-v7a, x86_64
+
+## 🎮 Controls
+
+| Action | Keyboard | TV Remote |
+|--------|----------|-----------|
+| Play/Pause | Space/Enter | OK |
+| Channel Up | ↑ | D-Pad Up |
+| Channel Down | ↓ | D-Pad Down |
+| Open Category Panel | ← | D-Pad Left |
+| Favorite | F | Long Press OK |
+| Mute | M | - |
+| Exit Player | Double Esc | Double Back |
+
 
 ## ✨ Features
 
@@ -86,29 +135,6 @@ Lotus IPTV is a modern, high-performance IPTV player built with Flutter. Feature
 - Support for common video formats
 - Playback control from casting device (play/pause/seek/volume)
 - Auto-start DLNA service option
-
-
-
-## 🚀 Download
-
-Download the latest version from [Releases Page](https://github.com/shnulaa/FlutterIPTV/releases/latest).
-
-### Available Platforms
-- **Windows**: x64 Installer (.exe)
-- **Android Mobile**: APK for arm64-v8a, armeabi-v7a, x86_64
-- **Android TV**: APK for arm64-v8a, armeabi-v7a, x86_64
-
-## 🎮 Controls
-
-| Action | Keyboard | TV Remote |
-|--------|----------|-----------|
-| Play/Pause | Space/Enter | OK |
-| Channel Up | ↑ | D-Pad Up |
-| Channel Down | ↓ | D-Pad Down |
-| Open Category Panel | ← | D-Pad Left |
-| Favorite | F | Long Press OK |
-| Mute | M | - |
-| Exit Player | Double Esc | Double Back |
 
 ## 🛠️ Development
 
