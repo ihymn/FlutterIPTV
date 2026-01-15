@@ -74,7 +74,12 @@ coverage/
 # Temporary database files
 temp_db.bin
 *.db.bin
-.claude/settings.local.json
+
+# Claude AI local config
+.claude/
+
+# SQLite temp files
+sqlite3_temp/
 
 # Android signing
 android/key.properties
