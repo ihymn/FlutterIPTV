@@ -305,13 +305,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             color: AppTheme.getSurfaceColor(context),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: isFocused ? AppTheme.focusBorderColor : Colors.transparent,
+              color: isFocused ? AppTheme.getPrimaryColor(context) : Colors.transparent,
               width: isFocused ? 2 : 0,
             ),
             boxShadow: isFocused
                 ? [
                     BoxShadow(
-                      color: AppTheme.focusColor.withOpacity(0.2),
+                      color: AppTheme.getPrimaryColor(context).withOpacity(0.2),
                       blurRadius: 12,
                     ),
                   ]

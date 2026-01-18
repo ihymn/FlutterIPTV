@@ -259,7 +259,7 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
                 child: LinearProgressIndicator(
                   value: provider.importProgress,
                   backgroundColor: AppTheme.getCardColor(context),
-                  color: AppTheme.primaryColor,
+                  color: AppTheme.getPrimaryColor(context),
                   minHeight: 6,
                 ),
               ),
@@ -350,13 +350,13 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: isFocused ? AppTheme.primaryColor : Colors.transparent,
+                color: isFocused ? AppTheme.getPrimaryColor(context) : Colors.transparent,
                 width: isFocused ? 3 : 0,
               ),
               boxShadow: isFocused
                   ? [
                       BoxShadow(
-                        color: AppTheme.primaryColor.withOpacity(0.3),
+                        color: AppTheme.getPrimaryColor(context).withOpacity(0.3),
                         blurRadius: 8,
                         spreadRadius: 1,
                       ),
@@ -405,16 +405,16 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
           decoration: BoxDecoration(
-            color: isPrimary ? AppTheme.primaryColor : Colors.transparent,
+            color: isPrimary ? AppTheme.getPrimaryColor(context) : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
-            border: isPrimary ? null : Border.all(color: AppTheme.primaryColor.withOpacity(0.5)),
+            border: isPrimary ? null : Border.all(color: AppTheme.getPrimaryColor(context).withOpacity(0.5)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconTheme(
                 data: IconThemeData(
-                  color: isPrimary ? Colors.white : AppTheme.primaryColor,
+                  color: isPrimary ? Colors.white : AppTheme.getPrimaryColor(context),
                 ),
                 child: icon,
               ),
@@ -422,7 +422,7 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
               Text(
                 label,
                 style: TextStyle(
-                  color: isPrimary ? Colors.white : AppTheme.primaryColor,
+                  color: isPrimary ? Colors.white : AppTheme.getPrimaryColor(context),
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                 ),
@@ -463,7 +463,7 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
                     boxShadow: isFocused
                         ? [
                             BoxShadow(
-                              color: AppTheme.primaryColor.withOpacity(0.4),
+                              color: AppTheme.getPrimaryColor(context).withOpacity(0.4),
                               blurRadius: 12,
                               spreadRadius: 2,
                             ),
@@ -476,7 +476,7 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
                           icon: icon,
                           label: Text(label),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppTheme.primaryColor,
+                            backgroundColor: AppTheme.getPrimaryColor(context),
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
@@ -489,9 +489,9 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
                           icon: icon,
                           label: Text(label),
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: AppTheme.primaryColor,
+                            foregroundColor: AppTheme.getPrimaryColor(context),
                             side: BorderSide(
-                              color: isFocused ? AppTheme.primaryColor : AppTheme.primaryColor.withOpacity(0.5),
+                              color: isFocused ? AppTheme.primaryColor : AppTheme.getPrimaryColor(context).withOpacity(0.5),
                               width: isFocused ? 2 : 1,
                             ),
                             padding: const EdgeInsets.symmetric(
@@ -584,15 +584,15 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      AppTheme.primaryColor.withOpacity(0.2),
-                      AppTheme.primaryColor.withOpacity(0.1),
+                      AppTheme.getPrimaryColor(context).withOpacity(0.2),
+                      AppTheme.getPrimaryColor(context).withOpacity(0.1),
                     ],
                   )
                 : null,
             color: isActive ? null : AppTheme.getSurfaceColor(context),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: isActive ? AppTheme.primaryColor.withOpacity(0.5) : Colors.transparent,
+              color: isActive ? AppTheme.getPrimaryColor(context).withOpacity(0.5) : Colors.transparent,
               width: 1,
             ),
           ),
@@ -619,12 +619,12 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
                         width: 48,
                         height: 48,
                         decoration: BoxDecoration(
-                          color: AppTheme.primaryColor.withOpacity(0.2),
+                          color: AppTheme.getPrimaryColor(context).withOpacity(0.2),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Icon(
                           playlist.isRemote ? Icons.cloud_outlined : Icons.folder_outlined,
-                          color: AppTheme.primaryColor,
+                          color: AppTheme.getPrimaryColor(context),
                           size: 24,
                         ),
                       ),
@@ -652,7 +652,7 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                     decoration: BoxDecoration(
-                                      color: AppTheme.primaryColor,
+                                      color: AppTheme.getPrimaryColor(context),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Text(
@@ -761,8 +761,8 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      AppTheme.primaryColor.withOpacity(0.2),
-                      AppTheme.primaryColor.withOpacity(0.1),
+                      AppTheme.getPrimaryColor(context).withOpacity(0.2),
+                      AppTheme.getPrimaryColor(context).withOpacity(0.1),
                     ],
                   )
                 : null,
@@ -770,16 +770,16 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: isFocused
-                  ? AppTheme.focusBorderColor
+                  ? AppTheme.getPrimaryColor(context)
                   : isActive
-                      ? AppTheme.primaryColor.withOpacity(0.5)
+                      ? AppTheme.getPrimaryColor(context).withOpacity(0.5)
                       : Colors.transparent,
               width: isFocused ? 2 : 1,
             ),
             boxShadow: isFocused
                 ? [
                     BoxShadow(
-                      color: AppTheme.focusColor.withOpacity(0.2),
+                      color: AppTheme.getPrimaryColor(context).withOpacity(0.2),
                       blurRadius: 12,
                     ),
                   ]
@@ -795,12 +795,12 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withOpacity(0.2),
+              color: AppTheme.getPrimaryColor(context).withOpacity(0.2),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
               playlist.isRemote ? Icons.cloud_outlined : Icons.folder_outlined,
-              color: AppTheme.primaryColor,
+              color: AppTheme.getPrimaryColor(context),
               size: 24,
             ),
           ),
@@ -832,7 +832,7 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: AppTheme.primaryColor,
+                          color: AppTheme.getPrimaryColor(context),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(

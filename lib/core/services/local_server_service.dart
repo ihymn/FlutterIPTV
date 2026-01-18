@@ -19,13 +19,19 @@ class LocalServerService {
   String? get localIp => _localIp;
   int get port => _port;
 
+  String? _lastError;
+  String? get lastError => _lastError;
+
   /// Start the local HTTP server
   Future<bool> start() async {
     try {
+      _lastError = null;
+      
       // Get local IP address
       _localIp = await _getLocalIpAddress();
       if (_localIp == null) {
-        debugPrint('LocalServer: 无法获取本地IP地址');
+        _lastError = '无法获取本地IP地址。请检查网络连接是否正常。';
+        debugPrint('LocalServer: $_lastError');
         return false;
       }
 
@@ -43,7 +49,19 @@ class LocalServerService {
       });
 
       return true;
+    } on SocketException catch (e) {
+      if (e.osError?.errorCode == 10048 || e.message.contains('address already in use')) {
+        _lastError = '端口 $_port 已被占用。请关闭占用该端口的程序后重试。';
+      } else if (e.osError?.errorCode == 10013) {
+        _lastError = '权限不足。请以管理员身份运行应用。';
+      } else {
+        _lastError = '网络错误: ${e.message}';
+      }
+      debugPrint('LocalServer: 启动失败 (SocketException): $e');
+      debugPrint('LocalServer: 错误代码: ${e.osError?.errorCode}');
+      return false;
     } catch (e) {
+      _lastError = '启动失败: $e';
       debugPrint('LocalServer: 启动失败: $e');
       return false;
     }

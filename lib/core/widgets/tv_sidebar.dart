@@ -158,7 +158,7 @@ class _TVSidebarState extends State<TVSidebar> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: ShaderMask(
-                    shaderCallback: (bounds) => AppTheme.lotusGradient.createShader(bounds),
+                    shaderCallback: (bounds) => AppTheme.getGradient(context).createShader(bounds),
                     child: const Text('Lotus', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white)),
                   ),
                 ),
@@ -234,25 +234,25 @@ class _TVSidebarState extends State<TVSidebar> {
               return Container(
                 padding: EdgeInsets.symmetric(horizontal: _expanded ? 10 : 8, vertical: 10),
                 decoration: BoxDecoration(
-                  gradient: showHighlight ? AppTheme.lotusGradient : null,
+                  gradient: showHighlight ? AppTheme.getGradient(context) : null,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: _expanded
                     ? Row(
                         children: [
-                          Icon(item.icon, color: showHighlight ? Colors.white : (showSelected ? AppTheme.primaryColor : AppTheme.textMuted), size: 18),
+                          Icon(item.icon, color: showHighlight ? Colors.white : (showSelected ? AppTheme.getPrimaryColor(context) : AppTheme.getTextMuted(context)), size: 18),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(item.label,
                                 style: TextStyle(
-                                  color: showHighlight ? Colors.white : (showSelected ? AppTheme.primaryColor : AppTheme.textSecondary),
+                                  color: showHighlight ? Colors.white : (showSelected ? AppTheme.getPrimaryColor(context) : AppTheme.getTextSecondary(context)),
                                   fontSize: 12,
                                   fontWeight: (showHighlight || showSelected) ? FontWeight.w600 : FontWeight.normal,
                                 )),
                           ),
                         ],
                       )
-                    : Center(child: Icon(item.icon, color: showHighlight ? Colors.white : (showSelected ? AppTheme.primaryColor : AppTheme.textMuted), size: 18)),
+                    : Center(child: Icon(item.icon, color: showHighlight ? Colors.white : (showSelected ? AppTheme.getPrimaryColor(context) : AppTheme.getTextMuted(context)), size: 18)),
               );
             },
           ),

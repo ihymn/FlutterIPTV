@@ -122,11 +122,14 @@ Download the latest version from [Releases Page](https://github.com/shnulaa/Flut
 
 ## ✨ Features
 
-### 🎨 Lotus Theme UI
-- Pure black background with lotus pink/purple gradient accents
+### 🎨 Multi-Color Theme System
+- **12 Preset Color Schemes**: 6 dark themes + 6 light themes
+- **Dynamic Theme Switching**: Change colors across entire UI instantly
+- **Color Schemes**: Lotus Pink, Ocean Blue, Forest Green, Sunset Orange, Royal Purple, Cherry Red
 - Glassmorphism style cards for desktop/mobile
 - TV-optimized interface with smooth performance
 - Auto-collapsing sidebar navigation
+- Theme colors applied globally: selection boxes, buttons, icons, gradients
 
 ### 📺 Multi-Platform Support
 - **Windows**: Desktop-optimized UI with keyboard shortcuts and mini mode
@@ -154,6 +157,7 @@ Download the latest version from [Releases Page](https://github.com/shnulaa/Flut
 - Double-press BACK to exit player (prevents accidental exit)
 - Watch history tracking
 - Default channel logo for missing thumbnails
+- **Auto-play on Startup**: Optional continue playback after app launch (disabled by default)
 - **Multi-source support**: Auto-merge channels with same name, switch sources with LEFT/RIGHT keys
 - **Multi-screen mode** (Desktop & TV): 2x2 split screen for simultaneous viewing of 4 channels, with independent EPG display and mini mode support (Desktop)
 

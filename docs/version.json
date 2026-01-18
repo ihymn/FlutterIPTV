@@ -1,23 +1,23 @@
 {
-  "version": "1.3.0",
-  "build": 110,
+  "version": "1.3.1",
+  "build": 111,
   "releaseDate": "2026-01-18",
   "assets": {
-    "windows": "https://github.boki.moe/https://github.com/shnulaa/FlutterIPTV/releases/download/v1.3.0/flutteriptv-Windows-x64-Setup.exe",
+    "windows": "https://github.boki.moe/https://github.com/shnulaa/FlutterIPTV/releases/download/v1.3.1/flutteriptv-Windows-x64-Setup.exe",
     "android_mobile": {
-      "arm64-v8a": "https://github.boki.moe/https://github.com/shnulaa/FlutterIPTV/releases/download/v1.3.0/flutteriptv-Android-Mobile-arm64-v8a.apk",
-      "armeabi-v7a": "https://github.boki.moe/https://github.com/shnulaa/FlutterIPTV/releases/download/v1.3.0/flutteriptv-Android-Mobile-armeabi-v7a.apk",
-      "x86_64": "https://github.boki.moe/https://github.com/shnulaa/FlutterIPTV/releases/download/v1.3.0/flutteriptv-Android-Mobile-x86_64.apk"
+      "arm64-v8a": "https://github.boki.moe/https://github.com/shnulaa/FlutterIPTV/releases/download/v1.3.1/flutteriptv-Android-Mobile-arm64-v8a.apk",
+      "armeabi-v7a": "https://github.boki.moe/https://github.com/shnulaa/FlutterIPTV/releases/download/v1.3.1/flutteriptv-Android-Mobile-armeabi-v7a.apk",
+      "x86_64": "https://github.boki.moe/https://github.com/shnulaa/FlutterIPTV/releases/download/v1.3.1/flutteriptv-Android-Mobile-x86_64.apk"
     },
     "android_tv": {
-      "arm64-v8a": "https://github.boki.moe/https://github.com/shnulaa/FlutterIPTV/releases/download/v1.3.0/flutteriptv-AndroidTV-arm64-v8a.apk",
-      "armeabi-v7a": "https://github.boki.moe/https://github.com/shnulaa/FlutterIPTV/releases/download/v1.3.0/flutteriptv-AndroidTV-armeabi-v7a.apk",
-      "x86_64": "https://github.boki.moe/https://github.com/shnulaa/FlutterIPTV/releases/download/v1.3.0/flutteriptv-AndroidTV-x86_64.apk"
+      "arm64-v8a": "https://github.boki.moe/https://github.com/shnulaa/FlutterIPTV/releases/download/v1.3.1/flutteriptv-AndroidTV-arm64-v8a.apk",
+      "armeabi-v7a": "https://github.boki.moe/https://github.com/shnulaa/FlutterIPTV/releases/download/v1.3.1/flutteriptv-AndroidTV-armeabi-v7a.apk",
+      "x86_64": "https://github.boki.moe/https://github.com/shnulaa/FlutterIPTV/releases/download/v1.3.1/flutteriptv-AndroidTV-x86_64.apk"
     }
   },
   "changelog": {
-    "zh": "- 优化卡片尺寸和布局，提升显示效果\n- EPG信息优化：静态显示当前和下一个节目，移除动画以降低CPU占用\n- 无EPG信息时显示暂无节目信息\n- 修复TV端原生播放器中收藏功能失败的问题\n- 调整卡片宽高比，确保EPG信息清晰可读",
-    "en": "- Optimized card size and layout for better display\n- EPG info optimization: static display of current and next programs, removed animations to reduce CPU usage\n- Show 'No program info' when EPG data is unavailable\n- Fixed favorite function failure in TV native player\n- Adjusted card aspect ratio to ensure EPG info is clearly readable"
+    "zh": "- 新增多色主题系统：12种预设配色方案（深色/浅色各6种）\n- 新增启动自动播放功能：可选择应用启动后自动继续播放（默认关闭）\n- 主题色应用到全局UI：选择框、按钮、图标、渐变背景等\n- 增强本地服务器错误提示：详细显示端口冲突、权限等错误信息\n- 优化设置界面：新增主题选择器，支持遥控器操作",
+    "en": "- Added multi-color theme system: 12 preset color schemes (6 dark + 6 light)\n- Added auto-play on startup: optional continue playback after app launch (disabled by default)\n- Theme colors applied globally: selection boxes, buttons, icons, gradients, etc.\n- Enhanced local server error messages: detailed port conflict and permission errors\n- Improved settings UI: new theme selector with TV remote support"
   },
   "minVersion": "1.0.0"
 }

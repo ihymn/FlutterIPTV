@@ -71,7 +71,7 @@ class ChannelCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
             border: Border.all(
               color: isFocused
-                  ? AppTheme.focusBorderColor
+                  ? AppTheme.getPrimaryColor(context)
                   : isPlaying
                       ? AppTheme.successColor
                       : AppTheme.getGlassBorderColor(context),
@@ -116,7 +116,7 @@ class ChannelCard extends StatelessWidget {
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: isMobile ? 4 : 6, vertical: isMobile ? 2 : 3),
                           decoration: BoxDecoration(
-                            gradient: AppTheme.lotusGradient,
+                            gradient: AppTheme.getGradient(context),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Row(
@@ -145,10 +145,10 @@ class ChannelCard extends StatelessWidget {
                       ),
                     // TV端只显示收藏图标（小）
                     if (isTV && isFavorite)
-                      const Positioned(
+                      Positioned(
                         top: 6,
                         right: 6,
-                        child: Icon(Icons.favorite, color: AppTheme.primaryColor, size: 16),
+                        child: Icon(Icons.favorite, color: AppTheme.getPrimaryColor(context), size: 16),
                       ),
                     // Unavailable indicator
                     if (isUnavailable)
@@ -227,13 +227,13 @@ class ChannelCard extends StatelessWidget {
             SizedBox(height: isMobile ? 1 : 2),
             Row(
               children: [
-                Icon(Icons.play_circle_filled, color: AppTheme.primaryColor, size: isMobile ? 7 : 9),
+                Icon(Icons.play_circle_filled, color: AppTheme.getPrimaryColor(context), size: isMobile ? 7 : 9),
                 SizedBox(width: isMobile ? 2 : 3),
                 Expanded(
                   child: Text(
                     currentProgram!,
                     style: TextStyle(
-                      color: AppTheme.primaryColor, 
+                      color: AppTheme.getPrimaryColor(context), 
                       fontSize: isMobile ? 7 : 9,
                       height: 1.1,
                     ),
@@ -321,7 +321,7 @@ class ChannelCard extends StatelessWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   decoration: BoxDecoration(
-                    color: isFocused ? AppTheme.primaryColor : AppTheme.getCardColor(context),
+                    color: isFocused ? AppTheme.getPrimaryColor(context) : AppTheme.getCardColor(context),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: child,
@@ -348,7 +348,7 @@ class ChannelCard extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                     decoration: BoxDecoration(
-                      color: isFocused ? AppTheme.primaryColor : AppTheme.getCardColor(context),
+                      color: isFocused ? AppTheme.getPrimaryColor(context) : AppTheme.getCardColor(context),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: child,
@@ -418,7 +418,7 @@ class ChannelCard extends StatelessWidget {
               ),
               child: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_border_rounded,
-                color: isFavorite ? AppTheme.primaryColor : (isDark ? Colors.white : Colors.grey[500]),
+                color: isFavorite ? AppTheme.getPrimaryColor(context) : (isDark ? Colors.white : Colors.grey[500]),
                 size: isMobile ? 10 : 12,
               ),
             ),

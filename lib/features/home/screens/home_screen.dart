@@ -259,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: () => _onNavItemTap(index),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                  decoration: BoxDecoration(gradient: isSelected ? AppTheme.lotusGradient : null, borderRadius: BorderRadius.circular(AppTheme.radiusPill)),
+                  decoration: BoxDecoration(gradient: isSelected ? AppTheme.getGradient(context) : null, borderRadius: BorderRadius.circular(AppTheme.radiusPill)),
                   child: Icon(item.icon, color: isSelected ? Colors.white : AppTheme.getTextMuted(context), size: 22),
                 ),
               );
@@ -380,7 +380,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ShaderMask(
-                    shaderCallback: (bounds) => AppTheme.lotusGradient.createShader(bounds),
+                    shaderCallback: (bounds) => AppTheme.getGradient(context).createShader(bounds),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -399,11 +399,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             return Container(
                               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
-                                gradient: isFocused ? AppTheme.lotusGradient : LinearGradient(
+                                gradient: isFocused ? AppTheme.getGradient(context) : LinearGradient(
                                   colors: [Colors.orange.shade600, Colors.deepOrange.shade600],
                                 ),
                                 borderRadius: BorderRadius.circular(AppTheme.radiusPill),
-                                border: isFocused ? Border.all(color: AppTheme.focusBorderColor, width: 2) : null,
+                                border: isFocused ? Border.all(color: AppTheme.getPrimaryColor(context), width: 2) : null,
                               ),
                               child: child,
                             );
@@ -588,10 +588,10 @@ class _HomeScreenState extends State<HomeScreen> {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: isMobile ? 10 : 14, vertical: isMobile ? 6 : 8),
           decoration: BoxDecoration(
-            gradient: isPrimary || isFocused ? AppTheme.lotusGradient : null,
+            gradient: isPrimary || isFocused ? AppTheme.getGradient(context) : null,
             color: isPrimary || isFocused ? null : AppTheme.getGlassColor(context),
             borderRadius: BorderRadius.circular(AppTheme.radiusPill),
-            border: Border.all(color: isFocused ? AppTheme.focusBorderColor : AppTheme.getGlassBorderColor(context), width: isFocused ? 2 : 1),
+            border: Border.all(color: isFocused ? AppTheme.getPrimaryColor(context) : AppTheme.getGlassBorderColor(context), width: isFocused ? 2 : 1),
           ),
           child: child,
         );
@@ -644,7 +644,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Container(
                     padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: isFocused ? AppTheme.primaryColor : AppTheme.getGlassColor(context),
+                      color: isFocused ? AppTheme.getPrimaryColor(context) : AppTheme.getGlassColor(context),
                       shape: BoxShape.circle,
                     ),
                     child: child,
@@ -663,7 +663,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Container(
                     padding: EdgeInsets.symmetric(horizontal: isMobile ? 8 : 10, vertical: isMobile ? 4 : 5),
                     decoration: BoxDecoration(
-                      gradient: isFocused ? AppTheme.lotusGradient : null,
+                      gradient: isFocused ? AppTheme.getGradient(context) : null,
                       borderRadius: BorderRadius.circular(AppTheme.radiusPill),
                     ),
                     child: child,
@@ -935,10 +935,10 @@ class _ResponsiveCategoryChipsState extends State<_ResponsiveCategoryChips> {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: isMobile ? 8 : 12, vertical: isMobile ? 5 : 8),
           decoration: BoxDecoration(
-            gradient: isFocused ? AppTheme.lotusGradient : null,
+            gradient: isFocused ? AppTheme.getGradient(context) : null,
             color: isFocused ? null : AppTheme.getGlassColor(context),
             borderRadius: BorderRadius.circular(AppTheme.radiusPill),
-            border: Border.all(color: isFocused ? AppTheme.focusBorderColor : AppTheme.getGlassBorderColor(context)),
+            border: Border.all(color: isFocused ? AppTheme.getPrimaryColor(context) : AppTheme.getGlassBorderColor(context)),
           ),
           child: child,
         );
@@ -963,10 +963,10 @@ class _ResponsiveCategoryChipsState extends State<_ResponsiveCategoryChips> {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: isMobile ? 8 : 12, vertical: isMobile ? 5 : 8),
           decoration: BoxDecoration(
-            gradient: isFocused ? AppTheme.lotusGradient : null,
+            gradient: isFocused ? AppTheme.getGradient(context) : null,
             color: isFocused ? null : AppTheme.getGlassColor(context),
             borderRadius: BorderRadius.circular(AppTheme.radiusPill),
-            border: Border.all(color: isFocused ? AppTheme.focusBorderColor : AppTheme.getGlassBorderColor(context)),
+            border: Border.all(color: isFocused ? AppTheme.getPrimaryColor(context) : AppTheme.getGlassBorderColor(context)),
           ),
           child: child,
         );
@@ -991,10 +991,10 @@ class _ResponsiveCategoryChipsState extends State<_ResponsiveCategoryChips> {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: isMobile ? 8 : 12, vertical: isMobile ? 5 : 8),
           decoration: BoxDecoration(
-            gradient: isFocused ? AppTheme.lotusGradient : null,
+            gradient: isFocused ? AppTheme.getGradient(context) : null,
             color: isFocused ? null : AppTheme.getGlassColor(context),
             borderRadius: BorderRadius.circular(AppTheme.radiusPill),
-            border: Border.all(color: isFocused ? AppTheme.focusBorderColor : AppTheme.getGlassBorderColor(context)),
+            border: Border.all(color: isFocused ? AppTheme.getPrimaryColor(context) : AppTheme.getGlassBorderColor(context)),
           ),
           child: child,
         );

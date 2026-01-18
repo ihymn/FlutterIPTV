@@ -62,7 +62,9 @@ class _QrImportDialogState extends State<QrImportDialog> {
       _isLoading = false;
       _isServerRunning = success;
       if (!success) {
-        _error = AppStrings.of(context)?.serverStartFailed ?? 'Failed to start local server. Please check network connection.';
+        // 使用服务器返回的详细错误信息
+        _error = _serverService.lastError ?? 
+                (AppStrings.of(context)?.serverStartFailed ?? 'Failed to start local server. Please check network connection.');
       }
     });
   }

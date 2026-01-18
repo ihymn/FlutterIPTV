@@ -227,7 +227,7 @@ class _MultiScreenPlayerState extends State<MultiScreenPlayer> {
           margin: EdgeInsets.all(isMiniMode ? 1 : 2),
           decoration: BoxDecoration(
             border: Border.all(
-              color: isActive ? AppTheme.primaryColor : Colors.grey.withOpacity(0.3),
+              color: isActive ? AppTheme.getPrimaryColor(context) : Colors.grey.withOpacity(0.3),
               width: isActive ? (isMiniMode ? 2 : 3) : 1,
             ),
           ),
@@ -254,7 +254,7 @@ class _MultiScreenPlayerState extends State<MultiScreenPlayer> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: isActive ? AppTheme.primaryColor : Colors.black54,
+                      color: isActive ? AppTheme.getPrimaryColor(context) : Colors.black54,
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
@@ -292,7 +292,7 @@ class _MultiScreenPlayerState extends State<MultiScreenPlayer> {
                   child: SizedBox(
                     width: isMiniMode ? 16 : 32,
                     height: isMiniMode ? 16 : 32,
-                    child: const CircularProgressIndicator(color: AppTheme.primaryColor, strokeWidth: 2),
+                    child: CircularProgressIndicator(color: AppTheme.getPrimaryColor(context), strokeWidth: 2),
                   ),
                 ),
               
@@ -432,10 +432,10 @@ class _MultiScreenPlayerState extends State<MultiScreenPlayer> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
-              color: isSelected ? AppTheme.primaryColor.withOpacity(0.2) : Colors.transparent,
+              color: isSelected ? AppTheme.getPrimaryColor(context).withOpacity(0.2) : Colors.transparent,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: isSelected ? AppTheme.primaryColor.withOpacity(0.5) : Colors.transparent,
+                color: isSelected ? AppTheme.getPrimaryColor(context).withOpacity(0.5) : Colors.transparent,
                 width: 1,
               ),
             ),
@@ -445,7 +445,7 @@ class _MultiScreenPlayerState extends State<MultiScreenPlayer> {
                   width: 3,
                   height: 20,
                   decoration: BoxDecoration(
-                    color: isSelected ? AppTheme.primaryColor : Colors.transparent,
+                    color: isSelected ? AppTheme.getPrimaryColor(context) : Colors.transparent,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -454,7 +454,7 @@ class _MultiScreenPlayerState extends State<MultiScreenPlayer> {
                   child: Text(
                     name,
                     style: TextStyle(
-                      color: isSelected ? AppTheme.primaryColor : AppTheme.getTextPrimary(context),
+                      color: isSelected ? AppTheme.getPrimaryColor(context) : AppTheme.getTextPrimary(context),
                       fontSize: 13,
                       fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                     ),
@@ -465,13 +465,13 @@ class _MultiScreenPlayerState extends State<MultiScreenPlayer> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
-                    color: isSelected ? AppTheme.primaryColor.withOpacity(0.2) : AppTheme.getCardColor(context),
+                    color: isSelected ? AppTheme.getPrimaryColor(context).withOpacity(0.2) : AppTheme.getCardColor(context),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
                     count.toString(),
                     style: TextStyle(
-                      color: isSelected ? AppTheme.primaryColor : AppTheme.getTextMuted(context),
+                      color: isSelected ? AppTheme.getPrimaryColor(context) : AppTheme.getTextMuted(context),
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
                     ),
@@ -712,12 +712,12 @@ class _MultiScreenPlayerState extends State<MultiScreenPlayer> {
             const SizedBox(height: 2),
             Row(
               children: [
-                const Icon(Icons.play_circle_filled, color: AppTheme.primaryColor, size: 10),
+                Icon(Icons.play_circle_filled, color: AppTheme.getPrimaryColor(context), size: 10),
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text(
                     currentProgram.title,
-                    style: const TextStyle(color: AppTheme.primaryColor, fontSize: 10),
+                    style: TextStyle(color: AppTheme.getPrimaryColor(context), fontSize: 10),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -737,7 +737,7 @@ class _MultiScreenPlayerState extends State<MultiScreenPlayer> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const CircularProgressIndicator(color: AppTheme.primaryColor),
+            CircularProgressIndicator(color: AppTheme.getPrimaryColor(context)),
             const SizedBox(height: 8),
             Text(
               screen.channel?.name ?? (AppStrings.of(context)?.loading ?? 'Loading...'),

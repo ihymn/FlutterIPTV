@@ -27,7 +27,7 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardColor = color ?? AppTheme.primaryColor;
+    final cardColor = color ?? AppTheme.getPrimaryColor(context);
     final isTV = PlatformDetector.isTV;
 
     return TVFocusable(
@@ -42,7 +42,7 @@ class CategoryCard extends StatelessWidget {
             gradient: isFocused ? LinearGradient(colors: [cardColor.withAlpha(180), cardColor.withAlpha(120)]) : LinearGradient(colors: [cardColor.withAlpha(60), cardColor.withAlpha(30)]),
             borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
             border: Border.all(
-              color: isFocused ? Colors.white.withAlpha(150) : AppTheme.glassBorderColor,
+              color: isFocused ? AppTheme.getPrimaryColor(context).withAlpha(200) : AppTheme.getGlassBorderColor(context),
               width: isFocused ? 2 : 1,
             ),
           ),

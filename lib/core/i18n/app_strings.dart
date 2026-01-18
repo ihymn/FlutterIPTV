@@ -319,6 +319,35 @@ class AppStrings {
   String get languageSwitchedToEnglish => _localizedValues['languageSwitchedToEnglish']!;
   String get themeChangedMessage => _localizedValues['themeChangedMessage']!;
   String get defaultVersion => _localizedValues['defaultVersion']!;
+  
+  // Color scheme strings
+  String get colorScheme => _localizedValues['colorScheme']!;
+  String get selectColorScheme => _localizedValues['selectColorScheme']!;
+  String get colorSchemeLotus => _localizedValues['colorSchemeLotus']!;
+  String get colorSchemeOcean => _localizedValues['colorSchemeOcean']!;
+  String get colorSchemeForest => _localizedValues['colorSchemeForest']!;
+  String get colorSchemeSunset => _localizedValues['colorSchemeSunset']!;
+  String get colorSchemeLavender => _localizedValues['colorSchemeLavender']!;
+  String get colorSchemeMidnight => _localizedValues['colorSchemeMidnight']!;
+  String get colorSchemeLotusLight => _localizedValues['colorSchemeLotusLight']!;
+  String get colorSchemeSky => _localizedValues['colorSchemeSky']!;
+  String get colorSchemeSpring => _localizedValues['colorSchemeSpring']!;
+  String get colorSchemeCoral => _localizedValues['colorSchemeCoral']!;
+  String get colorSchemeViolet => _localizedValues['colorSchemeViolet']!;
+  String get colorSchemeClassic => _localizedValues['colorSchemeClassic']!;
+  String get colorSchemeDescLotus => _localizedValues['colorSchemeDescLotus']!;
+  String get colorSchemeDescOcean => _localizedValues['colorSchemeDescOcean']!;
+  String get colorSchemeDescForest => _localizedValues['colorSchemeDescForest']!;
+  String get colorSchemeDescSunset => _localizedValues['colorSchemeDescSunset']!;
+  String get colorSchemeDescLavender => _localizedValues['colorSchemeDescLavender']!;
+  String get colorSchemeDescMidnight => _localizedValues['colorSchemeDescMidnight']!;
+  String get colorSchemeDescLotusLight => _localizedValues['colorSchemeDescLotusLight']!;
+  String get colorSchemeDescSky => _localizedValues['colorSchemeDescSky']!;
+  String get colorSchemeDescSpring => _localizedValues['colorSchemeDescSpring']!;
+  String get colorSchemeDescCoral => _localizedValues['colorSchemeDescCoral']!;
+  String get colorSchemeDescViolet => _localizedValues['colorSchemeDescViolet']!;
+  String get colorSchemeDescClassic => _localizedValues['colorSchemeDescClassic']!;
+  String get colorSchemeChanged => _localizedValues['colorSchemeChanged']!;
 
   // Map access for dynamic keys if needed
   String operator [](String key) => _localizedValues[key] ?? key;
@@ -386,8 +415,8 @@ class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {
     'addFavorites': '添加到收藏',
     'channelInfo': '频道信息',
     'playback': '播放',
-    'autoPlay': '自动播放',
-    'autoPlaySubtitle': '选择频道时自动开始播放',
+    'autoPlay': '启动时自动播放',
+    'autoPlaySubtitle': '应用启动后自动继续播放上次观看的内容',
     'hardwareDecoding': '硬件解码',
     'hardwareDecodingSubtitle': '使用硬件加速进行视频播放',
     'bufferSize': '缓冲大小',
@@ -539,8 +568,8 @@ class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {
     'updateNow': '立即更新',
     'noReleaseNotes': '暂无更新说明',
     // Settings messages
-    'autoPlayEnabled': '已启用自动播放',
-    'autoPlayDisabled': '已关闭自动播放',
+    'autoPlayEnabled': '已启用启动时自动播放',
+    'autoPlayDisabled': '已关闭启动时自动播放',
     'bufferStrength': '缓冲强度',
     'showFps': '显示 FPS',
     'showFpsSubtitle': '在播放器右上角显示帧率',
@@ -643,6 +672,34 @@ class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {
     'languageSwitchedToEnglish': '语言已切换为英文',
     'themeChangedMessage': '主题已切换: {theme}',
     'defaultVersion': '默认版本',
+    // Color scheme strings
+    'colorScheme': '配色方案',
+    'selectColorScheme': '选择配色方案',
+    'colorSchemeLotus': '莲花',
+    'colorSchemeOcean': '海洋',
+    'colorSchemeForest': '森林',
+    'colorSchemeSunset': '日落',
+    'colorSchemeLavender': '薰衣草',
+    'colorSchemeMidnight': '午夜',
+    'colorSchemeLotusLight': '莲花亮色',
+    'colorSchemeSky': '天空',
+    'colorSchemeSpring': '春天',
+    'colorSchemeCoral': '珊瑚',
+    'colorSchemeViolet': '紫罗兰',
+    'colorSchemeClassic': '经典',
+    'colorSchemeDescLotus': '优雅、现代、品牌色',
+    'colorSchemeDescOcean': '冷静、专业、护眼',
+    'colorSchemeDescForest': '自然、舒适、护眼',
+    'colorSchemeDescSunset': '温暖、活力、醒目',
+    'colorSchemeDescLavender': '神秘、高贵、柔和',
+    'colorSchemeDescMidnight': '深邃、专注、低调',
+    'colorSchemeDescLotusLight': '优雅、现代、品牌色',
+    'colorSchemeDescSky': '清新、明亮、舒适',
+    'colorSchemeDescSpring': '生机、活力、护眼',
+    'colorSchemeDescCoral': '温暖、友好、醒目',
+    'colorSchemeDescViolet': '优雅、柔和、高贵',
+    'colorSchemeDescClassic': '简洁、专业、通用',
+    'colorSchemeChanged': '配色方案已切换为: {scheme}',
   };
 
   static const Map<String, String> _enValues = {
@@ -685,8 +742,8 @@ class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {
     'addFavorites': 'Add to Favorites',
     'channelInfo': 'Channel Info',
     'playback': 'Playback',
-    'autoPlay': 'Auto-play',
-    'autoPlaySubtitle': 'Automatically start playback when selecting a channel',
+    'autoPlay': 'Auto-play on Startup',
+    'autoPlaySubtitle': 'Automatically continue playing last watched content when app starts',
     'hardwareDecoding': 'Hardware Decoding',
     'hardwareDecodingSubtitle': 'Use hardware acceleration for video playback',
     'bufferSize': 'Buffer Size',
@@ -838,8 +895,8 @@ class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {
     'updateNow': 'Update now',
     'noReleaseNotes': 'No release notes',
     // Settings messages
-    'autoPlayEnabled': 'Auto-play enabled',
-    'autoPlayDisabled': 'Auto-play disabled',
+    'autoPlayEnabled': 'Auto-play on startup enabled',
+    'autoPlayDisabled': 'Auto-play on startup disabled',
     'bufferStrength': 'Buffer Strength',
     'showFps': 'Show FPS',
     'showFpsSubtitle': 'Show frame rate in top-right corner of player',
@@ -942,5 +999,33 @@ class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {
     'languageSwitchedToEnglish': 'Language switched to English',
     'themeChangedMessage': 'Theme changed: {theme}',
     'defaultVersion': 'Default version',
+    // Color scheme strings
+    'colorScheme': 'Color Scheme',
+    'selectColorScheme': 'Select Color Scheme',
+    'colorSchemeLotus': 'Lotus',
+    'colorSchemeOcean': 'Ocean',
+    'colorSchemeForest': 'Forest',
+    'colorSchemeSunset': 'Sunset',
+    'colorSchemeLavender': 'Lavender',
+    'colorSchemeMidnight': 'Midnight',
+    'colorSchemeLotusLight': 'Lotus Light',
+    'colorSchemeSky': 'Sky',
+    'colorSchemeSpring': 'Spring',
+    'colorSchemeCoral': 'Coral',
+    'colorSchemeViolet': 'Violet',
+    'colorSchemeClassic': 'Classic',
+    'colorSchemeDescLotus': 'Elegant, modern, brand color',
+    'colorSchemeDescOcean': 'Calm, professional, eye-friendly',
+    'colorSchemeDescForest': 'Natural, comfortable, eye-friendly',
+    'colorSchemeDescSunset': 'Warm, energetic, eye-catching',
+    'colorSchemeDescLavender': 'Mysterious, noble, soft',
+    'colorSchemeDescMidnight': 'Deep, focused, low-key',
+    'colorSchemeDescLotusLight': 'Elegant, modern, brand color',
+    'colorSchemeDescSky': 'Fresh, bright, comfortable',
+    'colorSchemeDescSpring': 'Vibrant, energetic, eye-friendly',
+    'colorSchemeDescCoral': 'Warm, friendly, eye-catching',
+    'colorSchemeDescViolet': 'Elegant, soft, noble',
+    'colorSchemeDescClassic': 'Simple, professional, universal',
+    'colorSchemeChanged': 'Color scheme changed to: {scheme}',
   };
 }

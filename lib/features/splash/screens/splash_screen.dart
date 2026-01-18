@@ -77,17 +77,19 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = AppTheme.getPrimaryColor(context);
+    
     return Scaffold(
       backgroundColor: AppTheme.getBackgroundColor(context),
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Color(0xFF1A1A2E),
-              Color(0xFF0F0F23),
-              Color(0xFF16213E),
+              AppTheme.getBackgroundColor(context),
+              AppTheme.getBackgroundColor(context).withOpacity(0.8),
+              primaryColor.withOpacity(0.05),
             ],
           ),
         ),
@@ -111,19 +113,11 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                   width: 120,
                   height: 120,
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color(0xFF6366F1),
-                        Color(0xFF4F46E5),
-                        Color(0xFF7C3AED),
-                      ],
-                    ),
+                    gradient: AppTheme.getGradient(context),
                     borderRadius: BorderRadius.circular(30),
                     boxShadow: [
                       BoxShadow(
-                        color: AppTheme.primaryColor.withOpacity(0.4),
+                        color: primaryColor.withOpacity(0.4),
                         blurRadius: 30,
                         spreadRadius: 5,
                       ),
@@ -151,15 +145,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                   child: Column(
                     children: [
                       ShaderMask(
-                        shaderCallback: (bounds) {
-                          return const LinearGradient(
-                            colors: [
-                              Color(0xFF6366F1),
-                              Color(0xFF818CF8),
-                              Color(0xFFA78BFA),
-                            ],
-                          ).createShader(bounds);
-                        },
+                        shaderCallback: (bounds) => AppTheme.getGradient(context).createShader(bounds),
                         child: Text(
                           AppStrings.of(context)?.lotusIptv ?? 'Lotus IPTV',
                           style: const TextStyle(
@@ -175,7 +161,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                         AppStrings.of(context)?.professionalIptvPlayer ?? 'Professional IPTV Player',
                         style: TextStyle(
                           fontSize: 14,
-                          color: AppTheme.textSecondaryDark.withOpacity(0.8),
+                          color: AppTheme.getTextSecondary(context).withOpacity(0.8),
                           letterSpacing: 2,
                         ),
                       ),
@@ -201,18 +187,18 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(4),
-                        child: const LinearProgressIndicator(
-                          backgroundColor: AppTheme.surfaceColorDark,
-                          color: AppTheme.primaryColor,
+                        child: LinearProgressIndicator(
+                          backgroundColor: AppTheme.getSurfaceColor(context),
+                          color: primaryColor,
                           minHeight: 4,
                         ),
                       ),
                       const SizedBox(height: 16),
                       Text(
                         AppStrings.of(context)?.loading ?? 'Loading...',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
-                          color: AppTheme.textMutedDark,
+                          color: AppTheme.getTextMuted(context),
                         ),
                       ),
                     ],

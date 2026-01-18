@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/color_scheme_manager.dart';
 import '../../../core/widgets/tv_focusable.dart';
 import '../../../core/widgets/tv_sidebar.dart';
+import '../../../core/widgets/color_scheme_dialog.dart';
 import '../../../core/platform/platform_detector.dart';
 import '../../../core/i18n/app_strings.dart';
 import '../../../core/services/service_locator.dart';
@@ -82,6 +84,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 subtitle: _getThemeModeLabel(context, settings.themeMode),
                 icon: Icons.palette_rounded,
                 onTap: () => _showThemeModeDialog(context, settings),
+              ),
+              _buildDivider(),
+              _buildSelectTile(
+                context,
+                title: AppStrings.of(context)?.colorScheme ?? 'Color Scheme',
+                subtitle: _getCurrentColorSchemeName(context, settings),
+                icon: Icons.color_lens_rounded,
+                onTap: () => _showColorSchemeDialog(context),
               ),
             ]),
 
@@ -285,7 +295,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   await settings.setEnableEpg(value);
                   final strings = AppStrings.of(context);
                   if (value) {
-                    // 启用 EPG 时，如果有配置 URL 则加载
+                    // 启用 EPG 时，如果有配�?URL 则加�?
                     if (settings.epgUrl != null && settings.epgUrl!.isNotEmpty) {
                       final success = await context.read<EpgProvider>().loadEpg(settings.epgUrl!);
                       if (success) {
@@ -297,7 +307,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       _showSuccess(context, strings?.epgEnabledPleaseConfigure ?? 'EPG enabled, please configure EPG URL');
                     }
                   } else {
-                    // 关闭 EPG 时清除已加载的数据
+                    // 关闭 EPG 时清除已加载的数�?
                     context.read<EpgProvider>().clear();
                     _showSuccess(context, strings?.epgDisabled ?? 'EPG disabled');
                   }
@@ -430,7 +440,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       return Scaffold(
         backgroundColor: AppTheme.getBackgroundColor(context),
         body: TVSidebar(
-          selectedIndex: 4, // 设置页
+          selectedIndex: 4, // 设置�?
           child: content,
         ),
       );
@@ -440,7 +450,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (widget.embedded) {
       return Column(
         children: [
-          // 简化的标题栏
+          // 简化的标题�?
           SafeArea(
             bottom: false,
             child: Container(
@@ -485,16 +495,77 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final locale = settings.locale;
     final strings = AppStrings.of(context);
     if (locale == null) {
-      // 没有设置，显示"跟随系统"
+      // 没有设置，显�?跟随系统"
       final systemLocale = Localizations.localeOf(context);
       final systemLang = systemLocale.languageCode == 'zh' ? (strings?.chinese ?? '中文') : 'English';
       return '${strings?.followSystem ?? "Follow system"} ($systemLang)';
     }
-    // 根据保存的设置显示
+    // 根据保存的设置显�?
     if (locale.languageCode == 'zh') {
       return strings?.chinese ?? '中文';
     }
     return strings?.english ?? 'English';
+  }
+
+  String _getCurrentColorSchemeName(BuildContext context, SettingsProvider settings) {
+    final strings = AppStrings.of(context);
+    final manager = ColorSchemeManager.instance;
+    
+    // 判断当前是黑暗还是明亮模�?
+    final isDarkMode = _isDarkMode(context, settings);
+    final schemeId = isDarkMode ? settings.darkColorScheme : settings.lightColorScheme;
+    final scheme = isDarkMode 
+        ? manager.getDarkScheme(schemeId) 
+        : manager.getLightScheme(schemeId);
+    
+    // 返回配色名称
+    switch (scheme.nameKey) {
+      case 'colorSchemeLotus':
+        return strings?.colorSchemeLotus ?? 'Lotus';
+      case 'colorSchemeOcean':
+        return strings?.colorSchemeOcean ?? 'Ocean';
+      case 'colorSchemeForest':
+        return strings?.colorSchemeForest ?? 'Forest';
+      case 'colorSchemeSunset':
+        return strings?.colorSchemeSunset ?? 'Sunset';
+      case 'colorSchemeLavender':
+        return strings?.colorSchemeLavender ?? 'Lavender';
+      case 'colorSchemeMidnight':
+        return strings?.colorSchemeMidnight ?? 'Midnight';
+      case 'colorSchemeLotusLight':
+        return strings?.colorSchemeLotusLight ?? 'Lotus Light';
+      case 'colorSchemeSky':
+        return strings?.colorSchemeSky ?? 'Sky';
+      case 'colorSchemeSpring':
+        return strings?.colorSchemeSpring ?? 'Spring';
+      case 'colorSchemeCoral':
+        return strings?.colorSchemeCoral ?? 'Coral';
+      case 'colorSchemeViolet':
+        return strings?.colorSchemeViolet ?? 'Violet';
+      case 'colorSchemeClassic':
+        return strings?.colorSchemeClassic ?? 'Classic';
+      default:
+        return scheme.id;
+    }
+  }
+
+  bool _isDarkMode(BuildContext context, SettingsProvider settings) {
+    if (settings.themeMode == 'dark') {
+      return true;
+    } else if (settings.themeMode == 'light') {
+      return false;
+    } else {
+      // 跟随系统
+      final brightness = MediaQuery.of(context).platformBrightness;
+      return brightness == Brightness.dark;
+    }
+  }
+
+  void _showColorSchemeDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => const ColorSchemeDialog(),
+    );
   }
 
   String _getPlatformName() {
@@ -551,7 +622,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _showSuccess(context, (strings?.decodingModeSet ?? 'Decoding mode set to: {mode}').replaceFirst('{mode}', _getDecodingModeLabel(context, value)));
                   }
                 },
-                activeColor: AppTheme.primaryColor,
+                activeColor: AppTheme.getPrimaryColor(dialogContext),
               );
             }).toList(),
           ),
@@ -642,10 +713,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: AppTheme.primaryColor.withOpacity(0.15),
+                color: AppTheme.getPrimaryColor(context).withOpacity(0.15),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(icon, color: AppTheme.primaryColor, size: 20),
+              child: Icon(icon, color: AppTheme.getPrimaryColor(context), size: 20),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -674,7 +745,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Switch(
               value: value,
               onChanged: onChanged,
-              activeColor: AppTheme.primaryColor,
+              activeColor: AppTheme.getPrimaryColor(context),
             ),
           ],
         ),
@@ -711,10 +782,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppTheme.primaryColor.withOpacity(0.15),
+                  color: AppTheme.getPrimaryColor(context).withOpacity(0.15),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(icon, color: AppTheme.primaryColor, size: 20),
+                child: Icon(icon, color: AppTheme.getPrimaryColor(context), size: 20),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -797,12 +868,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: (isDestructive ? AppTheme.errorColor : AppTheme.primaryColor).withOpacity(0.15),
+                  color: (isDestructive ? AppTheme.errorColor : AppTheme.getPrimaryColor(context)).withOpacity(0.15),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
                   icon,
-                  color: isDestructive ? AppTheme.errorColor : AppTheme.primaryColor,
+                  color: isDestructive ? AppTheme.errorColor : AppTheme.getPrimaryColor(context),
                   size: 20,
                 ),
               ),
@@ -925,7 +996,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Navigator.pop(dialogContext);
                   }
                 },
-                activeColor: AppTheme.primaryColor,
+                activeColor: AppTheme.getPrimaryColor(dialogContext),
               );
             }).toList(),
           ),
@@ -964,7 +1035,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _showError(context, strings?.bufferSizeNotImplemented ?? 'Buffer size setting not implemented, setting will not take effect');
                   }
                 },
-                activeColor: AppTheme.primaryColor,
+                activeColor: AppTheme.getPrimaryColor(dialogContext),
               );
             }).toList(),
           ),
@@ -1009,7 +1080,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _showSuccess(context, (strings?.volumeBoostSet ?? 'Volume boost set to {value}').replaceFirst('{value}', boostValue));
                   }
                 },
-                activeColor: AppTheme.primaryColor,
+                activeColor: AppTheme.getPrimaryColor(dialogContext),
               );
             }).toList(),
           ),
@@ -1059,7 +1130,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _showError(context, strings?.autoRefreshNotImplemented ?? 'Auto-refresh not implemented, setting will not take effect');
                   }
                 },
-                activeColor: AppTheme.primaryColor,
+                activeColor: AppTheme.getPrimaryColor(dialogContext),
               );
             }).toList(),
           ),
@@ -1098,11 +1169,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 final newUrl = controller.text.trim().isEmpty ? null : controller.text.trim();
                 final oldUrl = settings.epgUrl;
 
-                // 保存新 URL
+                // 保存�?URL
                 await settings.setEpgUrl(newUrl);
                 Navigator.pop(dialogContext);
 
-                // 如果 URL 变化了，清除旧数据并加载新数据
+                // 如果 URL 变化了，清除旧数据并加载新数�?
                 if (newUrl != oldUrl) {
                   final epgProvider = context.read<EpgProvider>();
                   epgProvider.clear();
@@ -1243,7 +1314,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Navigator.pop(dialogContext);
                   _showSuccess(context, AppStrings.of(context)?.languageFollowSystem ?? '已设置为跟随系统语言');
                 },
-                activeColor: AppTheme.primaryColor,
+                activeColor: AppTheme.getPrimaryColor(dialogContext),
               ),
               RadioListTile<String?>(
                 title: const Text(
@@ -1257,7 +1328,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Navigator.pop(dialogContext);
                   _showSuccess(context, 'Language changed to English');
                 },
-                activeColor: AppTheme.primaryColor,
+                activeColor: AppTheme.getPrimaryColor(dialogContext),
               ),
               RadioListTile<String?>(
                 title: Text(
@@ -1272,7 +1343,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   final strings = AppStrings.of(context);
                   _showSuccess(context, strings?.languageSwitchedToChinese ?? 'Language switched to Chinese');
                 },
-                activeColor: AppTheme.primaryColor,
+                activeColor: AppTheme.getPrimaryColor(dialogContext),
               ),
             ],
           ),
@@ -1324,7 +1395,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _showSuccess(context, (strings?.themeChangedMessage ?? 'Theme changed: {theme}').replaceFirst('{theme}', _getThemeModeLabel(context, value)));
                   }
                 },
-                activeColor: AppTheme.primaryColor,
+                activeColor: AppTheme.getPrimaryColor(dialogContext),
               );
             }).toList(),
           ),
@@ -1342,7 +1413,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  // 检查更新
+  // 检查更�?
   void _checkForUpdates(BuildContext context) {
     ServiceLocator.updateManager.manualCheckForUpdate(context);
   }
@@ -1383,7 +1454,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
               ),
               const SizedBox(height: 16),
-              // 显示2x2网格示意图
+              // 显示2x2网格示意�?
               Container(
                 width: 120,
                 height: 90,
@@ -1400,7 +1471,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             child: Container(
                               decoration: BoxDecoration(
                                 border: Border.all(color: AppTheme.textMuted.withOpacity(0.3)),
-                                color: settings.defaultScreenPosition == 1 ? AppTheme.primaryColor.withOpacity(0.3) : null,
+                                color: settings.defaultScreenPosition == 1 ? AppTheme.getPrimaryColor(context).withOpacity(0.3) : null,
                               ),
                               child: const Center(child: Text('1', style: TextStyle(color: AppTheme.textPrimary, fontSize: 12))),
                             ),
@@ -1409,7 +1480,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             child: Container(
                               decoration: BoxDecoration(
                                 border: Border.all(color: AppTheme.textMuted.withOpacity(0.3)),
-                                color: settings.defaultScreenPosition == 2 ? AppTheme.primaryColor.withOpacity(0.3) : null,
+                                color: settings.defaultScreenPosition == 2 ? AppTheme.getPrimaryColor(context).withOpacity(0.3) : null,
                               ),
                               child: const Center(child: Text('2', style: TextStyle(color: AppTheme.textPrimary, fontSize: 12))),
                             ),
@@ -1424,7 +1495,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             child: Container(
                               decoration: BoxDecoration(
                                 border: Border.all(color: AppTheme.textMuted.withOpacity(0.3)),
-                                color: settings.defaultScreenPosition == 3 ? AppTheme.primaryColor.withOpacity(0.3) : null,
+                                color: settings.defaultScreenPosition == 3 ? AppTheme.getPrimaryColor(context).withOpacity(0.3) : null,
                               ),
                               child: const Center(child: Text('3', style: TextStyle(color: AppTheme.textPrimary, fontSize: 12))),
                             ),
@@ -1433,7 +1504,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             child: Container(
                               decoration: BoxDecoration(
                                 border: Border.all(color: AppTheme.textMuted.withOpacity(0.3)),
-                                color: settings.defaultScreenPosition == 4 ? AppTheme.primaryColor.withOpacity(0.3) : null,
+                                color: settings.defaultScreenPosition == 4 ? AppTheme.getPrimaryColor(context).withOpacity(0.3) : null,
                               ),
                               child: const Center(child: Text('4', style: TextStyle(color: AppTheme.textPrimary, fontSize: 12))),
                             ),
@@ -1461,7 +1532,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       _showSuccess(context, (strings?.screenPositionSet ?? 'Default screen position set to: {position}').replaceFirst('{position}', _getScreenPositionLabel(context, value)));
                     }
                   },
-                  activeColor: AppTheme.primaryColor,
+                  activeColor: AppTheme.getPrimaryColor(dialogContext),
                 );
               }).toList(),
             ],
@@ -1471,3 +1542,5 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 }
+
+

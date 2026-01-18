@@ -448,13 +448,13 @@ class _ChannelsScreenState extends State<ChannelsScreen> {
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
       leading: Icon(
         CategoryCard.getIconForCategory(name),
-        color: isSelected ? AppTheme.primaryColor : AppTheme.getTextSecondary(context),
+        color: isSelected ? AppTheme.getPrimaryColor(context) : AppTheme.getTextSecondary(context),
         size: 20,
       ),
       title: Text(
         name,
         style: TextStyle(
-          color: isSelected ? AppTheme.primaryColor : AppTheme.getTextPrimary(context),
+          color: isSelected ? AppTheme.getPrimaryColor(context) : AppTheme.getTextPrimary(context),
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
           fontSize: 13,
         ),
@@ -462,20 +462,20 @@ class _ChannelsScreenState extends State<ChannelsScreen> {
       trailing: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         decoration: BoxDecoration(
-          color: isSelected ? AppTheme.primaryColor.withOpacity(0.2) : AppTheme.getCardColor(context),
+          color: isSelected ? AppTheme.getPrimaryColor(context).withOpacity(0.2) : AppTheme.getCardColor(context),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
           count.toString(),
           style: TextStyle(
-            color: isSelected ? AppTheme.primaryColor : AppTheme.getTextMuted(context),
+            color: isSelected ? AppTheme.getPrimaryColor(context) : AppTheme.getTextMuted(context),
             fontSize: 11,
             fontWeight: FontWeight.w600,
           ),
         ),
       ),
       selected: isSelected,
-      selectedTileColor: AppTheme.primaryColor.withOpacity(0.1),
+      selectedTileColor: AppTheme.getPrimaryColor(context).withOpacity(0.1),
       onTap: onTap,
     );
   }
@@ -534,16 +534,16 @@ class _ChannelsScreenState extends State<ChannelsScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: isSelected
-                  ? AppTheme.primaryColor.withOpacity(0.2)
+                  ? AppTheme.getPrimaryColor(context).withOpacity(0.15)
                   : isFocused
-                      ? AppTheme.getCardColor(context)
+                      ? AppTheme.getPrimaryColor(context).withOpacity(0.08)
                       : Colors.transparent,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: isFocused
-                    ? AppTheme.focusBorderColor
+                    ? AppTheme.getPrimaryColor(context)
                     : isSelected
-                        ? AppTheme.primaryColor.withOpacity(0.5)
+                        ? AppTheme.getPrimaryColor(context).withOpacity(0.5)
                         : Colors.transparent,
                 width: isFocused ? 2 : 1,
               ),
@@ -556,7 +556,7 @@ class _ChannelsScreenState extends State<ChannelsScreen> {
                   width: 4,
                   height: 24,
                   decoration: BoxDecoration(
-                    color: isSelected ? AppTheme.primaryColor : Colors.transparent,
+                    color: isSelected ? AppTheme.getPrimaryColor(context) : Colors.transparent,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -567,7 +567,7 @@ class _ChannelsScreenState extends State<ChannelsScreen> {
                   child: Text(
                     name,
                     style: TextStyle(
-                      color: isSelected ? AppTheme.primaryColor : AppTheme.getTextPrimary(context),
+                      color: isSelected ? AppTheme.getPrimaryColor(context) : AppTheme.getTextPrimary(context),
                       fontSize: 14,
                       fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                     ),
@@ -580,13 +580,13 @@ class _ChannelsScreenState extends State<ChannelsScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: isSelected ? AppTheme.primaryColor.withOpacity(0.2) : AppTheme.getCardColor(context),
+                    color: isSelected ? AppTheme.getPrimaryColor(context).withOpacity(0.2) : AppTheme.getCardColor(context),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
                     count.toString(),
                     style: TextStyle(
-                      color: isSelected ? AppTheme.primaryColor : AppTheme.getTextMuted(context),
+                      color: isSelected ? AppTheme.getPrimaryColor(context) : AppTheme.getTextMuted(context),
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),
@@ -1026,7 +1026,7 @@ class _ChannelsScreenState extends State<ChannelsScreen> {
               Text('测试已转入后台，剩余 ${result.remainingCount} 个频道'),
             ],
           ),
-          backgroundColor: AppTheme.primaryColor,
+          backgroundColor: AppTheme.getPrimaryColor(context),
           duration: const Duration(seconds: 5),
           action: SnackBarAction(
             label: '查看进度',
@@ -1299,19 +1299,19 @@ class _BackgroundTestIndicatorState extends State<_BackgroundTestIndicator> {
         margin: const EdgeInsets.only(right: 8),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: _progress.isRunning ? AppTheme.primaryColor.withOpacity(0.2) : Colors.orange.withOpacity(0.2),
+          color: _progress.isRunning ? AppTheme.getPrimaryColor(context).withOpacity(0.2) : Colors.orange.withOpacity(0.2),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (_progress.isRunning) ...[
-              const SizedBox(
+              SizedBox(
                 width: 14,
                 height: 14,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: AppTheme.primaryColor,
+                  color: AppTheme.getPrimaryColor(context),
                 ),
               ),
               const SizedBox(width: 8),

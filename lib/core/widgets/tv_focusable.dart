@@ -153,12 +153,12 @@ class _TVFocusableState extends State<TVFocusable> with SingleTickerProviderStat
                       ? BoxDecoration(
                           borderRadius: widget.borderRadius ?? BorderRadius.circular(AppTheme.radiusMedium),
                           border: Border.all(
-                            color: AppTheme.focusBorderColor,
+                            color: AppTheme.getPrimaryColor(context),
                             width: 3,
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: AppTheme.focusColor.withAlpha(102),
+                              color: AppTheme.getPrimaryColor(context).withAlpha(102),
                               blurRadius: 16,
                               spreadRadius: 2,
                             ),

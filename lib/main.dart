@@ -311,49 +311,55 @@ class _DlnaAwareAppState extends State<_DlnaAwareApp> with WindowListener {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: _navigatorKey,
-      title: AppStrings.of(context)?.lotusIptv ?? 'Lotus IPTV',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: widget.settings.themeMode == 'light'
-          ? ThemeMode.light
-          : widget.settings.themeMode == 'system'
-              ? ThemeMode.system
-              : ThemeMode.dark,
-      locale: widget.settings.locale,
-      supportedLocales: const [
-        Locale('en', ''),
-        Locale('zh', ''),
-      ],
-      localizationsDelegates: const [
-        AppStrings.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      // Use shortcuts for TV remote support
-      shortcuts: <ShortcutActivator, Intent>{
-        ...WidgetsApp.defaultShortcuts,
-        const SingleActivator(LogicalKeyboardKey.select): const ActivateIntent(),
-        const SingleActivator(LogicalKeyboardKey.enter): const ActivateIntent(),
-      },
-      onGenerateRoute: AppRouter.generateRoute,
-      initialRoute: AppRouter.splash,
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: const TextScaler.linear(1.0),
-          ),
-          child: Platform.isWindows
-              ? Stack(
+    // 监听 settings 变化，确保主题能够更新
+    return Consumer<SettingsProvider>(
+      builder: (context, settings, _) {
+        debugPrint('MaterialApp 重建 - 黑暗配色: ${settings.darkColorScheme}, 明亮配色: ${settings.lightColorScheme}, 主题模式: ${settings.themeMode}');
+        return MaterialApp(
+          navigatorKey: _navigatorKey,
+          title: AppStrings.of(context)?.lotusIptv ?? 'Lotus IPTV',
+          debugShowCheckedModeBanner: false,
+          theme: AppThemeDynamic.getLightTheme(settings.lightColorScheme),
+          darkTheme: AppThemeDynamic.getDarkTheme(settings.darkColorScheme),
+          themeMode: settings.themeMode == 'light'
+              ? ThemeMode.light
+              : settings.themeMode == 'system'
+                  ? ThemeMode.system
+                  : ThemeMode.dark,
+          locale: settings.locale,
+          supportedLocales: const [
+            Locale('en', ''),
+            Locale('zh', ''),
+          ],
+          localizationsDelegates: const [
+            AppStrings.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          // Use shortcuts for TV remote support
+          shortcuts: <ShortcutActivator, Intent>{
+            ...WidgetsApp.defaultShortcuts,
+            const SingleActivator(LogicalKeyboardKey.select): const ActivateIntent(),
+            const SingleActivator(LogicalKeyboardKey.enter): const ActivateIntent(),
+          },
+          onGenerateRoute: AppRouter.generateRoute,
+          initialRoute: AppRouter.splash,
+          builder: (context, child) {
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                textScaler: const TextScaler.linear(1.0),
+              ),
+              child: Platform.isWindows
+                  ? Stack(
                   children: [
                     child!,
                     const WindowTitleBar(),
                   ],
                 )
               : child!,
+            );
+          },
         );
       },
     );

@@ -78,6 +78,9 @@ temp_db.bin
 # Claude AI local config
 .claude/
 
+# Kiro AI local config
+.kiro/
+
 # SQLite temp files
 sqlite3_temp/
 

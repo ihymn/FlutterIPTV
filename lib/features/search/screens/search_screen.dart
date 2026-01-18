@@ -273,7 +273,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: isInputFocused ? AppTheme.primaryColor : Colors.transparent,
+                            color: isInputFocused ? AppTheme.getPrimaryColor(context) : Colors.transparent,
                             width: 2,
                           ),
                         ),
@@ -341,7 +341,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
-                                    color: hasFocus ? AppTheme.primaryColor : Colors.transparent,
+                                    color: hasFocus ? AppTheme.getPrimaryColor(context) : Colors.transparent,
                                     width: 2,
                                   ),
                                 ),
@@ -402,7 +402,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     Navigator.pop(dialogContext);
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppTheme.primaryColor,
+                                    backgroundColor: AppTheme.getPrimaryColor(context),
                                   ),
                                   child: Text(
                                     AppStrings.of(context)?.search ?? 'Search',

@@ -31,6 +31,8 @@ class SettingsProvider extends ChangeNotifier {
   static const String _keyActiveScreenIndex = 'active_screen_index';
   static const String _keyLastPlayMode = 'last_play_mode'; // 'single' or 'multi'
   static const String _keyLastMultiScreenChannels = 'last_multi_screen_channels'; // JSON string of channel IDs
+  static const String _keyDarkColorScheme = 'dark_color_scheme';
+  static const String _keyLightColorScheme = 'light_color_scheme';
 
   // Settings values
   String _themeMode = 'dark';
@@ -45,7 +47,7 @@ class SettingsProvider extends ChangeNotifier {
   String? _epgUrl;
   bool _parentalControl = false;
   String? _parentalPin;
-  bool _autoPlay = true;
+  bool _autoPlay = false;
   bool _rememberLastChannel = true;
   int? _lastChannelId;
   Locale? _locale;
@@ -61,6 +63,8 @@ class SettingsProvider extends ChangeNotifier {
   int _activeScreenIndex = 0; // 当前活动窗口索引
   String _lastPlayMode = 'single'; // 上次播放模式：'single' 或 'multi'
   List<int?> _lastMultiScreenChannels = [null, null, null, null]; // 分屏频道ID列表
+  String _darkColorScheme = 'lotus'; // 黑暗模式配色方案
+  String _lightColorScheme = 'lotus-light'; // 明亮模式配色方案
 
   // Getters
   String get themeMode => _themeMode;
@@ -90,6 +94,17 @@ class SettingsProvider extends ChangeNotifier {
   int get activeScreenIndex => _activeScreenIndex;
   String get lastPlayMode => _lastPlayMode;
   List<int?> get lastMultiScreenChannels => _lastMultiScreenChannels;
+  String get darkColorScheme => _darkColorScheme;
+  String get lightColorScheme => _lightColorScheme;
+  
+  /// 获取当前应该使用的配色方案
+  String get currentColorScheme {
+    if (_themeMode == 'dark') return _darkColorScheme;
+    if (_themeMode == 'light') return _lightColorScheme;
+    // 跟随系统时需要根据系统亮度决定
+    // 这里返回黑暗模式配色作为默认，实际使用时会在 UI 层判断
+    return _darkColorScheme;
+  }
 
   SettingsProvider() {
     _loadSettings();
@@ -110,7 +125,7 @@ class SettingsProvider extends ChangeNotifier {
     _epgUrl = prefs.getString(_keyEpgUrl);
     _parentalControl = prefs.getBool(_keyParentalControl) ?? false;
     _parentalPin = prefs.getString(_keyParentalPin);
-    _autoPlay = prefs.getBool(_keyAutoPlay) ?? true;
+    _autoPlay = prefs.getBool(_keyAutoPlay) ?? false;
     _rememberLastChannel = prefs.getBool(_keyRememberLastChannel) ?? true;
     _lastChannelId = prefs.getInt(_keyLastChannelId);
 
@@ -146,6 +161,11 @@ class SettingsProvider extends ChangeNotifier {
         _lastMultiScreenChannels = [null, null, null, null];
       }
     }
+    
+    // 加载配色方案设置
+    _darkColorScheme = prefs.getString(_keyDarkColorScheme) ?? 'lotus';
+    _lightColorScheme = prefs.getString(_keyLightColorScheme) ?? 'lotus-light';
+    
     // 不在构造函数中调用 notifyListeners()，避免 build 期间触发重建
   }
 
@@ -192,6 +212,8 @@ class SettingsProvider extends ChangeNotifier {
     await prefs.setInt(_keyActiveScreenIndex, _activeScreenIndex);
     await prefs.setString(_keyLastPlayMode, _lastPlayMode);
     await prefs.setString(_keyLastMultiScreenChannels, _lastMultiScreenChannels.map((e) => e?.toString() ?? '').join(','));
+    await prefs.setString(_keyDarkColorScheme, _darkColorScheme);
+    await prefs.setString(_keyLightColorScheme, _lightColorScheme);
   }
 
   // Setters with persistence
@@ -400,6 +422,24 @@ class SettingsProvider extends ChangeNotifier {
   bool get hasMultiScreenState {
     return _lastPlayMode == 'multi' && _lastMultiScreenChannels.any((id) => id != null);
   }
+  
+  /// 设置黑暗模式配色方案
+  Future<void> setDarkColorScheme(String scheme) async {
+    debugPrint('SettingsProvider: 设置黑暗配色方案 - $scheme');
+    _darkColorScheme = scheme;
+    await _saveSettings();
+    debugPrint('SettingsProvider: 配色方案已保存，通知监听者');
+    notifyListeners();
+  }
+  
+  /// 设置明亮模式配色方案
+  Future<void> setLightColorScheme(String scheme) async {
+    debugPrint('SettingsProvider: 设置明亮配色方案 - $scheme');
+    _lightColorScheme = scheme;
+    await _saveSettings();
+    debugPrint('SettingsProvider: 配色方案已保存，通知监听者');
+    notifyListeners();
+  }
 
   // Reset all settings to defaults
   Future<void> resetSettings() async {
@@ -413,7 +453,7 @@ class SettingsProvider extends ChangeNotifier {
     _epgUrl = null;
     _parentalControl = false;
     _parentalPin = null;
-    _autoPlay = true;
+    _autoPlay = false;
     _rememberLastChannel = true;
     _volumeNormalization = false;
     _volumeBoost = 0;
@@ -425,6 +465,8 @@ class SettingsProvider extends ChangeNotifier {
     _enableMultiScreen = true;
     _defaultScreenPosition = 1;
     _activeScreenIndex = 0;
+    _darkColorScheme = 'lotus';
+    _lightColorScheme = 'lotus-light';
 
     await _saveSettings();
     notifyListeners();
