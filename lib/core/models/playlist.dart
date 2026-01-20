@@ -1,4 +1,4 @@
-/// Represents an IPTV playlist (M3U/M3U8 source)
+/// Represents an IPTV playlist (M3U/M3U8/TXT source)
 class Playlist {
   final int? id;
   final String name;
@@ -89,6 +89,18 @@ class Playlist {
 
   /// Get the source path (URL or file path)
   String get sourcePath => url ?? filePath ?? '';
+
+  /// Get the playlist format (M3U or TXT)
+  String get format {
+    final source = sourcePath.toLowerCase();
+    if (source.endsWith('.txt')) {
+      return 'TXT';
+    } else if (source.endsWith('.m3u') || source.endsWith('.m3u8')) {
+      return 'M3U';
+    }
+    // 默认返回 M3U
+    return 'M3U';
+  }
 
   @override
   bool operator ==(Object other) {

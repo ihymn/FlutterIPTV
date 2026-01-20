@@ -149,6 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final channelProvider = context.read<ChannelProvider>();
     final favoritesProvider = context.read<FavoritesProvider>();
     final settingsProvider = context.read<SettingsProvider>();
+    final epgProvider = context.read<EpgProvider>();
 
     if (playlistProvider.hasPlaylists) {
       final activePlaylist = playlistProvider.activePlaylist;
@@ -160,6 +161,18 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       await favoritesProvider.loadFavorites();
       _refreshRecommendedChannels();
+      
+      // 加载 EPG（使用播放列表的 EPG URL，如果失败则使用设置中的兜底 URL）
+      if (activePlaylist?.epgUrl != null && activePlaylist!.epgUrl!.isNotEmpty) {
+        debugPrint('HomeScreen: 初始加载播放列表的 EPG URL: ${activePlaylist.epgUrl}');
+        await epgProvider.loadEpg(
+          activePlaylist.epgUrl!,
+          fallbackUrl: settingsProvider.epgUrl,
+        );
+      } else if (settingsProvider.epgUrl != null && settingsProvider.epgUrl!.isNotEmpty) {
+        debugPrint('HomeScreen: 初始加载设置中的兜底 EPG URL: ${settingsProvider.epgUrl}');
+        await epgProvider.loadEpg(settingsProvider.epgUrl!);
+      }
       
       // 自动播放功能：数据加载完成后延迟500ms自动播放
       if (settingsProvider.autoPlay && mounted) {

@@ -108,7 +108,7 @@ class WindowsPipChannel {
       await windowManager.setTitleBarStyle(TitleBarStyle.hidden);
       
       // 恢复最小尺寸限制
-      await windowManager.setMinimumSize(const Size(800, 600));
+      await windowManager.setMinimumSize(const Size(360, 600));
       
       // 恢复原始大小和位置
       if (_originalSize != null) {

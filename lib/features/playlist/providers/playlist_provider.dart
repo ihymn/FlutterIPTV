@@ -6,6 +6,7 @@ import '../../../core/models/playlist.dart';
 import '../../../core/models/channel.dart';
 import '../../../core/services/service_locator.dart';
 import '../../../core/utils/m3u_parser.dart';
+import '../../../core/utils/txt_parser.dart';
 import '../../favorites/providers/favorites_provider.dart';
 
 class PlaylistProvider extends ChangeNotifier {
@@ -87,6 +88,35 @@ class PlaylistProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Detect playlist format from URL or content
+  /// Returns 'txt' for TXT format, 'm3u' for M3U format
+  String _detectPlaylistFormat(String source, {String? content}) {
+    // Check by extension first
+    final lowerSource = source.toLowerCase();
+    if (lowerSource.endsWith('.txt')) {
+      return 'txt';
+    }
+    if (lowerSource.endsWith('.m3u') || lowerSource.endsWith('.m3u8')) {
+      return 'm3u';
+    }
+
+    // Check by content if available
+    if (content != null) {
+      final trimmed = content.trim();
+      // TXT format typically starts with category or has ,#genre# pattern
+      if (trimmed.contains(',#genre#')) {
+        return 'txt';
+      }
+      // M3U format starts with #EXTM3U
+      if (trimmed.startsWith('#EXTM3U') || trimmed.startsWith('#EXTINF')) {
+        return 'm3u';
+      }
+    }
+
+    // Default to M3U
+    return 'm3u';
+  }
+
   // Add a new playlist from URL
   Future<Playlist?> addPlaylistFromUrl(String name, String url) async {
     _isLoading = true;
@@ -108,20 +138,30 @@ class PlaylistProvider extends ChangeNotifier {
       _importProgress = 0.2;
       notifyListeners();
 
-      // Parse M3U from URL
-      final channels = await M3UParser.parseFromUrl(url, playlistId);
+      // Detect format and parse accordingly
+      final format = _detectPlaylistFormat(url);
+      debugPrint('DEBUG: 检测到播放列表格式: $format');
 
-      // Check for EPG URL in M3U header
-      _lastExtractedEpgUrl = M3UParser.lastParseResult?.epgUrl;
-      if (_lastExtractedEpgUrl != null) {
-        debugPrint('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
-        // Save EPG URL to playlist
-        await ServiceLocator.database.update(
-          'playlists',
-          {'epg_url': _lastExtractedEpgUrl},
-          where: 'id = ?',
-          whereArgs: [playlistId],
-        );
+      final List<Channel> channels;
+      if (format == 'txt') {
+        channels = await TXTParser.parseFromUrl(url, playlistId);
+      } else {
+        channels = await M3UParser.parseFromUrl(url, playlistId);
+      }
+
+      // Check for EPG URL in M3U header (only for M3U format)
+      if (format == 'm3u') {
+        _lastExtractedEpgUrl = M3UParser.lastParseResult?.epgUrl;
+        if (_lastExtractedEpgUrl != null) {
+          debugPrint('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
+          // Save EPG URL to playlist
+          await ServiceLocator.database.update(
+            'playlists',
+            {'epg_url': _lastExtractedEpgUrl},
+            where: 'id = ?',
+            whereArgs: [playlistId],
+          );
+        }
       }
 
       _importProgress = 0.6;
@@ -193,20 +233,30 @@ class PlaylistProvider extends ChangeNotifier {
       _importProgress = 0.2;
       notifyListeners();
 
-      // Parse M3U content directly
-      final channels = M3UParser.parse(content, playlistId);
+      // Detect format and parse accordingly
+      final format = _detectPlaylistFormat('', content: content);
+      debugPrint('DEBUG: 检测到播放列表格式: $format');
 
-      // Check for EPG URL in M3U header
-      _lastExtractedEpgUrl = M3UParser.lastParseResult?.epgUrl;
-      if (_lastExtractedEpgUrl != null) {
-        debugPrint('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
-        // Save EPG URL to playlist
-        await ServiceLocator.database.update(
-          'playlists',
-          {'epg_url': _lastExtractedEpgUrl},
-          where: 'id = ?',
-          whereArgs: [playlistId],
-        );
+      final List<Channel> channels;
+      if (format == 'txt') {
+        channels = TXTParser.parse(content, playlistId);
+      } else {
+        channels = M3UParser.parse(content, playlistId);
+      }
+
+      // Check for EPG URL in M3U header (only for M3U format)
+      if (format == 'm3u') {
+        _lastExtractedEpgUrl = M3UParser.lastParseResult?.epgUrl;
+        if (_lastExtractedEpgUrl != null) {
+          debugPrint('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
+          // Save EPG URL to playlist
+          await ServiceLocator.database.update(
+            'playlists',
+            {'epg_url': _lastExtractedEpgUrl},
+            where: 'id = ?',
+            whereArgs: [playlistId],
+          );
+        }
       }
 
       _importProgress = 0.6;
@@ -278,13 +328,23 @@ class PlaylistProvider extends ChangeNotifier {
       _importProgress = 0.2;
       notifyListeners();
 
-      // Parse M3U from file
-      final channels = await M3UParser.parseFromFile(filePath, playlistId);
+      // Detect format and parse accordingly
+      final format = _detectPlaylistFormat(filePath);
+      debugPrint('DEBUG: 检测到播放列表格式: $format');
 
-      // Check for EPG URL in M3U header
-      _lastExtractedEpgUrl = M3UParser.lastParseResult?.epgUrl;
-      if (_lastExtractedEpgUrl != null) {
-        debugPrint('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
+      final List<Channel> channels;
+      if (format == 'txt') {
+        channels = await TXTParser.parseFromFile(filePath, playlistId);
+      } else {
+        channels = await M3UParser.parseFromFile(filePath, playlistId);
+      }
+
+      // Check for EPG URL in M3U header (only for M3U format)
+      if (format == 'm3u') {
+        _lastExtractedEpgUrl = M3UParser.lastParseResult?.epgUrl;
+        if (_lastExtractedEpgUrl != null) {
+          debugPrint('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
+        }
       }
 
       _importProgress = 0.6;
@@ -361,7 +421,24 @@ class PlaylistProvider extends ChangeNotifier {
 
       if (freshPlaylist.isRemote) {
         debugPrint('DEBUG: 开始从URL解析播放列表: ${freshPlaylist.url}');
-        channels = await M3UParser.parseFromUrl(freshPlaylist.url!, playlist.id!);
+        
+        // Detect format and parse accordingly
+        final format = _detectPlaylistFormat(freshPlaylist.url!);
+        debugPrint('DEBUG: 检测到播放列表格式: $format');
+        
+        if (format == 'txt') {
+          channels = await TXTParser.parseFromUrl(freshPlaylist.url!, playlist.id!);
+        } else {
+          channels = await M3UParser.parseFromUrl(freshPlaylist.url!, playlist.id!);
+        }
+        
+        // Check for EPG URL in M3U header (only for M3U format)
+        if (format == 'm3u') {
+          _lastExtractedEpgUrl = M3UParser.lastParseResult?.epgUrl;
+          if (_lastExtractedEpgUrl != null) {
+            debugPrint('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
+          }
+        }
       } else if (freshPlaylist.isLocal) {
         debugPrint('DEBUG: 开始从本地文件解析播放列表: ${freshPlaylist.filePath}');
 
@@ -372,17 +449,27 @@ class PlaylistProvider extends ChangeNotifier {
           throw Exception('Local playlist file not found: ${freshPlaylist.filePath}');
         }
 
-        channels = await M3UParser.parseFromFile(freshPlaylist.filePath!, playlist.id!);
+        // Detect format and parse accordingly
+        final format = _detectPlaylistFormat(freshPlaylist.filePath!);
+        debugPrint('DEBUG: 检测到播放列表格式: $format');
+        
+        if (format == 'txt') {
+          channels = await TXTParser.parseFromFile(freshPlaylist.filePath!, playlist.id!);
+        } else {
+          channels = await M3UParser.parseFromFile(freshPlaylist.filePath!, playlist.id!);
+        }
+        
+        // Check for EPG URL in M3U header (only for M3U format)
+        if (format == 'm3u') {
+          _lastExtractedEpgUrl = M3UParser.lastParseResult?.epgUrl;
+          if (_lastExtractedEpgUrl != null) {
+            debugPrint('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
+          }
+        }
       } else {
         // Check if this is a content-imported playlist without a proper file path
         debugPrint('DEBUG: 播放列表源无效，URL: ${freshPlaylist.url}, 文件路径: ${freshPlaylist.filePath}');
         throw Exception('Invalid playlist source - URL: ${freshPlaylist.url}, File: ${freshPlaylist.filePath}');
-      }
-
-      // Check for EPG URL in M3U header
-      _lastExtractedEpgUrl = M3UParser.lastParseResult?.epgUrl;
-      if (_lastExtractedEpgUrl != null) {
-        debugPrint('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
       }
 
       debugPrint('DEBUG: 解析完成，共找到 ${channels.length} 个频道');

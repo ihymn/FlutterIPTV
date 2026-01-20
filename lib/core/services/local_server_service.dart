@@ -436,7 +436,7 @@ class LocalServerService {
         <div class="card">
             <h2>从链接导入</h2>
             <input type="text" id="playlistName" placeholder="播放列表名称 (可选)">
-            <input type="url" id="playlistUrl" placeholder="请输入 M3U/M3U8 链接">
+            <input type="url" id="playlistUrl" placeholder="请输入 M3U/M3U8/TXT 链接">
             <button onclick="submitUrl()" id="urlBtn">导入链接</button>
             <div id="urlMessage"></div>
         </div>
@@ -447,9 +447,9 @@ class LocalServerService {
             <h2>从文件导入</h2>
             <input type="text" id="fileName" placeholder="播放列表名称 (可选)">
             <div class="file-input-wrapper">
-                <input type="file" id="fileInput" accept=".m3u,.m3u8" onchange="handleFileSelect(event)">
+                <input type="file" id="fileInput" accept=".m3u,.m3u8,.txt" onchange="handleFileSelect(event)">
                 <div class="file-label" id="fileLabel">
-                    📁 点击选择 M3U/M3U8 文件
+                    📁 点击选择 M3U/M3U8/TXT 文件
                 </div>
             </div>
             <button onclick="submitFile()" id="fileBtn" disabled>上传文件</button>
@@ -536,7 +536,7 @@ class LocalServerService {
                     showMessage(msg, '✓ 已发送到电视，请在电视上查看', 'success');
                     selectedFile = null;
                     document.getElementById('fileInput').value = '';
-                    document.getElementById('fileLabel').textContent = '📁 点击选择 M3U/M3U8 文件';
+                    document.getElementById('fileLabel').textContent = '📁 点击选择 M3U/M3U8/TXT 文件';
                     document.getElementById('fileLabel').classList.remove('has-file');
                     document.getElementById('fileName').value = '';
                 } else {

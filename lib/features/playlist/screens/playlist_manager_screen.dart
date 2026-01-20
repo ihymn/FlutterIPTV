@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -675,14 +677,13 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
                                   size: 12,
                                 ),
                                 const SizedBox(width: 4),
-                                Text(
-                                  playlist.isRemote ? 'URL' : (AppStrings.of(context)?.localFile ?? 'Local File'),
-                                  style: TextStyle(color: AppTheme.getTextMuted(context), fontSize: 11),
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  '${playlist.channelCount} ${AppStrings.of(context)?.channels ?? 'channels'} • ${playlist.groupCount} ${AppStrings.of(context)?.categories ?? 'groups'}',
-                                  style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 13),
+                                Flexible(
+                                  child: Text(
+                                    '${playlist.format} · ${playlist.isRemote ? 'URL' : (AppStrings.of(context)?.localFile ?? 'Local File')} · ${playlist.channelCount} ${AppStrings.of(context)?.channels ?? 'channels'} · ${playlist.groupCount} ${AppStrings.of(context)?.categories ?? 'groups'}',
+                                    style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 11),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                               ],
                             ),
@@ -865,27 +866,48 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
                       ],
                     ),
                     const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        Icon(
-                          playlist.isRemote ? Icons.cloud_outlined : Icons.folder_outlined,
-                          color: AppTheme.getTextMuted(context),
-                          size: 12,
-                        ),
-                        const SizedBox(width: 4),
-                        Expanded(
-                          child: Text(
-                            '${playlist.isRemote ? 'URL' : (AppStrings.of(context)?.localFile ?? 'Local File')} · ${playlist.channelCount} ${AppStrings.of(context)?.channels ?? 'channels'} · ${playlist.groupCount} ${AppStrings.of(context)?.categories ?? 'groups'}',
-                            style: TextStyle(
-                              color: AppTheme.getTextSecondary(context),
-                              fontSize: 11,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                    // 在 Windows/TV 上单行显示，手机上允许换行
+                    Platform.isWindows || PlatformDetector.isTV
+                        ? Row(
+                            children: [
+                              Icon(
+                                playlist.isRemote ? Icons.cloud_outlined : Icons.folder_outlined,
+                                color: AppTheme.getTextMuted(context),
+                                size: 12,
+                              ),
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  '${playlist.format} · ${playlist.isRemote ? 'URL' : (AppStrings.of(context)?.localFile ?? 'Local File')} · ${playlist.channelCount} ${AppStrings.of(context)?.channels ?? 'channels'} · ${playlist.groupCount} ${AppStrings.of(context)?.categories ?? 'groups'}',
+                                  style: TextStyle(
+                                    color: AppTheme.getTextSecondary(context),
+                                    fontSize: 11,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Wrap(
+                            spacing: 4,
+                            runSpacing: 2,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Icon(
+                                playlist.isRemote ? Icons.cloud_outlined : Icons.folder_outlined,
+                                color: AppTheme.getTextMuted(context),
+                                size: 12,
+                              ),
+                              Text(
+                                '${playlist.format} · ${playlist.isRemote ? 'URL' : (AppStrings.of(context)?.localFile ?? 'Local File')} · ${playlist.channelCount} ${AppStrings.of(context)?.channels ?? 'channels'} · ${playlist.groupCount} ${AppStrings.of(context)?.categories ?? 'groups'}',
+                                style: TextStyle(
+                                  color: AppTheme.getTextSecondary(context),
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                     if (playlist.lastUpdated != null) ...[
                       const SizedBox(height: 2),
                       Text(
@@ -1231,14 +1253,14 @@ class _PlaylistManagerScreenState extends State<PlaylistManagerScreen> {
 
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['m3u', 'm3u8'],
+        allowedExtensions: ['m3u', 'm3u8', 'txt'],
       );
 
       if (result != null && result.files.single.path != null) {
         if (!mounted) return;
 
         final filePath = result.files.single.path!;
-        final fileName = result.files.single.name.replaceAll(RegExp(r'\.m3u8?'), '');
+        final fileName = result.files.single.name.replaceAll(RegExp(r'\.(m3u8?|txt)$'), '');
 
         try {
           final playlist = await provider.addPlaylistFromFile(fileName, filePath);

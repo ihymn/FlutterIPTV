@@ -10,6 +10,7 @@ import 'dart:math' as math;
 import '../../../core/models/channel.dart';
 import '../../../core/platform/platform_detector.dart';
 import '../../../core/services/service_locator.dart';
+import '../../../core/services/channel_test_service.dart';
 
 enum PlayerState {
   idle,
@@ -47,8 +48,10 @@ class PlayerProvider extends ChangeNotifier {
   int _volumeBoostDb = 0;
 
   int _retryCount = 0;
-  static const int _maxRetries = 3;
+  static const int _maxRetries = 2;  // 改为重试2次
   Timer? _retryTimer;
+  bool _isAutoSwitching = false; // 标记是否正在自动切换源
+  bool _isAutoDetecting = false; // 标记是否正在自动检测源
 
   // On Android TV, we use native player via Activity, so don't init any Flutter player
   // On Android phone/tablet, use ExoPlayer
@@ -95,6 +98,47 @@ class PlayerProvider extends ChangeNotifier {
   bool _errorDisplayed = false; // 标记错误是否已被显示
 
   void _setError(String error) {
+    debugPrint('PlayerProvider: _setError 被调用 - 当前重试次数: $_retryCount/$_maxRetries, 错误: $error');
+    
+    // 尝试自动重试（重试阶段不受防抖限制）
+    if (_retryCount < _maxRetries && _currentChannel != null) {
+      _retryCount++;
+      debugPrint('PlayerProvider: 播放错误，尝试重试 ($_retryCount/$_maxRetries): $error');
+      _retryTimer?.cancel();
+      _retryTimer = Timer(const Duration(milliseconds: 500), () {
+        if (_currentChannel != null) {
+          _retryPlayback();
+        }
+      });
+      return;
+    }
+    
+    // 超过重试次数，检查是否有下一个源
+    if (_currentChannel != null && _currentChannel!.hasMultipleSources) {
+      final currentSourceIndex = _currentChannel!.currentSourceIndex;
+      final totalSources = _currentChannel!.sourceCount;
+      
+      debugPrint('PlayerProvider: 当前源索引: $currentSourceIndex, 总源数: $totalSources');
+      
+      // 计算下一个源索引（不使用模运算，避免循环）
+      int nextIndex = currentSourceIndex + 1;
+      
+      // 检查下一个源是否存在
+      if (nextIndex < totalSources) {
+        // 下一个源存在，先检测再尝试
+        debugPrint('PlayerProvider: 当前源 (${currentSourceIndex + 1}/$totalSources) 重试失败，检测源 ${nextIndex + 1}');
+        
+        // 标记开始自动检测
+        _isAutoDetecting = true;
+        // 异步检测下一个源
+        _checkAndSwitchToNextSource(nextIndex, error);
+        return;
+      } else {
+        debugPrint('PlayerProvider: 已到达最后一个源 (${currentSourceIndex + 1}/$totalSources)，停止尝试');
+      }
+    }
+    
+    // 没有更多源或所有源都失败，显示错误（此时才应用防抖）
     final now = DateTime.now();
     // 如果错误已经被显示过，不再设置
     if (_errorDisplayed) {
@@ -107,41 +151,92 @@ class PlayerProvider extends ChangeNotifier {
     _lastErrorMessage = error;
     _lastErrorTime = now;
     
-    // 尝试自动重试
-    if (_retryCount < _maxRetries && _currentChannel != null) {
-      _retryCount++;
-      debugPrint('PlayerProvider: 播放错误，尝试重试 ($_retryCount/$_maxRetries): $error');
-      _retryTimer?.cancel();
-      _retryTimer = Timer(const Duration(seconds: 2), () {
-        if (_currentChannel != null) {
-          _retryPlayback();
-        }
-      });
-      return;
-    }
-    
-    // 超过重试次数，显示错误
+    debugPrint('PlayerProvider: 播放失败，显示错误');
     _state = PlayerState.error;
     _error = error;
     notifyListeners();
   }
   
+  
+  /// 检测并切换到下一个源（用于自动切换）
+  Future<void> _checkAndSwitchToNextSource(int nextIndex, String originalError) async {
+    if (_currentChannel == null || !_isAutoDetecting) return; // 如果检测被取消，停止
+    
+    // 更新UI显示正在检测的源
+    _currentChannel!.currentSourceIndex = nextIndex;
+    _state = PlayerState.loading;
+    notifyListeners();
+    
+    debugPrint('PlayerProvider: 检测源 ${nextIndex + 1}/${_currentChannel!.sourceCount}');
+    
+    final testService = ChannelTestService();
+    final tempChannel = Channel(
+      id: _currentChannel!.id,
+      name: _currentChannel!.name,
+      url: _currentChannel!.sources[nextIndex],
+      groupName: _currentChannel!.groupName,
+      logoUrl: _currentChannel!.logoUrl,
+      sources: [_currentChannel!.sources[nextIndex]],
+      playlistId: _currentChannel!.playlistId,
+    );
+    
+    final result = await testService.testChannel(tempChannel);
+    
+    if (!_isAutoDetecting) return; // 检测完成后再次检查是否被取消
+    
+    if (!result.isAvailable) {
+      debugPrint('PlayerProvider: 源 ${nextIndex + 1} 不可用: ${result.error}，继续尝试下一个源');
+      
+      // 检查是否还有更多源
+      final totalSources = _currentChannel!.sourceCount;
+      final nextNextIndex = nextIndex + 1;
+      
+      if (nextNextIndex < totalSources) {
+        // 继续检测下一个源
+        _checkAndSwitchToNextSource(nextNextIndex, originalError);
+      } else {
+        // 已到达最后一个源，显示错误
+        debugPrint('PlayerProvider: 已到达最后一个源，所有源都不可用');
+        _isAutoDetecting = false;
+        _state = PlayerState.error;
+        _error = '所有 $totalSources 个源均不可用';
+        notifyListeners();
+      }
+      return;
+    }
+    
+    debugPrint('PlayerProvider: 源 ${nextIndex + 1} 可用 (${result.responseTime}ms)，切换');
+    _isAutoDetecting = false;
+    _retryCount = 0; // 重置重试计数
+    _isAutoSwitching = true; // 标记为自动切换
+    _lastErrorMessage = null; // 重置错误消息，允许新源的错误被处理
+    _playCurrentSource();
+    _isAutoSwitching = false; // 重置标记
+  }
+
   /// 重试播放当前频道
   Future<void> _retryPlayback() async {
     if (_currentChannel == null) return;
     
-    debugPrint('PlayerProvider: 正在重试播放 ${_currentChannel!.name}');
+    debugPrint('PlayerProvider: 正在重试播放 ${_currentChannel!.name}, 当前源索引: ${_currentChannel!.currentSourceIndex}, 重试计数: $_retryCount');
     _state = PlayerState.loading;
     _error = null;
     notifyListeners();
     
+    // 使用 currentUrl 而不是 url，以使用当前选择的源
+    final url = _currentChannel!.currentUrl;
+    debugPrint('PlayerProvider: 重试URL: $url');
+    
     try {
       if (_useExoPlayer) {
-        await _initExoPlayer(_currentChannel!.url);
+        await _initExoPlayer(url);
       } else {
-        await _mediaKitPlayer?.open(Media(_currentChannel!.url));
+        await _mediaKitPlayer?.open(Media(url));
         _state = PlayerState.playing;
       }
+      // 注意：不在这里重置 _retryCount，因为播放器可能还会异步报错
+      // 重试计数会在播放真正稳定后（playing 状态持续一段时间）或切换频道时重置
+      debugPrint('PlayerProvider: 重试命令已发送');
     } catch (e) {
       debugPrint('PlayerProvider: 重试失败: $e');
       // 重试失败，继续尝试或显示错误
@@ -218,7 +313,11 @@ class PlayerProvider extends ChangeNotifier {
     };
 
     _mediaKitPlayer = Player(
-      configuration: PlayerConfiguration(bufferSize: bufferSize),
+      configuration: PlayerConfiguration(
+        bufferSize: bufferSize,
+        // 设置网络超时（秒）
+        // timeout: 3 秒连接超时
+      ),
     );
 
     VideoControllerConfiguration config = VideoControllerConfiguration(
@@ -235,7 +334,14 @@ class PlayerProvider extends ChangeNotifier {
     _mediaKitPlayer!.stream.playing.listen((playing) {
       if (playing) {
         _state = PlayerState.playing;
-        _retryCount = 0;
+        // 只有在播放稳定后才重置重试计数
+        // 使用延迟确保播放真正开始，而不是短暂的状态变化
+        Future.delayed(const Duration(seconds: 3), () {
+          if (_state == PlayerState.playing && _currentChannel != null) {
+            debugPrint('PlayerProvider: 播放稳定，重置重试计数');
+            _retryCount = 0;
+          }
+        });
       } else if (_state == PlayerState.playing) {
         _state = PlayerState.paused;
       }
@@ -414,8 +520,26 @@ class PlayerProvider extends ChangeNotifier {
     _error = null;
     _lastErrorMessage = null; // 重置错误防抖
     _errorDisplayed = false; // 重置错误显示标记
+    _retryCount = 0; // 重置重试计数
+    _retryTimer?.cancel(); // 取消任何正在进行的重试
+    _isAutoDetecting = false; // 取消任何正在进行的自动检测
     loadVolumeSettings(); // Apply volume boost settings
     notifyListeners();
+
+    // 如果有多个源，先检测找到第一个可用的源
+    if (channel.hasMultipleSources) {
+      debugPrint('PlayerProvider: 频道有 ${channel.sourceCount} 个源，开始检测可用源...');
+      final availableSourceIndex = await _findFirstAvailableSource(channel);
+      
+      if (availableSourceIndex != null) {
+        channel.currentSourceIndex = availableSourceIndex;
+        debugPrint('PlayerProvider: 找到可用源 ${availableSourceIndex + 1}/${channel.sourceCount}');
+      } else {
+        debugPrint('PlayerProvider: 所有源都不可用');
+        _setError('所有 ${channel.sourceCount} 个源均不可用');
+        return;
+      }
+    }
 
     // 使用 currentUrl 而不是 url，以保留当前选择的源索引
     final playUrl = channel.currentUrl;
@@ -433,6 +557,41 @@ class PlayerProvider extends ChangeNotifier {
       return;
     }
     notifyListeners();
+  }
+
+  /// 查找第一个可用的源
+  Future<int?> _findFirstAvailableSource(Channel channel) async {
+    final testService = ChannelTestService();
+    
+    for (int i = 0; i < channel.sourceCount; i++) {
+      // 更新UI显示当前检测的源
+      channel.currentSourceIndex = i;
+      notifyListeners();
+      
+      // 创建临时频道对象用于测试
+      final tempChannel = Channel(
+        id: channel.id,
+        name: channel.name,
+        url: channel.sources[i],
+        groupName: channel.groupName,
+        logoUrl: channel.logoUrl,
+        sources: [channel.sources[i]], // 只测试当前源
+        playlistId: channel.playlistId,
+      );
+      
+      debugPrint('PlayerProvider: 检测源 ${i + 1}/${channel.sourceCount}: ${channel.sources[i]}');
+      
+      final result = await testService.testChannel(tempChannel);
+      
+      if (result.isAvailable) {
+        debugPrint('PlayerProvider: 源 ${i + 1} 可用 (${result.responseTime}ms)');
+        return i;
+      } else {
+        debugPrint('PlayerProvider: 源 ${i + 1} 不可用: ${result.error}');
+      }
+    }
+    
+    return null; // 所有源都不可用
   }
 
   Future<void> playUrl(String url, {String? name}) async {
@@ -599,10 +758,20 @@ class PlayerProvider extends ChangeNotifier {
   void switchToNextSource() {
     if (_currentChannel == null || !_currentChannel!.hasMultipleSources) return;
     
+    // 取消正在进行的自动检测
+    _isAutoDetecting = false;
+    _retryTimer?.cancel();
+    
     final newIndex = (_currentChannel!.currentSourceIndex + 1) % _currentChannel!.sourceCount;
     _currentChannel!.currentSourceIndex = newIndex;
     
-    debugPrint('PlayerProvider: 切换到源 ${newIndex + 1}/${_currentChannel!.sourceCount}');
+    debugPrint('PlayerProvider: 手动切换到源 ${newIndex + 1}/${_currentChannel!.sourceCount}');
+    
+    // 只有在非自动切换时才重置（手动切换时重置）
+    if (!_isAutoSwitching) {
+      _retryCount = 0;
+      debugPrint('PlayerProvider: 手动切换源，重置重试状态');
+    }
     
     // Play the new source
     _playCurrentSource();
@@ -612,10 +781,20 @@ class PlayerProvider extends ChangeNotifier {
   void switchToPreviousSource() {
     if (_currentChannel == null || !_currentChannel!.hasMultipleSources) return;
     
+    // 取消正在进行的自动检测
+    _isAutoDetecting = false;
+    _retryTimer?.cancel();
+    
     final newIndex = (_currentChannel!.currentSourceIndex - 1 + _currentChannel!.sourceCount) % _currentChannel!.sourceCount;
     _currentChannel!.currentSourceIndex = newIndex;
     
-    debugPrint('PlayerProvider: 切换到源 ${newIndex + 1}/${_currentChannel!.sourceCount}');
+    debugPrint('PlayerProvider: 手动切换到源 ${newIndex + 1}/${_currentChannel!.sourceCount}');
+    
+    // 只有在非自动切换时才重置（手动切换时重置）
+    if (!_isAutoSwitching) {
+      _retryCount = 0;
+      debugPrint('PlayerProvider: 手动切换源，重置重试状态');
+    }
     
     // Play the new source
     _playCurrentSource();
@@ -624,6 +803,29 @@ class PlayerProvider extends ChangeNotifier {
   /// Play the current source of the current channel
   Future<void> _playCurrentSource() async {
     if (_currentChannel == null) return;
+    
+    // 检测当前源是否可用
+    final testService = ChannelTestService();
+    final tempChannel = Channel(
+      id: _currentChannel!.id,
+      name: _currentChannel!.name,
+      url: _currentChannel!.currentUrl,
+      groupName: _currentChannel!.groupName,
+      logoUrl: _currentChannel!.logoUrl,
+      sources: [_currentChannel!.currentUrl],
+      playlistId: _currentChannel!.playlistId,
+    );
+    
+    debugPrint('PlayerProvider: 检测源 ${_currentChannel!.currentSourceIndex + 1}/${_currentChannel!.sourceCount}');
+    final result = await testService.testChannel(tempChannel);
+    
+    if (!result.isAvailable) {
+      debugPrint('PlayerProvider: 源不可用: ${result.error}');
+      _setError('源不可用: ${result.error}');
+      return;
+    }
+    
+    debugPrint('PlayerProvider: 源可用 (${result.responseTime}ms)');
     
     final url = _currentChannel!.currentUrl;
     _state = PlayerState.loading;

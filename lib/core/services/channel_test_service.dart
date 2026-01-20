@@ -41,7 +41,7 @@ class SourceTestResult {
 
 /// 频道测试服务
 class ChannelTestService {
-  static const int _timeout = 15; // 超时时间（秒）
+  static const int _timeout = 3; // 超时时间（秒）- 改为3秒
   static const int _maxConcurrent = 5; // 最大并发数
 
   /// 测试单个频道（测试所有源）

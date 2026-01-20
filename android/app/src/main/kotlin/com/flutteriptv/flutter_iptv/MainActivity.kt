@@ -34,7 +34,8 @@ class MainActivity: FlutterFragmentActivity() {
     data class ScreenState(
         var channelIndex: Int = -1,
         var channelName: String = "",
-        var channelUrl: String = ""
+        var channelUrl: String = "",
+        var currentSourceIndex: Int = 0  // 记住源索引
     )
     private var savedMultiScreenStates = Array(4) { ScreenState() }
     private var savedActiveScreenIndex = 0
@@ -123,6 +124,7 @@ class MainActivity: FlutterFragmentActivity() {
                     @Suppress("UNCHECKED_CAST")
                     val sources = call.argument<List<List<String>>>("sources") // 每个频道的所有源
                     val logos = call.argument<List<String>>("logos") // 每个频道的台标URL
+                    val epgIds = call.argument<List<String>>("epgIds") // 每个频道的EPG ID
                     val isDlnaMode = call.argument<Boolean>("isDlnaMode") ?: false
                     val bufferStrength = call.argument<String>("bufferStrength") ?: "fast"
                     val showFps = call.argument<Boolean>("showFps") ?: true
@@ -217,6 +219,25 @@ class MainActivity: FlutterFragmentActivity() {
         }
     }
     
+    fun requestEpgInfo(channelName: String, epgId: String, callback: (Map<String, Any?>?) -> Unit) {
+        runOnUiThread {
+            playerMethodChannel?.invokeMethod("getEpgInfo", mapOf("channelName" to channelName, "epgId" to epgId), object : MethodChannel.Result {
+                override fun success(result: Any?) {
+                    @Suppress("UNCHECKED_CAST")
+                    callback(result as? Map<String, Any?>)
+                }
+                override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+                    Log.e(TAG, "EPG request error: $errorMessage")
+                    callback(null)
+                }
+                override fun notImplemented() {
+                    Log.e(TAG, "EPG request method not implemented on Flutter side")
+                    callback(null)
+                }
+            })
+        }
+    }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate called")
@@ -299,6 +320,7 @@ class MainActivity: FlutterFragmentActivity() {
         
         // 将 sources 转换为 ArrayList<ArrayList<String>>
         val sourcesArrayList = sources?.map { ArrayList(it) }?.let { ArrayList(it) }
+        val logosArrayList = logos?.let { ArrayList(it) }
         
         playerFragment = NativePlayerFragment.newInstance(
             url,
@@ -308,6 +330,8 @@ class MainActivity: FlutterFragmentActivity() {
             names?.let { ArrayList(it) },
             groups?.let { ArrayList(it) },
             sourcesArrayList,
+            logosArrayList,
+            null,  // channelEpgIds
             isDlnaMode,
             bufferStrength,
             showFps,
@@ -436,17 +460,17 @@ class MainActivity: FlutterFragmentActivity() {
             // 从 Flutter 传递的状态恢复（首页继续播放）
             savedStatesArrayList = ArrayList(restoreScreenChannels.map { channelIndex ->
                 if (channelIndex != null && channelIndex >= 0 && channelIndex < urls.size) {
-                    arrayListOf(channelIndex.toString(), names.getOrElse(channelIndex) { "" }, urls.getOrElse(channelIndex) { "" })
+                    arrayListOf(channelIndex.toString(), names.getOrElse(channelIndex) { "" }, urls.getOrElse(channelIndex) { "" }, "0")  // 源索引默认为0
                 } else {
-                    arrayListOf("-1", "", "")
+                    arrayListOf("-1", "", "", "0")
                 }
             })
             finalRestoreActiveIndex = restoreActiveIndex
             finalRestoreFocusedIndex = restoreActiveIndex
         } else if (restoreFromLocal) {
-            // 从本地保存的状态恢复（单屏切换到分屏）
+            // 从本地保存的状态恢复（单屏切换到分屏），包含源索引
             savedStatesArrayList = ArrayList(savedMultiScreenStates.map { 
-                arrayListOf(it.channelIndex.toString(), it.channelName, it.channelUrl)
+                arrayListOf(it.channelIndex.toString(), it.channelName, it.channelUrl, it.currentSourceIndex.toString())
             })
             finalRestoreActiveIndex = savedActiveScreenIndex
             finalRestoreFocusedIndex = savedFocusedScreenIndex
@@ -546,7 +570,8 @@ class MainActivity: FlutterFragmentActivity() {
                 savedMultiScreenStates[i] = ScreenState(
                     channelIndex = state?.channelIndex ?: -1,
                     channelName = state?.channelName ?: "",
-                    channelUrl = state?.channelUrl ?: ""
+                    channelUrl = state?.channelUrl ?: "",
+                    currentSourceIndex = state?.currentSourceIndex ?: 0  // 保存源索引
                 )
             }
             savedActiveScreenIndex = fragment.getActiveScreenIndex()

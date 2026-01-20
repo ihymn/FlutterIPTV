@@ -51,7 +51,7 @@ Lotus IPTV is a modern, high-performance IPTV player built with Flutter. Feature
 
 ### 📋 Adding IPTV Playlists
 
-To start watching channels, you need to add M3U/M3U8 playlist sources:
+To start watching channels, you need to add M3U/M3U8/TXT playlist sources:
 
 #### 🌍 Free Public Playlists
 For testing and demonstration purposes, you can use this free public playlist:
@@ -144,11 +144,20 @@ Download the latest version from [Releases Page](https://github.com/shnulaa/Flut
 - Supports HLS (m3u8), MP4, MKV, RTMP/RTSP and more
 
 ### 📂 Smart Playlist Management
-- Import M3U/M3U8 playlists from local files or URLs
+- Import M3U/M3U8/TXT playlists from local files or URLs
 - QR code import for easy mobile-to-TV transfer
 - Auto-grouping by `group-title`
 - Preserves original M3U category order
 - Channel availability testing with batch operations
+
+#### Supported Playlist Formats
+- **M3U/M3U8**: Standard IPTV playlist format with EPG and logo support
+- **TXT**: Simplified text format using `,#genre#` as category marker
+  ```
+  Category Name,#genre#
+  Channel Name,Channel URL
+  Channel Name,Channel URL
+  ```
 
 ### ❤️ User Features
 - Favorites management with long-press support

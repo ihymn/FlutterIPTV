@@ -254,8 +254,11 @@ class MultiScreenPlayerFragment : Fragment() {
                 val stateData = restoreScreenStates?.getOrNull(i)
                 if (stateData != null && stateData.size >= 3) {
                     val channelIndex = stateData[0].toIntOrNull() ?: -1
+                    // 读取源索引（第4个字段，如果存在）
+                    val sourceIndex = if (stateData.size >= 4) stateData[3].toIntOrNull() ?: 0 else 0
                     if (channelIndex >= 0 && channelIndex < channelUrls.size) {
-                        playChannelOnScreen(i, channelIndex)
+                        Log.d(TAG, "Restoring screen $i: channelIndex=$channelIndex, sourceIndex=$sourceIndex")
+                        playChannelOnScreen(i, channelIndex, sourceIndex)
                     }
                 }
             }
@@ -388,24 +391,8 @@ class MultiScreenPlayerFragment : Fragment() {
                             arrayListOf()
                         }
                         
-                        if (state.currentSourceIndex + 1 < sources.size) {
-                            // 还有其他源，切换到下一个源
-                            Log.d(TAG, "Switching to next source for screen $index")
-                            state.currentSourceIndex++
-                            state.retryCount = 0
-                            val nextUrl = sources[state.currentSourceIndex]
-                            state.channelUrl = nextUrl
-                            state.isLoading = true
-                            updateScreenOverlay(index)
-                            
-                            handler.postDelayed({
-                                players[index]?.let { player ->
-                                    player.setMediaItem(MediaItem.fromUri(nextUrl))
-                                    player.prepare()
-                                }
-                            }, RETRY_DELAY)
-                        } else if (state.retryCount < MAX_RETRIES) {
-                            // 重试当前源
+                        if (state.retryCount < MAX_RETRIES) {
+                            // 先重试当前源
                             Log.d(TAG, "Retrying screen $index (attempt ${state.retryCount + 1}/$MAX_RETRIES)")
                             state.retryCount++
                             state.isLoading = true
@@ -417,8 +404,60 @@ class MultiScreenPlayerFragment : Fragment() {
                                     player.prepare()
                                 }
                             }, RETRY_DELAY)
+                        } else if (state.currentSourceIndex + 1 < sources.size) {
+                            // 重试次数用完，检测并切换到下一个源
+                            Log.d(TAG, "Retries exhausted, checking next sources for screen $index")
+                            state.isLoading = true
+                            updateScreenOverlay(index)
+                            
+                            // 在后台线程检测源
+                            Thread {
+                                val originalName = state.channelName
+                                var foundIndex = -1
+                                for (i in (state.currentSourceIndex + 1) until sources.size) {
+                                    activity?.runOnUiThread {
+                                        // 更新状态显示正在检测的源
+                                        state.channelName = "$originalName (检测 ${i+1}/${sources.size})"
+                                        updateScreenOverlay(index)
+                                        Log.d(TAG, "Checking source ${i + 1}/${sources.size} for screen $index")
+                                    }
+                                    
+                                    if (testSource(sources[i])) {
+                                        Log.d(TAG, "Source ${i + 1} available for screen $index")
+                                        foundIndex = i
+                                        break
+                                    } else {
+                                        Log.d(TAG, "Source ${i + 1} not available for screen $index")
+                                    }
+                                }
+                                
+                                activity?.runOnUiThread {
+                                    state.channelName = originalName
+                                    
+                                    if (foundIndex >= 0) {
+                                        // 找到可用源，切换
+                                        state.currentSourceIndex = foundIndex
+                                        state.retryCount = 0
+                                        val nextUrl = sources[foundIndex]
+                                        state.channelUrl = nextUrl
+                                        state.isLoading = true
+                                        updateScreenOverlay(index)
+                                        
+                                        players[index]?.let { player ->
+                                            player.setMediaItem(MediaItem.fromUri(nextUrl))
+                                            player.prepare()
+                                        }
+                                    } else {
+                                        // 所有源都不可用
+                                        Log.e(TAG, "All sources failed for screen $index")
+                                        state.hasError = true
+                                        state.isLoading = false
+                                        updateScreenOverlay(index)
+                                    }
+                                }
+                            }.start()
                         } else {
-                            // 所有重试都失败了
+                            // 所有重试都失败了，没有更多源
                             Log.e(TAG, "All retries failed for screen $index")
                             state.hasError = true
                             updateScreenOverlay(index)
@@ -443,37 +482,120 @@ class MultiScreenPlayerFragment : Fragment() {
         if (channelIndex < 0 || channelIndex >= channelUrls.size) return
 
         // 获取源列表
+        // 获取源列表
         val sources = if (channelIndex < channelSources.size) channelSources[channelIndex] else arrayListOf()
         
-        // 使用指定的源索引，如果超出范围则使用第一个源
-        val validSourceIndex = if (sources.isNotEmpty()) sourceIndex.coerceIn(0, sources.size - 1) else 0
-        val url = if (sources.isNotEmpty()) {
-            sources[validSourceIndex]
-        } else {
-            channelUrls[channelIndex]
-        }
-
         val name = channelNames.getOrElse(channelIndex) { "Channel ${channelIndex + 1}" }
+        
+        // 如果有多个源且未指定特定源（sourceIndex == 0），则进行自动检测
+        if (sources.size > 1 && sourceIndex == 0) {
+            Log.d(TAG, "Multi-source channel '$name' on screen $screenIndex, starting auto-detection")
+            
+            // 先更新UI为加载状态
+            screenStates[screenIndex].apply {
+                this.channelIndex = channelIndex
+                this.channelName = name
+                this.channelUrl = "" // 暂时为空
+                this.isLoading = true
+                this.hasError = false
+                this.videoWidth = 0
+                this.videoHeight = 0
+                this.retryCount = 0
+                this.currentSourceIndex = 0
+            }
+            updateScreenOverlay(screenIndex)
+            
+            // 在后台线程检测源
+            Thread {
+                var foundIndex = -1
+                for (i in sources.indices) {
+                    activity?.runOnUiThread {
+                        screenStates[screenIndex].channelName = "$name (检测 ${i+1}/${sources.size})"
+                        updateScreenOverlay(screenIndex)
+                    }
+                    
+                    if (testSource(sources[i])) {
+                        Log.d(TAG, "Screen $screenIndex: Source ${i + 1} available")
+                        foundIndex = i
+                        break
+                    }
+                }
+                
+                // 如果所有源都不可用，使用第一个源（会报错然后触发onPlayerError的重试逻辑）
+                if (foundIndex == -1) foundIndex = 0
+                
+                val finalIndex = foundIndex
+                val finalUrl = sources[finalIndex]
+                
+                activity?.runOnUiThread {
+                    // 恢复原始频道名称
+                    screenStates[screenIndex].channelName = name
+                    
+                    // 更新状态并播放
+                    screenStates[screenIndex].apply {
+                        this.channelUrl = finalUrl
+                        this.currentSourceIndex = finalIndex
+                    }
+                    updateScreenOverlay(screenIndex)
+                    
+                    players[screenIndex]?.let { player ->
+                        player.setMediaItem(MediaItem.fromUri(finalUrl))
+                        player.prepare()
+                    }
+                }
+            }.start()
+        } else {
+            // 直接播放（单源或指定了源）
+            val validSourceIndex = if (sources.isNotEmpty()) sourceIndex.coerceIn(0, sources.size - 1) else 0
+            val url = if (sources.isNotEmpty()) {
+                sources[validSourceIndex]
+            } else {
+                channelUrls[channelIndex]
+            }
 
-        Log.d(TAG, "Playing channel '$name' on screen $screenIndex, source ${validSourceIndex + 1}/${sources.size.coerceAtLeast(1)}")
+            Log.d(TAG, "Playing channel '$name' on screen $screenIndex, source ${validSourceIndex + 1}/${sources.size.coerceAtLeast(1)}")
 
-        screenStates[screenIndex].apply {
-            this.channelIndex = channelIndex
-            this.channelName = name
-            this.channelUrl = url
-            this.isLoading = true
-            this.hasError = false
-            this.videoWidth = 0
-            this.videoHeight = 0
-            this.retryCount = 0  // 重置重试计数
-            this.currentSourceIndex = validSourceIndex  // 使用指定的源索引
+            screenStates[screenIndex].apply {
+                this.channelIndex = channelIndex
+                this.channelName = name
+                this.channelUrl = url
+                this.isLoading = true
+                this.hasError = false
+                this.videoWidth = 0
+                this.videoHeight = 0
+                this.retryCount = 0
+                this.currentSourceIndex = validSourceIndex
+            }
+
+            updateScreenOverlay(screenIndex)
+
+            players[screenIndex]?.let { player ->
+                player.setMediaItem(MediaItem.fromUri(url))
+                player.prepare()
+            }
         }
+    }
 
-        updateScreenOverlay(screenIndex)
-
-        players[screenIndex]?.let { player ->
-            player.setMediaItem(MediaItem.fromUri(url))
-            player.prepare()
+    // 检测源是否可用（在后台线程执行）
+    private fun testSource(url: String): Boolean {
+        return try {
+            val urlConnection = java.net.URL(url).openConnection() as java.net.HttpURLConnection
+            urlConnection.connectTimeout = 1500 // 1.5秒超时
+            urlConnection.readTimeout = 1500
+            urlConnection.requestMethod = "HEAD" // 使用HEAD请求，更快
+            urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0")
+            urlConnection.setRequestProperty("Accept", "*/*")
+            urlConnection.setRequestProperty("Connection", "keep-alive")
+            
+            val responseCode = urlConnection.responseCode
+            urlConnection.disconnect()
+            
+            val isAvailable = responseCode in 200..399
+            Log.d(TAG, "testSource: $url -> $responseCode (${if (isAvailable) "可用" else "不可用"})")
+            isAvailable
+        } catch (e: Exception) {
+            Log.d(TAG, "testSource: $url -> 异常: ${e.message}")
+            false
         }
     }
 
@@ -664,12 +786,34 @@ class MultiScreenPlayerFragment : Fragment() {
             }
             
             KeyEvent.KEYCODE_DPAD_LEFT -> {
-                moveFocus(-1, 0)
+                if (leftKeyDownTime == 0L) {
+                    leftKeyDownTime = System.currentTimeMillis()
+                    navLongPressHandled = false
+                    
+                    handler.postDelayed({
+                        if (leftKeyDownTime > 0 && !navLongPressHandled) {
+                            navLongPressHandled = true
+                            // 长按：切换上一个源
+                            switchSourceOnFocusedScreen(-1)
+                        }
+                    }, LONG_PRESS_THRESHOLD)
+                }
                 return true
             }
             
             KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                moveFocus(1, 0)
+                if (rightKeyDownTime == 0L) {
+                    rightKeyDownTime = System.currentTimeMillis()
+                    navLongPressHandled = false
+                    
+                    handler.postDelayed({
+                        if (rightKeyDownTime > 0 && !navLongPressHandled) {
+                            navLongPressHandled = true
+                            // 长按：切换下一个源
+                            switchSourceOnFocusedScreen(1)
+                        }
+                    }, LONG_PRESS_THRESHOLD)
+                }
                 return true
             }
             
@@ -730,10 +874,83 @@ class MultiScreenPlayerFragment : Fragment() {
                 
                 return true
             }
+            
+            KeyEvent.KEYCODE_DPAD_LEFT -> {
+                if (leftKeyDownTime > 0) {
+                    leftKeyDownTime = 0L
+                    if (!navLongPressHandled) {
+                        // 短按：移动焦点左
+                        moveFocus(-1, 0)
+                    }
+                    navLongPressHandled = false
+                }
+                return true
+            }
+            
+            KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                if (rightKeyDownTime > 0) {
+                    rightKeyDownTime = 0L
+                    if (!navLongPressHandled) {
+                        // 短按：移动焦点右
+                        moveFocus(1, 0)
+                    }
+                    navLongPressHandled = false
+                }
+                return true
+            }
         }
         return false
     }
+
+
+    // 长按检测 - 左右键
+    private var leftKeyDownTime = 0L
+    private var rightKeyDownTime = 0L
+    private var navLongPressHandled = false
     
+    // 在焦点屏幕切换源
+    private fun switchSourceOnFocusedScreen(direction: Int) {
+        val index = focusedScreenIndex
+        val state = screenStates[index]
+        
+        // 如果当前屏幕没有播放频道，忽略
+        if (state.channelIndex < 0) return
+        
+        val sources = if (state.channelIndex < channelSources.size) {
+            channelSources[state.channelIndex]
+        } else {
+            arrayListOf()
+        }
+        
+        if (sources.size <= 1) {
+            Toast.makeText(requireContext(), "当前频道只有一个源", Toast.LENGTH_SHORT).show()
+            return 
+        }
+        
+        // 计算新索引
+        var newSourceIndex = state.currentSourceIndex + direction
+        if (newSourceIndex < 0) newSourceIndex = sources.size - 1
+        if (newSourceIndex >= sources.size) newSourceIndex = 0
+        
+        Log.d(TAG, "Manually switching source on screen $index to $newSourceIndex")
+        
+        // 播放新源（playChannelOnScreen 已包含自动检测逻辑，如果 sourceIndex=0 会触发检测）
+        // 但这里我们希望直接播放新源，或者如果是切回0号源也希望能检测？
+        // playChannelOnScreen 的逻辑是：如果 sources.size > 1 && sourceIndex == 0 -> 检测
+        // 如果我们要手动切到 0 号源，但不想触发重新全量检测（太慢），怎么办？
+        // 其实 sourceIndex=0 触发检测是为了初始进入。手动切源时我们希望它尝试播放。
+        // 所以我们需要微调 playChannelOnScreen 或者在这里处理。
+        // 现在 playChannelOnScreen 如果 sourceIndex=0 会检测。
+        // 如果 newSourceIndex 是 0，它会重新检测一遍，这其实也没坏处（确保可用）。
+        // 如果不想重新检测，可以修改 playChannelOnScreen。
+        // 但为了简单，先由它去检测。
+        
+        playChannelOnScreen(index, state.channelIndex, newSourceIndex)
+        
+        val directionStr = if (direction > 0) "下一个" else "上一个"
+        Toast.makeText(requireContext(), "切换到${directionStr}源 (${newSourceIndex + 1}/${sources.size})", Toast.LENGTH_SHORT).show()
+    }
+
     // 移动焦点（移动到有频道的屏幕时自动切换声音）
     private fun moveFocus(dx: Int, dy: Int) {
         // 计算新的焦点位置
@@ -1309,7 +1526,7 @@ class MultiScreenPlayerFragment : Fragment() {
             val channelIndex = filteredChannels[position]
             val isFocused = !isCategoryFocused && position == channelFocusIndex
             
-            holder.name.text = channelNames.getOrElse(channelIndex) { getString(R.string.channel, channelIndex + 1) }
+            holder.name.text = channelNames.getOrElse(channelIndex) { "Channel ${channelIndex + 1}" }
             
             // 加载台标
             val logoUrl = channelLogos.getOrElse(channelIndex) { "" }

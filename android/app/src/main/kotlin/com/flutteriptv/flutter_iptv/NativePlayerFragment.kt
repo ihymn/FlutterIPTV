@@ -26,9 +26,12 @@ import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.analytics.AnalyticsListener
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.ui.PlayerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.flutteriptv.flutter_iptv.MainActivity
 
 class NativePlayerFragment : Fragment() {
     private val TAG = "NativePlayerFragment"
@@ -92,6 +95,8 @@ class NativePlayerFragment : Fragment() {
     // Long press detection for center/enter key (favorite)
     private var centerKeyDownTime = 0L
     private var centerLongPressHandled = false
+    private var isManualSwitching = false
+    private var currentVerificationId = 0L
 
     private var currentUrl: String = ""
     private var currentName: String = ""
@@ -102,6 +107,8 @@ class NativePlayerFragment : Fragment() {
     private var channelNames: ArrayList<String> = arrayListOf()
     private var channelGroups: ArrayList<String> = arrayListOf()
     private var channelSources: ArrayList<ArrayList<String>> = arrayListOf() // 每个频道的所有源
+    private var channelLogos: ArrayList<String> = arrayListOf()
+    private var channelEpgIds: ArrayList<String> = arrayListOf()
     private var isDlnaMode: Boolean = false
     private var bufferStrength: String = "fast"
     
@@ -131,9 +138,13 @@ class NativePlayerFragment : Fragment() {
     
     // Retry logic
     private var retryCount = 0
-    private val MAX_RETRIES = 3
-    private val RETRY_DELAY = 2000L
+    private val MAX_RETRIES = 2 // 改为2次重试
+    private val RETRY_DELAY = 500L // 改为0.5秒，加快重试速度
     private var retryRunnable: Runnable? = null
+    
+    // 自动源切换标记
+    private var isAutoSwitching = false // 标记是否正在自动切换源
+    private var isAutoDetecting = false // 标记是否正在自动检测源
     
     // FPS calculation
     private var lastRenderedFrameCount = 0L
@@ -177,6 +188,8 @@ class NativePlayerFragment : Fragment() {
         private const val ARG_CHANNEL_NAMES = "channel_names"
         private const val ARG_CHANNEL_GROUPS = "channel_groups"
         private const val ARG_CHANNEL_SOURCES = "channel_sources"
+        private const val ARG_CHANNEL_LOGOS = "channel_logos"
+        private const val ARG_CHANNEL_EPG_IDS = "channel_epg_ids"
         private const val ARG_IS_DLNA_MODE = "is_dlna_mode"
         private const val ARG_BUFFER_STRENGTH = "buffer_strength"
         private const val ARG_SHOW_FPS = "show_fps"
@@ -193,6 +206,8 @@ class NativePlayerFragment : Fragment() {
             channelNames: ArrayList<String>? = null,
             channelGroups: ArrayList<String>? = null,
             channelSources: ArrayList<ArrayList<String>>? = null,
+            channelLogos: ArrayList<String>? = null,
+            channelEpgIds: ArrayList<String>? = null,
             isDlnaMode: Boolean = false,
             bufferStrength: String = "fast",
             showFps: Boolean = true,
@@ -210,6 +225,8 @@ class NativePlayerFragment : Fragment() {
                     channelNames?.let { putStringArrayList(ARG_CHANNEL_NAMES, it) }
                     channelGroups?.let { putStringArrayList(ARG_CHANNEL_GROUPS, it) }
                     channelSources?.let { putSerializable(ARG_CHANNEL_SOURCES, it) }
+                    channelLogos?.let { putStringArrayList(ARG_CHANNEL_LOGOS, it) }
+                    channelEpgIds?.let { putStringArrayList(ARG_CHANNEL_EPG_IDS, it) }
                     putBoolean(ARG_IS_DLNA_MODE, isDlnaMode)
                     putString(ARG_BUFFER_STRENGTH, bufferStrength)
                     putBoolean(ARG_SHOW_FPS, showFps)
@@ -241,6 +258,8 @@ class NativePlayerFragment : Fragment() {
             channelGroups = it.getStringArrayList(ARG_CHANNEL_GROUPS) ?: arrayListOf()
             @Suppress("UNCHECKED_CAST")
             channelSources = it.getSerializable(ARG_CHANNEL_SOURCES) as? ArrayList<ArrayList<String>> ?: arrayListOf()
+            channelLogos = it.getStringArrayList(ARG_CHANNEL_LOGOS) ?: arrayListOf()
+            channelEpgIds = it.getStringArrayList(ARG_CHANNEL_EPG_IDS) ?: arrayListOf()
             isDlnaMode = it.getBoolean(ARG_IS_DLNA_MODE, false)
             bufferStrength = it.getString(ARG_BUFFER_STRENGTH, "fast") ?: "fast"
             showFps = it.getBoolean(ARG_SHOW_FPS, true)
@@ -342,17 +361,76 @@ class NativePlayerFragment : Fragment() {
         initializePlayer()
         
         if (currentUrl.isNotEmpty()) {
-            // 使用第一个源播放
+            Log.d(TAG, "=== 开始首次播放流程 ===")
+            Log.d(TAG, "当前URL: $currentUrl")
+            Log.d(TAG, "当前频道: $currentName")
+            
+            // 检测并使用第一个可用的源
             val sources = getCurrentSources()
-            val urlToPlay = if (sources.isNotEmpty()) sources[0] else currentUrl
-            playUrl(urlToPlay)
-            updateSourceIndicator()
+            Log.d(TAG, "获取到 ${sources.size} 个源")
+            
+            if (sources.size > 1 && currentSourceIndex == 0) {
+                Log.d(TAG, "频道有多个源且未指定特定源(index=0)，开始在后台线程检测...")
+                
+                // 显示正在检测的状态
+                updateStatus("检测源...")
+                showLoading()
+                
+                // 在后台线程检测源
+                Thread {
+                    var foundSourceIndex = 0
+                    for (i in sources.indices) {
+                        // 实时更新UI显示当前检测的源
+                        activity?.runOnUiThread {
+                            updateStatus("检测源 ${i + 1}/${sources.size}")
+                        }
+                        
+                        Log.d(TAG, "检测源 ${i + 1}/${sources.size}: ${sources[i]}")
+                        if (testSource(sources[i])) {
+                            foundSourceIndex = i
+                            Log.d(TAG, "✓ 源 ${i + 1} 可用")
+                            break
+                        } else {
+                            Log.d(TAG, "✗ 源 ${i + 1} 不可用")
+                        }
+                    }
+                    
+                    val finalSourceIndex = foundSourceIndex
+                    activity?.runOnUiThread {
+                        currentSourceIndex = finalSourceIndex
+                        val urlToPlay = sources[currentSourceIndex]
+                        Log.d(TAG, "首次播放，使用源 ${currentSourceIndex + 1}/${sources.size}: $urlToPlay")
+                        updateSourceIndicator()
+                        playUrl(urlToPlay)
+                    }
+                }.start()
+            } else {
+                Log.d(TAG, "直接播放指定源 (index=$currentSourceIndex) 或单源频道")
+                // 确保索引在有效范围内
+                if (currentSourceIndex < 0 || currentSourceIndex >= sources.size) {
+                    currentSourceIndex = 0
+                }
+                
+                val urlToPlay = if (sources.isNotEmpty()) {
+                    sources[currentSourceIndex]
+                } else {
+                    currentUrl
+                }
+                
+                Log.d(TAG, "播放URL: $urlToPlay")
+                playUrl(urlToPlay)
+                updateSourceIndicator()
+            }
         } else {
+            Log.e(TAG, "错误：没有提供视频URL")
             showError("No video URL provided")
         }
         
         // Start clock update
         startClockUpdate()
+        
+        // 初始化EPG信息
+        refreshEpgInfo()
 
         // Start network speed update
         startNetworkSpeedUpdate()
@@ -953,8 +1031,15 @@ class NativePlayerFragment : Fragment() {
             .setBufferDurationsMs(minBuffer, maxBuffer, playbackBuffer, rebufferBuffer)
             .build()
         
+        // 配置 HTTP 数据源，设置更短的超时时间（3秒连接超时，5秒读取超时）
+        val dataSourceFactory = DefaultHttpDataSource.Factory()
+            .setConnectTimeoutMs(1000)  // 3秒连接超时
+            .setReadTimeoutMs(1000)     // 5秒读取超时
+            .setAllowCrossProtocolRedirects(true)
+        
         player = ExoPlayer.Builder(requireContext(), renderersFactory)
             .setLoadControl(loadControl)
+            .setMediaSourceFactory(DefaultMediaSourceFactory(requireContext()).setDataSourceFactory(dataSourceFactory))
             .setVideoChangeFrameRateStrategy(C.VIDEO_CHANGE_FRAME_RATE_STRATEGY_OFF)
             .build().also { exoPlayer ->
             playerView.player = exoPlayer
@@ -974,7 +1059,8 @@ class NativePlayerFragment : Fragment() {
                         Player.STATE_READY -> {
                             hideLoading()
                             updateStatus("LIVE")
-                            retryCount = 0 // 播放成功，重置重试计数
+                            // 不立即重置，延迟3秒确保播放真正稳定
+                            // 这样可以避免短暂的 READY 状态导致重试计数被过早重置
                             startFpsCalculation() // 开始计算 FPS
                         }
                         Player.STATE_ENDED -> {
@@ -991,6 +1077,14 @@ class NativePlayerFragment : Fragment() {
                 override fun onIsPlayingChanged(isPlaying: Boolean) {
                     if (isPlaying) {
                         updateStatus("LIVE")
+                        // 延迟3秒后确认播放稳定，然后重置重试计数
+                        handler.postDelayed({
+                            if (player?.isPlaying == true) {
+                                Log.d(TAG, "播放稳定，重置重试计数")
+                                retryCount = 0
+                                isAutoSwitching = false
+                            }
+                        }, 3000)
                     } else if (player?.playbackState == Player.STATE_READY) {
                         updateStatus("Paused")
                     }
@@ -1008,7 +1102,7 @@ class NativePlayerFragment : Fragment() {
                     // 自动重试逻辑
                     if (retryCount < MAX_RETRIES) {
                         retryCount++
-                        Log.d(TAG, "Retrying playback ($retryCount/$MAX_RETRIES)...")
+                        Log.d(TAG, "播放错误，尝试重试 ($retryCount/$MAX_RETRIES): ${error.message}")
                         updateStatus("Retrying")
                         showLoading()
                         
@@ -1020,8 +1114,87 @@ class NativePlayerFragment : Fragment() {
                         }
                         handler.postDelayed(retryRunnable!!, RETRY_DELAY)
                     } else {
-                        showError("Error: ${error.message}")
-                        updateStatus("Offline")
+                        // 重试次数用完，检查是否有其他源可以尝试
+                        val sources = getCurrentSources()
+                        if (sources.size > 1) {
+                            // 标记开始自动检测
+                            isAutoDetecting = true
+                            
+                            // 显示正在检测的状态
+                            updateStatus("自动切换源...")
+                            showLoading()
+                            
+                            // 在后台线程异步检测源
+                            Thread {
+                                // 查找下一个可用的源
+                                var nextSourceIndex = currentSourceIndex + 1
+                                var foundAvailableSource = false
+                                
+                                // 不循环，只往后找
+                                while (nextSourceIndex < sources.size && isAutoDetecting) {
+                                    // 实时更新UI显示当前检测的源
+                                    activity?.runOnUiThread {
+                                        updateStatus("检测源 ${nextSourceIndex + 1}/${sources.size}")
+                                    }
+                                    
+                                    // 检测源是否可用
+                                    Log.d(TAG, "当前源 (${currentSourceIndex + 1}/${sources.size}) 重试失败，检测源 ${nextSourceIndex + 1}")
+                                    if (testSource(sources[nextSourceIndex])) {
+                                        Log.d(TAG, "源 ${nextSourceIndex + 1} 可用")
+                                        foundAvailableSource = true
+                                        break
+                                    } else {
+                                        Log.d(TAG, "源 ${nextSourceIndex + 1} 不可用，继续尝试下一个源")
+                                    }
+                                    nextSourceIndex++
+                                }
+                                
+                                val finalNextSourceIndex = nextSourceIndex
+                                val finalFoundAvailableSource = foundAvailableSource
+                                
+                                activity?.runOnUiThread {
+                                    isAutoDetecting = false
+                                    
+                                    if (finalFoundAvailableSource) {
+                                        // 找到可用的源，自动切换
+                                        Log.d(TAG, "切换到可用源 ${finalNextSourceIndex + 1}")
+                                        isAutoSwitching = true
+                                        currentSourceIndex = finalNextSourceIndex
+                                        retryCount = 0 // 重置重试计数
+                                        val newUrl = sources[currentSourceIndex]
+                                        currentUrl = newUrl
+                                        
+                                        updateSourceIndicator()
+                                        showSourceIndicator()
+                                        playUrl(newUrl)
+                                    } else {
+                                        // 尝试 Fallback 到下一个源（如果有的话）
+                                        val fallbackIndex = currentSourceIndex + 1
+                                        if (fallbackIndex < sources.size) {
+                                            Log.d(TAG, "自动检测全部失败，Fallback：强制尝试下一个 ${fallbackIndex + 1}")
+                                            isAutoSwitching = true
+                                            currentSourceIndex = fallbackIndex
+                                            retryCount = 0
+                                            val newUrl = sources[currentSourceIndex]
+                                            currentUrl = newUrl
+                                            
+                                            updateSourceIndicator()
+                                            showSourceIndicator()
+                                            playUrl(newUrl)
+                                        } else {
+                                            // 所有源都不可用，显示错误
+                                            Log.d(TAG, "所有 ${sources.size} 个源都不可用，全部失败")
+                                            showError("播放失败: ${error.message}")
+                                            updateStatus("Offline")
+                                        }
+                                    }
+                                }
+                            }.start()
+                        } else {
+                            // 只有一个源，直接显示错误
+                            showError("播放失败: ${error.message}")
+                            updateStatus("Offline")
+                        }
                     }
                 }
             })
@@ -1235,32 +1408,146 @@ class NativePlayerFragment : Fragment() {
         return getCurrentSources().size > 1
     }
     
-    // 切换到下一个源
+    // 切换到下一个源（循环检测直到找到可用源）
     private fun nextSource() {
-        val sources = getCurrentSources()
-        if (sources.size <= 1) return
-        
-        currentSourceIndex = (currentSourceIndex + 1) % sources.size
-        val newUrl = sources[currentSourceIndex]
-        
-        Log.d(TAG, "Switching to source ${currentSourceIndex + 1}/${sources.size}: $newUrl")
-        showSourceIndicator()
-        playUrl(newUrl)
-        showControls()
+        switchSourceIteratively(1)
     }
     
-    // 切换到上一个源
+    // 切换到上一个源（循环检测直到找到可用源）
     private fun previousSource() {
+        switchSourceIteratively(-1)
+    }
+
+    // 循环切换源的通用逻辑
+    private fun switchSourceIteratively(direction: Int) {
         val sources = getCurrentSources()
         if (sources.size <= 1) return
         
-        currentSourceIndex = (currentSourceIndex - 1 + sources.size) % sources.size
-        val newUrl = sources[currentSourceIndex]
+        // 防止重复手动切换
+        if (isManualSwitching) {
+            activity?.let {
+                android.widget.Toast.makeText(it, "正在检测源，请稍候...", android.widget.Toast.LENGTH_SHORT).show()
+            }
+            return
+        }
         
-        Log.d(TAG, "Switching to source ${currentSourceIndex + 1}/${sources.size}: $newUrl")
-        showSourceIndicator()
-        playUrl(newUrl)
+        // 增加验证 ID，立即使所有之前的后台任务失效
+        currentVerificationId++
+        val myVerificationId = currentVerificationId
+        
+        // 取消正在进行的自动检测和重试
+        isAutoDetecting = false
+        retryRunnable?.let { handler.removeCallbacks(it) }
+        
+        // 手动切换源时重置状态
+        retryCount = 0
+        isAutoSwitching = false
+        
+        // 锁定
+        isManualSwitching = true
+        
         showControls()
+        showLoading()
+        updateStatus("正在寻找可用源...")
+        
+        val startIndex = currentSourceIndex
+        
+        Thread {
+            if (myVerificationId != currentVerificationId) {
+                activity?.runOnUiThread { isManualSwitching = false }
+                return@Thread
+            }
+            
+            try {
+                var found = false
+                var loopCount = 0
+                // 根据方向计算起始检查点
+                var indexToCheck = if (direction > 0) {
+                    (startIndex + 1) % sources.size
+                } else {
+                    (startIndex - 1 + sources.size) % sources.size
+                }
+                
+                // 循环检测，最多尝试 sources.size 次
+                while (loopCount < sources.size) {
+                    if (myVerificationId != currentVerificationId) {
+                        activity?.runOnUiThread { isManualSwitching = false }
+                        return@Thread
+                    }
+
+                    // 如果回到了起点，且不是第一次检查，则停止
+                    if (indexToCheck == startIndex) {
+                        break
+                    }
+
+                    activity?.runOnUiThread {
+                        if (myVerificationId == currentVerificationId) {
+                            updateStatus("检测源 ${indexToCheck + 1}/${sources.size}")
+                            showControls()
+                        }
+                    }
+                    
+                    Log.d(TAG, "检测源 ${indexToCheck + 1}/${sources.size}: ${sources[indexToCheck]}")
+                    if (testSource(sources[indexToCheck])) {
+                        found = true
+                        break
+                    }
+                    
+                    Log.d(TAG, "源 ${indexToCheck + 1} 不可用，尝试下一个")
+                    
+                    // 继续下一个
+                    if (direction > 0) {
+                        indexToCheck = (indexToCheck + 1) % sources.size
+                    } else {
+                        indexToCheck = (indexToCheck - 1 + sources.size) % sources.size
+                    }
+                    loopCount++
+                }
+                
+                if (myVerificationId != currentVerificationId) {
+                    activity?.runOnUiThread { isManualSwitching = false }
+                    return@Thread
+                }
+                
+                val finalIndex = indexToCheck
+                activity?.runOnUiThread {
+                    if (myVerificationId != currentVerificationId) {
+                        isManualSwitching = false
+                        return@runOnUiThread
+                    }
+                    
+                    // 解锁
+                    isManualSwitching = false
+                    
+                    if (found) {
+                        Log.d(TAG, "找到可用源 ${finalIndex + 1}，切换")
+                        currentSourceIndex = finalIndex
+                        currentUrl = sources[currentSourceIndex]
+                        updateSourceIndicator()
+                        playUrl(currentUrl)
+                    } else {
+                        Log.d(TAG, "未找到其他可用源 (全部检测失败)，强制尝试下一个源")
+                        // Fallback
+                        val fallbackIndex = if (direction > 0) {
+                            (startIndex + 1) % sources.size
+                        } else {
+                            (startIndex - 1 + sources.size) % sources.size
+                        }
+                        
+                        currentSourceIndex = fallbackIndex
+                        currentUrl = sources[currentSourceIndex]
+                        updateSourceIndicator()
+                        playUrl(currentUrl)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Source switching error: ${e.message}")
+                activity?.runOnUiThread {
+                    isManualSwitching = false
+                    hideLoading()
+                }
+            }
+        }.start()
     }
     
     // 显示源切换指示器
@@ -1286,12 +1573,29 @@ class NativePlayerFragment : Fragment() {
     }
     
     private fun switchChannel(newIndex: Int) {
+        Log.d(TAG, "=== switchChannel 被调用 ===")
+        Log.d(TAG, "新频道索引: $newIndex, 总频道数: ${channelUrls.size}")
+        
         if (channelUrls.isEmpty() || newIndex < 0 || newIndex >= channelUrls.size) {
+            Log.e(TAG, "无效的频道索引")
             return
         }
         
-        // 重置重试计数
+        // 增加验证 ID，立即使所有之前的后台任务失效
+        currentVerificationId++
+        val myVerificationId = currentVerificationId
+        
+        // 重置手动切换状态
+        isManualSwitching = false
+        
+        // 立即停止当前播放，给予"已切换"的反馈
+        player?.stop()
+        player?.clearMediaItems()
+        
+        // 重置重试计数和取消自动检测
         retryCount = 0
+        isAutoSwitching = false
+        isAutoDetecting = false
         retryRunnable?.let { handler.removeCallbacks(it) }
         
         currentIndex = newIndex
@@ -1299,18 +1603,164 @@ class NativePlayerFragment : Fragment() {
         currentUrl = channelUrls[newIndex]
         currentName = if (newIndex < channelNames.size) channelNames[newIndex] else "Channel ${newIndex + 1}"
         
-        Log.d(TAG, "Switching to channel: $currentName (index $currentIndex, sources=${getCurrentSources().size})")
-        updateSourceIndicator()
-        
-        // 使用第一个源播放
-        val sources = getCurrentSources()
-        val urlToPlay = if (sources.isNotEmpty()) sources[0] else currentUrl
-        playUrl(urlToPlay)
-        
-        // 检查新频道的收藏状态
-        checkInitialFavoriteStatus()
-        
+        // 立即显示控制栏（频道信息等）
         showControls()
+        // 更新EPG信息
+        refreshEpgInfo()
+        
+        Log.d(TAG, "切换到频道: $currentName")
+        
+        // 检测并使用第一个可用的源
+        val sources = getCurrentSources()
+        Log.d(TAG, "频道有 ${sources.size} 个源")
+        
+        if (sources.size > 1) {
+            Log.d(TAG, "开始在后台线程检测源...")
+            
+            // 显示正在检测的状态
+            updateStatus("检测源...")
+            showLoading()
+            
+            // 在后台线程检测源
+            Thread {
+                if (myVerificationId != currentVerificationId) return@Thread
+                
+                var foundSourceIndex = 0
+                for (i in sources.indices) {
+                    // 如果已经进行了新的操作，立即停止
+                    if (myVerificationId != currentVerificationId) return@Thread
+                    
+                    // 实时更新UI显示当前检测的源
+                    activity?.runOnUiThread {
+                        if (myVerificationId != currentVerificationId) return@runOnUiThread
+                        updateStatus("检测源 ${i + 1}/${sources.size}")
+                        currentSourceIndex = i
+                        updateSourceIndicator()
+                        showControls()
+                    }
+                    
+                    Log.d(TAG, "检测源 ${i + 1}/${sources.size}: ${sources[i]}")
+                    if (testSource(sources[i])) {
+                        foundSourceIndex = i
+                        Log.d(TAG, "✓ 源 ${i + 1} 可用")
+                        break
+                    } else {
+                        Log.d(TAG, "✗ 源 ${i + 1} 不可用")
+                    }
+                }
+                
+                if (myVerificationId != currentVerificationId) return@Thread
+                
+                val finalSourceIndex = foundSourceIndex
+                activity?.runOnUiThread {
+                    if (myVerificationId != currentVerificationId) return@runOnUiThread
+                    
+                    currentSourceIndex = finalSourceIndex
+                    val urlToPlay = sources[currentSourceIndex]
+                    Log.d(TAG, "使用源 ${currentSourceIndex + 1}/${sources.size}: $urlToPlay")
+                    
+                    updateSourceIndicator()
+                    playUrl(urlToPlay)
+                    
+                    // 检查新频道的收藏状态
+                    checkInitialFavoriteStatus()
+                    
+                    showControls()
+                }
+            }.start()
+        } else {
+            Log.d(TAG, "频道只有一个源，直接播放")
+            val urlToPlay = if (sources.isNotEmpty() && currentSourceIndex < sources.size) {
+                sources[currentSourceIndex]
+            } else {
+                currentUrl
+            }
+            
+            updateSourceIndicator()
+            playUrl(urlToPlay)
+            
+            // 检查新频道的收藏状态
+            checkInitialFavoriteStatus()
+            
+            showControls()
+        }
+    }
+
+    private fun refreshEpgInfo() {
+        // 简单检查是否attached
+        if (!isAdded || activity == null) return
+
+        if (isDlnaMode || channelNames.isEmpty() || currentIndex < 0 || currentIndex >= channelNames.size) {
+             activity?.runOnUiThread {
+                 try {
+                     if (view != null) epgContainer.visibility = View.GONE
+                 } catch (e: Exception) {}
+             }
+             return
+        }
+        
+        val name = channelNames[currentIndex]
+        val epgId = if (currentIndex < channelEpgIds.size) channelEpgIds[currentIndex] else ""
+        
+        (activity as? MainActivity)?.requestEpgInfo(name, epgId) { result ->
+            activity?.runOnUiThread {
+                try {
+                    if (view == null) return@runOnUiThread
+                    
+                    if (result != null) {
+                        val currentTitle = result["currentTitle"] as? String
+                        val nextTitle = result["nextTitle"] as? String
+                        
+                        var hasContent = false
+                        
+                        if (!currentTitle.isNullOrEmpty()) {
+                            epgCurrentTitle.text = currentTitle
+                            epgCurrentContainer.visibility = View.VISIBLE
+                            hasContent = true
+                        } else {
+                            epgCurrentContainer.visibility = View.GONE
+                        }
+                        
+                        if (!nextTitle.isNullOrEmpty()) {
+                            epgNextTitle.text = nextTitle
+                            epgNextContainer.visibility = View.VISIBLE
+                            hasContent = true
+                        } else {
+                            epgNextContainer.visibility = View.GONE
+                        }
+                        
+                        epgContainer.visibility = if (hasContent) View.VISIBLE else View.GONE
+                    } else {
+                        epgContainer.visibility = View.GONE
+                    }
+                } catch (e: Exception) {
+                    // Ignore
+                }
+            }
+        }
+    }
+    
+    // 检测源是否可用（在后台线程执行）
+    private fun testSource(url: String): Boolean {
+        return try {
+            val urlConnection = java.net.URL(url).openConnection() as java.net.HttpURLConnection
+            urlConnection.connectTimeout = 1500 // 1.5秒超时
+            urlConnection.readTimeout = 1500
+            urlConnection.requestMethod = "HEAD" // 使用HEAD请求，更快
+            urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0")
+            urlConnection.setRequestProperty("Accept", "*/*")
+            urlConnection.setRequestProperty("Connection", "keep-alive")
+            
+            val responseCode = urlConnection.responseCode
+            urlConnection.disconnect()
+            
+            val isAvailable = responseCode in 200..399
+            Log.d(TAG, "testSource: $url -> $responseCode (${if (isAvailable) "可用" else "不可用"})")
+            isAvailable
+        } catch (e: Exception) {
+            Log.d(TAG, "testSource: $url -> 异常: ${e.message}")
+            false
+        }
     }
     
     private fun nextChannel() {

@@ -17,7 +17,9 @@ class NativePlayerChannel {
   static SettingsProvider? _settingsProvider;
 
   /// Set providers for favorite functionality
-  static void setProviders(FavoritesProvider favoritesProvider, ChannelProvider channelProvider, [SettingsProvider? settingsProvider]) {
+  static void setProviders(
+      FavoritesProvider favoritesProvider, ChannelProvider channelProvider,
+      [SettingsProvider? settingsProvider]) {
     _favoritesProvider = favoritesProvider;
     _channelProvider = channelProvider;
     _settingsProvider = settingsProvider;
@@ -74,92 +76,107 @@ class NativePlayerChannel {
   }
 
   static Future<bool?> _toggleFavorite(int? channelIndex) async {
-    if (channelIndex == null || _favoritesProvider == null || _channelProvider == null) {
-      debugPrint('NativePlayerChannel: toggleFavorite - invalid params: index=$channelIndex, favProv=${_favoritesProvider != null}, chanProv=${_channelProvider != null}');
+    if (channelIndex == null ||
+        _favoritesProvider == null ||
+        _channelProvider == null) {
+      debugPrint(
+          'NativePlayerChannel: toggleFavorite - invalid params: index=$channelIndex, favProv=${_favoritesProvider != null}, chanProv=${_channelProvider != null}');
       return null;
     }
-    
+
     final channels = _channelProvider!.channels;
     if (channelIndex < 0 || channelIndex >= channels.length) {
-      debugPrint('NativePlayerChannel: toggleFavorite - invalid index: $channelIndex, channels=${channels.length}');
+      debugPrint(
+          'NativePlayerChannel: toggleFavorite - invalid index: $channelIndex, channels=${channels.length}');
       return null;
     }
-    
+
     final channel = channels[channelIndex];
-    debugPrint('NativePlayerChannel: toggleFavorite - channel: ${channel.name}, id: ${channel.id}');
-    
+    debugPrint(
+        'NativePlayerChannel: toggleFavorite - channel: ${channel.name}, id: ${channel.id}');
+
     if (channel.id == null) {
       debugPrint('NativePlayerChannel: toggleFavorite - channel has no id');
       return null;
     }
-    
+
     // Check current favorite status before toggle
     final wasFavorite = _favoritesProvider!.isFavorite(channel.id!);
-    debugPrint('NativePlayerChannel: toggleFavorite - wasFavorite: $wasFavorite');
-    
+    debugPrint(
+        'NativePlayerChannel: toggleFavorite - wasFavorite: $wasFavorite');
+
     // Toggle favorite
     final success = await _favoritesProvider!.toggleFavorite(channel);
     debugPrint('NativePlayerChannel: toggleFavorite - success: $success');
-    
+
     if (!success) {
       return null;
     }
-    
+
     // Return the new favorite status (opposite of what it was)
     final isFavoriteNow = !wasFavorite;
-    debugPrint('NativePlayerChannel: toggleFavorite - isFavoriteNow: $isFavoriteNow');
+    debugPrint(
+        'NativePlayerChannel: toggleFavorite - isFavoriteNow: $isFavoriteNow');
     return isFavoriteNow;
   }
 
   static bool _isFavorite(int? channelIndex) {
-    if (channelIndex == null || _favoritesProvider == null || _channelProvider == null) {
-      debugPrint('NativePlayerChannel: isFavorite - invalid params: index=$channelIndex, favProv=${_favoritesProvider != null}, chanProv=${_channelProvider != null}');
+    if (channelIndex == null ||
+        _favoritesProvider == null ||
+        _channelProvider == null) {
+      debugPrint(
+          'NativePlayerChannel: isFavorite - invalid params: index=$channelIndex, favProv=${_favoritesProvider != null}, chanProv=${_channelProvider != null}');
       return false;
     }
-    
+
     final channels = _channelProvider!.channels;
     if (channelIndex < 0 || channelIndex >= channels.length) {
-      debugPrint('NativePlayerChannel: isFavorite - invalid index: $channelIndex, channels=${channels.length}');
+      debugPrint(
+          'NativePlayerChannel: isFavorite - invalid index: $channelIndex, channels=${channels.length}');
       return false;
     }
-    
+
     final channel = channels[channelIndex];
     if (channel.id == null) {
       debugPrint('NativePlayerChannel: isFavorite - channel has no id');
       return false;
     }
-    
+
     final isFav = _favoritesProvider!.isFavorite(channel.id!);
-    debugPrint('NativePlayerChannel: isFavorite - channel: ${channel.name}, isFavorite: $isFav');
+    debugPrint(
+        'NativePlayerChannel: isFavorite - channel: ${channel.name}, isFavorite: $isFav');
     return isFav;
   }
 
   /// 保存分屏状态
   static void _saveMultiScreenState(dynamic arguments) {
     if (_settingsProvider == null || _channelProvider == null) {
-      debugPrint('NativePlayerChannel: _saveMultiScreenState - providers not set');
+      debugPrint(
+          'NativePlayerChannel: _saveMultiScreenState - providers not set');
       return;
     }
-    
+
     if (arguments == null) {
       debugPrint('NativePlayerChannel: _saveMultiScreenState - no arguments');
       return;
     }
-    
+
     try {
       final Map<dynamic, dynamic> args = arguments as Map<dynamic, dynamic>;
-      final List<dynamic>? screenStates = args['screenStates'] as List<dynamic>?;
+      final List<dynamic>? screenStates =
+          args['screenStates'] as List<dynamic>?;
       final int activeIndex = args['activeIndex'] as int? ?? 0;
-      
+
       if (screenStates == null) {
-        debugPrint('NativePlayerChannel: _saveMultiScreenState - no screenStates');
+        debugPrint(
+            'NativePlayerChannel: _saveMultiScreenState - no screenStates');
         return;
       }
-      
+
       // 将频道索引转换为频道ID
       final channels = _channelProvider!.channels;
       final List<int?> channelIds = [];
-      
+
       for (final state in screenStates) {
         if (state == null) {
           channelIds.add(null);
@@ -172,9 +189,10 @@ class NativePlayerChannel {
           }
         }
       }
-      
-      debugPrint('NativePlayerChannel: _saveMultiScreenState - channelIds: $channelIds, activeIndex: $activeIndex');
-      
+
+      debugPrint(
+          'NativePlayerChannel: _saveMultiScreenState - channelIds: $channelIds, activeIndex: $activeIndex');
+
       // 保存分屏状态
       _settingsProvider!.saveLastMultiScreen(channelIds, activeIndex);
     } catch (e) {
@@ -185,39 +203,44 @@ class NativePlayerChannel {
   /// 保存单频道播放状态
   static void _saveSingleChannelState(dynamic arguments) {
     if (_settingsProvider == null || _channelProvider == null) {
-      debugPrint('NativePlayerChannel: _saveSingleChannelState - providers not set');
+      debugPrint(
+          'NativePlayerChannel: _saveSingleChannelState - providers not set');
       return;
     }
-    
+
     try {
       int? channelIndex;
       bool skipSave = false;
-      
+
       if (arguments != null && arguments is Map) {
         channelIndex = arguments['channelIndex'] as int?;
         skipSave = arguments['skipSave'] as bool? ?? false;
       }
-      
+
       // 如果是从分屏退出到单频道播放的，不覆盖分屏状态
       if (skipSave) {
-        debugPrint('NativePlayerChannel: _saveSingleChannelState - skipSave=true, keeping multi-screen state');
+        debugPrint(
+            'NativePlayerChannel: _saveSingleChannelState - skipSave=true, keeping multi-screen state');
         return;
       }
-      
+
       if (channelIndex == null || channelIndex < 0) {
-        debugPrint('NativePlayerChannel: _saveSingleChannelState - no valid channelIndex');
+        debugPrint(
+            'NativePlayerChannel: _saveSingleChannelState - no valid channelIndex');
         return;
       }
-      
+
       final channels = _channelProvider!.channels;
       if (channelIndex >= channels.length) {
-        debugPrint('NativePlayerChannel: _saveSingleChannelState - channelIndex out of range');
+        debugPrint(
+            'NativePlayerChannel: _saveSingleChannelState - channelIndex out of range');
         return;
       }
-      
+
       final channelId = channels[channelIndex].id;
-      debugPrint('NativePlayerChannel: _saveSingleChannelState - channelIndex: $channelIndex, channelId: $channelId');
-      
+      debugPrint(
+          'NativePlayerChannel: _saveSingleChannelState - channelIndex: $channelIndex, channelId: $channelId');
+
       if (channelId != null) {
         // 保存单频道播放状态
         _settingsProvider!.saveLastSingleChannel(channelId);
@@ -232,7 +255,8 @@ class NativePlayerChannel {
     if (!PlatformDetector.isAndroid) return false;
 
     try {
-      final result = await _channel.invokeMethod<bool>('isNativePlayerAvailable');
+      final result =
+          await _channel.invokeMethod<bool>('isNativePlayerAvailable');
       return result ?? false;
     } catch (e) {
       debugPrint('NativePlayerChannel: isAvailable error: $e');
@@ -251,6 +275,7 @@ class NativePlayerChannel {
     List<String>? groups,
     List<List<String>>? sources, // 每个频道的所有源
     List<String>? logos, // 每个频道的台标URL
+    List<String>? epgIds, // 每个频道的EPG ID
     bool isDlnaMode = false,
     String bufferStrength = 'fast',
     bool showFps = true,
@@ -263,7 +288,8 @@ class NativePlayerChannel {
       init(); // Ensure initialized
       _onPlayerClosedCallback = onClosed;
 
-      debugPrint('NativePlayerChannel: launching player with url=$url, name=$name, index=$index, channels=${urls?.length ?? 0}, isDlna=$isDlnaMode, buffer=$bufferStrength');
+      debugPrint(
+          'NativePlayerChannel: launching player with url=$url, name=$name, index=$index, channels=${urls?.length ?? 0}, isDlna=$isDlnaMode, buffer=$bufferStrength');
       final result = await _channel.invokeMethod<bool>('launchPlayer', {
         'url': url,
         'name': name,
@@ -273,6 +299,7 @@ class NativePlayerChannel {
         'groups': groups,
         'sources': sources, // 传递每个频道的所有源
         'logos': logos, // 传递每个频道的台标URL
+        'epgIds': epgIds, // 传递每个频道的EPG ID
         'isDlnaMode': isDlnaMode,
         'bufferStrength': bufferStrength,
         'showFps': showFps,
@@ -297,7 +324,7 @@ class NativePlayerChannel {
       debugPrint('NativePlayerChannel: closePlayer error: $e');
     }
   }
-  
+
   /// Pause the native player (for DLNA control)
   static Future<void> pause() async {
     try {
@@ -306,7 +333,7 @@ class NativePlayerChannel {
       debugPrint('NativePlayerChannel: pause error: $e');
     }
   }
-  
+
   /// Resume/play the native player (for DLNA control)
   static Future<void> play() async {
     try {
@@ -315,7 +342,7 @@ class NativePlayerChannel {
       debugPrint('NativePlayerChannel: play error: $e');
     }
   }
-  
+
   /// Seek to position in milliseconds (for DLNA control)
   static Future<void> seekTo(int positionMs) async {
     try {
@@ -324,7 +351,7 @@ class NativePlayerChannel {
       debugPrint('NativePlayerChannel: seekTo error: $e');
     }
   }
-  
+
   /// Set volume (0-100) (for DLNA control)
   static Future<void> setVolume(int volume) async {
     try {
@@ -333,7 +360,7 @@ class NativePlayerChannel {
       debugPrint('NativePlayerChannel: setVolume error: $e');
     }
   }
-  
+
   /// Get current playback state from native player
   static Future<Map<String, dynamic>?> getPlaybackState() async {
     try {
@@ -357,16 +384,17 @@ class NativePlayerChannel {
     List<String>? logos,
     int initialChannelIndex = 0,
     int volumeBoostDb = 0,
-    int defaultScreenPosition = 1,  // 1-4 对应四个屏幕位置
-    int restoreActiveIndex = -1,  // 恢复时的活动屏幕索引
-    List<int?>? restoreScreenChannels,  // 恢复时每个屏幕的频道索引
+    int defaultScreenPosition = 1, // 1-4 对应四个屏幕位置
+    int restoreActiveIndex = -1, // 恢复时的活动屏幕索引
+    List<int?>? restoreScreenChannels, // 恢复时每个屏幕的频道索引
     Function? onClosed,
   }) async {
     try {
       init(); // Ensure initialized
       _onMultiScreenClosedCallback = onClosed;
 
-      debugPrint('NativePlayerChannel: launching multi-screen with ${urls.length} channels, initial=$initialChannelIndex, volumeBoost=$volumeBoostDb, defaultScreen=$defaultScreenPosition, restoreActive=$restoreActiveIndex, restoreChannels=$restoreScreenChannels');
+      debugPrint(
+          'NativePlayerChannel: launching multi-screen with ${urls.length} channels, initial=$initialChannelIndex, volumeBoost=$volumeBoostDb, defaultScreen=$defaultScreenPosition, restoreActive=$restoreActiveIndex, restoreChannels=$restoreScreenChannels');
       final result = await _channel.invokeMethod<bool>('launchMultiScreen', {
         'urls': urls,
         'names': names,
