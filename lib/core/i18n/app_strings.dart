@@ -36,6 +36,9 @@ class AppStrings {
   String get themeLight => _localizedValues['themeLight']!;
   String get themeSystem => _localizedValues['themeSystem']!;
   String get themeChanged => _localizedValues['themeChanged']!;
+  String get fontFamily => _localizedValues['fontFamily']!;
+  String get fontFamilyDesc => _localizedValues['fontFamilyDesc']!;
+  String get fontChanged => _localizedValues['fontChanged']!;
   String get unknown => _localizedValues['unknown']!;
   String get save => _localizedValues['save']!;
   String get error => _localizedValues['error']!;
@@ -354,6 +357,24 @@ class AppStrings {
   String get customColorApplied => _localizedValues['customColorApplied']!;
   String get colorSchemeCustom => _localizedValues['colorSchemeCustom']!;
 
+  // Local server web page strings
+  String get importPlaylistTitle => _localizedValues['importPlaylistTitle']!;
+  String get importPlaylistSubtitle => _localizedValues['importPlaylistSubtitle']!;
+  String get importFromUrlTitle => _localizedValues['importFromUrlTitle']!;
+  String get importFromFileTitle => _localizedValues['importFromFileTitle']!;
+  String get playlistNameOptional => _localizedValues['playlistNameOptional']!;
+  String get enterPlaylistUrl => _localizedValues['enterPlaylistUrl']!;
+  String get importUrlButton => _localizedValues['importUrlButton']!;
+  String get selectFile => _localizedValues['selectFile']!;
+  String get fileNameOptional => _localizedValues['fileNameOptional']!;
+  String get fileUploadButton => _localizedValues['fileUploadButton']!;
+  String get or => _localizedValues['or']!;
+  String get pleaseEnterUrl => _localizedValues['pleaseEnterUrl']!;
+  String get sentToTV => _localizedValues['sentToTV']!;
+  String get sendFailed => _localizedValues['sendFailed']!;
+  String get networkError => _localizedValues['networkError']!;
+  String get uploading => _localizedValues['uploading']!;
+
   // Map access for dynamic keys if needed
   String operator [](String key) => _localizedValues[key] ?? key;
 }
@@ -404,6 +425,9 @@ class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {
     'themeLight': '明亮',
     'themeSystem': '跟随系统',
     'themeChanged': '主题已切换',
+    'fontFamily': '字体',
+    'fontFamilyDesc': '选择应用显示字体',
+    'fontChanged': '字体已更改为 {font}',
     'unknown': '未知',
     'save': '保存',
     'error': '错误',
@@ -710,6 +734,23 @@ class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {
     'apply': '应用',
     'customColorApplied': '自定义颜色已应用',
     'colorSchemeCustom': '自定义',
+    // Local server web page strings
+    'importPlaylistTitle': '导入播放列表',
+    'importPlaylistSubtitle': '导入播放列表到您的电视',
+    'importFromUrlTitle': '从链接导入',
+    'importFromFileTitle': '从文件导入',
+    'playlistNameOptional': '播放列表名称（可选）',
+    'enterPlaylistUrl': '请输入 M3U/M3U8/TXT 链接',
+    'importUrlButton': '导入链接',
+    'selectFile': '选择文件',
+    'fileNameOptional': '播放列表名称（可选）',
+    'fileUploadButton': '上传文件',
+    'or': '或者',
+    'pleaseEnterUrl': '请输入链接',
+    'sentToTV': '已发送到电视，请在电视上查看',
+    'sendFailed': '发送失败',
+    'networkError': '网络错误，请确保设备在同一局域网',
+    'uploading': '正在上传...',
   };
 
   static const Map<String, String> _enValues = {
@@ -736,6 +777,9 @@ class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {
     'themeLight': 'Light',
     'themeSystem': 'Follow System',
     'themeChanged': 'Theme changed',
+    'fontFamily': 'Font Family',
+    'fontFamilyDesc': 'Choose application display font',
+    'fontChanged': 'Font changed to {font}',
     'unknown': 'Unknown',
     'save': 'Save',
     'error': 'Error',
@@ -1042,5 +1086,22 @@ class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {
     'apply': 'Apply',
     'customColorApplied': 'Custom color applied',
     'colorSchemeCustom': 'Custom',
+    // Local server web page strings
+    'importPlaylistTitle': 'Import Playlist',
+    'importPlaylistSubtitle': 'Import playlist to your TV',
+    'importFromUrlTitle': 'Import from URL',
+    'importFromFileTitle': 'Import from File',
+    'playlistNameOptional': 'Playlist name (optional)',
+    'enterPlaylistUrl': 'Please enter M3U/M3U8/TXT URL',
+    'importUrlButton': 'Import URL',
+    'selectFile': 'Select File',
+    'fileNameOptional': 'Playlist name (optional)',
+    'fileUploadButton': 'Upload File',
+    'or': 'or',
+    'pleaseEnterUrl': 'Please enter URL',
+    'sentToTV': 'Sent to TV, please check on your TV',
+    'sendFailed': 'Send failed',
+    'networkError': 'Network error, please ensure devices are on the same network',
+    'uploading': 'Uploading...',
   };
 }

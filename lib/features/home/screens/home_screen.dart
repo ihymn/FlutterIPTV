@@ -824,7 +824,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(width: 6),
               Text(
-                isDarkMode ? '明亮' : '黑暗', 
+                isDarkMode ? (AppStrings.of(context)?.themeLight ?? '明亮') : (AppStrings.of(context)?.themeDark ?? '深色'), 
                 style: TextStyle(color: textColor, fontSize: 12, fontWeight: FontWeight.w500)
               ),
             ],

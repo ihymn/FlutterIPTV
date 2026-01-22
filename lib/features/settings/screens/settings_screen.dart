@@ -96,7 +96,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               _buildDivider(),
               _buildSelectTile(
                 context,
-                title: '字体',
+                title: AppStrings.of(context)?.fontFamily ?? '字体',
                 subtitle: _getFontFamilyLabel(context, settings.fontFamily, settings),
                 icon: Icons.text_fields_rounded,
                 onTap: () => _showFontFamilyDialog(context, settings),
@@ -1629,7 +1629,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _showFontFamilyDialog(BuildContext context, SettingsProvider settings) {
     final languageCode = settings.locale?.languageCode ?? WidgetsBinding.instance.platformDispatcher.locale.languageCode;
     final fonts = AppTheme.getAvailableFonts(languageCode);
-    final isChinese = languageCode.startsWith('zh');
+    final strings = AppStrings.of(context);
 
     showDialog(
       context: context,
@@ -1637,7 +1637,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         return AlertDialog(
           backgroundColor: AppTheme.surfaceColor,
           title: Text(
-            isChinese ? '字体' : 'Font Family',
+            strings?.fontFamily ?? '字体',
             style: const TextStyle(color: AppTheme.textPrimary),
           ),
           content: SizedBox(
@@ -1662,7 +1662,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     if (value != null) {
                       settings.setFontFamily(value);
                       Navigator.pop(dialogContext);
-                      _showSuccess(context, isChinese ? '字体已更改为 ${_getFontFamilyLabel(context, value, settings)}' : 'Font changed to ${_getFontFamilyLabel(context, value, settings)}');
+                      final fontLabel = _getFontFamilyLabel(context, value, settings);
+                      final message = (strings?.fontChanged ?? '字体已更改为 {font}').replaceAll('{font}', fontLabel);
+                      _showSuccess(context, message);
                     }
                   },
                   activeColor: AppTheme.getPrimaryColor(dialogContext),
