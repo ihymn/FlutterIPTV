@@ -318,6 +318,25 @@ class AppStrings {
   String get fastBuffer => _localizedValues['fastBuffer']!;
   String get balancedBuffer => _localizedValues['balancedBuffer']!;
   String get stableBuffer => _localizedValues['stableBuffer']!;
+
+  // Developer and debug settings
+  String get developerAndDebug => _localizedValues['developerAndDebug']!;
+  String get logLevel => _localizedValues['logLevel']!;
+  String get logLevelSubtitle => _localizedValues['logLevelSubtitle']!;
+  String get logLevelDebug => _localizedValues['logLevelDebug']!;
+  String get logLevelRelease => _localizedValues['logLevelRelease']!;
+  String get logLevelOff => _localizedValues['logLevelOff']!;
+  String get logLevelDebugDesc => _localizedValues['logLevelDebugDesc']!;
+  String get logLevelReleaseDesc => _localizedValues['logLevelReleaseDesc']!;
+  String get logLevelOffDesc => _localizedValues['logLevelOffDesc']!;
+  String get exportLogs => _localizedValues['exportLogs']!;
+  String get exportLogsSubtitle => _localizedValues['exportLogsSubtitle']!;
+  String get clearLogs => _localizedValues['clearLogs']!;
+  String get clearLogsSubtitle => _localizedValues['clearLogsSubtitle']!;
+  String get logFileLocation => _localizedValues['logFileLocation']!;
+  String get logsCleared => _localizedValues['logsCleared']!;
+  String get clearLogsConfirm => _localizedValues['clearLogsConfirm']!;
+  String get clearLogsConfirmMessage => _localizedValues['clearLogsConfirmMessage']!;
   String get bufferSizeNotImplemented => _localizedValues['bufferSizeNotImplemented']!;
   String get volumeBoostSet => _localizedValues['volumeBoostSet']!;
   String get noBoostValue => _localizedValues['noBoostValue']!;
@@ -803,6 +822,25 @@ class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {
     'progressBarModeAlwaysDesc': '所有内容都显示进度条',
     'progressBarModeNeverDesc': '所有内容都不显示进度条',
     'progressBarModeSet': '进度条显示已设置为：{mode}',
+
+    // Developer and debug settings
+    'developerAndDebug': '开发者与调试',
+    'logLevel': '日志级别',
+    'logLevelSubtitle': '选择日志记录级别',
+    'logLevelDebug': '调试',
+    'logLevelRelease': '发布',
+    'logLevelOff': '关闭',
+    'logLevelDebugDesc': '记录所有日志，用于开发调试',
+    'logLevelReleaseDesc': '只记录警告和错误，推荐',
+    'logLevelOffDesc': '不记录任何日志',
+    'exportLogs': '导出日志',
+    'exportLogsSubtitle': '扫码查看或导出日志文件',
+    'clearLogs': '清空日志',
+    'clearLogsSubtitle': '删除所有日志文件',
+    'logFileLocation': '日志文件位置',
+    'logsCleared': '日志已清空',
+    'clearLogsConfirm': '清空日志',
+    'clearLogsConfirmMessage': '确定要删除所有日志文件吗？',
   };
 
   static const Map<String, String> _enValues = {
@@ -1180,5 +1218,24 @@ class _AppStringsDelegate extends LocalizationsDelegate<AppStrings> {
     'progressBarModeAlwaysDesc': 'Show progress bar for all content',
     'progressBarModeNeverDesc': 'Never show progress bar',
     'progressBarModeSet': 'Progress bar display set to: {mode}',
+
+    // Developer and debug settings
+    'developerAndDebug': 'Developer & Debug',
+    'logLevel': 'Log Level',
+    'logLevelSubtitle': 'Select logging level',
+    'logLevelDebug': 'Debug',
+    'logLevelRelease': 'Release',
+    'logLevelOff': 'Off',
+    'logLevelDebugDesc': 'Log everything for development and debugging',
+    'logLevelReleaseDesc': 'Only log warnings and errors (recommended)',
+    'logLevelOffDesc': 'Do not log anything',
+    'exportLogs': 'Export Logs',
+    'exportLogsSubtitle': 'Scan QR to view or export log files',
+    'clearLogs': 'Clear Logs',
+    'clearLogsSubtitle': 'Delete all log files',
+    'logFileLocation': 'Log File Location',
+    'logsCleared': 'Logs cleared',
+    'clearLogsConfirm': 'Clear Logs',
+    'clearLogsConfirmMessage': 'Are you sure you want to delete all log files?',
   };
 }

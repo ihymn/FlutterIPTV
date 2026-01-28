@@ -5,6 +5,7 @@ import 'dart:io';
 import '../database/database_helper.dart';
 import '../platform/platform_detector.dart';
 import 'update_service.dart';
+import 'log_service.dart';
 import '../managers/update_manager.dart';
 
 /// Service Locator for dependency injection
@@ -14,18 +15,33 @@ class ServiceLocator {
   static late Directory _appDir;
   static late UpdateService _updateService;
   static late UpdateManager _updateManager;
+  static late LogService _logService;
 
   static SharedPreferences get prefs => _prefs;
   static DatabaseHelper get database => _database;
   static Directory get appDir => _appDir;
   static UpdateService get updateService => _updateService;
   static UpdateManager get updateManager => _updateManager;
+  static LogService get log => _logService;
+  
+  /// Check if log service is initialized
+  static bool get isLogInitialized {
+    try {
+      return _logService != null;
+    } catch (e) {
+      return false;
+    }
+  }
 
   static Future<void> initPrefs() async {
     // Initialize SharedPreferences - Fast and critical for theme
     _prefs = await SharedPreferences.getInstance();
+    
+    // Initialize log service early (after prefs) - pass prefs to avoid circular dependency
+    _logService = LogService();
+    await _logService.init(prefs: _prefs);
 
-    // Detect platform
+    // Detect platform (after log service is initialized)
     await PlatformDetector.init();
   }
 

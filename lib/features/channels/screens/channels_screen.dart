@@ -825,7 +825,7 @@ class _ChannelsScreenState extends State<ChannelsScreen> {
                             onLeft: (PlatformDetector.isTV && isFirstColumn)
                                 ? () {
                                     // 第一列按左键，跳转到当前选中的分类
-                                    debugPrint('ChannelsScreen: onLeft pressed, _currentGroupIndex=$_currentGroupIndex, _selectedGroup=$_selectedGroup');
+                                    ServiceLocator.log.d('ChannelsScreen: onLeft pressed, _currentGroupIndex=$_currentGroupIndex, _selectedGroup=$_selectedGroup');
                                     if (_currentGroupIndex < _groupFocusNodes.length) {
                                       _groupFocusNodes[_currentGroupIndex].requestFocus();
                                     }
@@ -848,13 +848,13 @@ class _ChannelsScreenState extends State<ChannelsScreen> {
                                 settingsProvider.setLastChannelId(channel.id);
                               }
 
-                              debugPrint('ChannelsScreen: onTap - enableMultiScreen=${settingsProvider.enableMultiScreen}, isDesktop=${PlatformDetector.isDesktop}, isTV=${PlatformDetector.isTV}');
+                              ServiceLocator.log.d('ChannelsScreen: onTap - enableMultiScreen=${settingsProvider.enableMultiScreen}, isDesktop=${PlatformDetector.isDesktop}, isTV=${PlatformDetector.isTV}');
 
                               // 检查是否启用了分屏模式
                               if (settingsProvider.enableMultiScreen) {
                                 // TV 端使用原生分屏播放器
                                 if (PlatformDetector.isTV && PlatformDetector.isAndroid) {
-                                  debugPrint('ChannelsScreen: TV Multi-screen mode, launching native multi-screen player');
+                                  ServiceLocator.log.d('ChannelsScreen: TV Multi-screen mode, launching native multi-screen player');
                                   final channelProvider = context.read<ChannelProvider>();
                                   final favoritesProvider = context.read<FavoritesProvider>();
                                   final channels = channelProvider.channels;
@@ -883,11 +883,11 @@ class _ChannelsScreenState extends State<ChannelsScreen> {
                                 volumeBoostDb: settingsProvider.volumeBoost,
                                 defaultScreenPosition: settingsProvider.defaultScreenPosition,
                                 onClosed: () {
-                                  debugPrint('ChannelsScreen: Native multi-screen closed');
+                                  ServiceLocator.log.d('ChannelsScreen: Native multi-screen closed');
                                 },
                               );
                             } else if (PlatformDetector.isDesktop) {
-                              debugPrint('ChannelsScreen: Desktop Multi-screen mode, playing channel: ${channel.name}');
+                              ServiceLocator.log.d('ChannelsScreen: Desktop Multi-screen mode, playing channel: ${channel.name}');
                               // 桌面端分屏模式：在指定位置播放频道
                               final multiScreenProvider = context.read<MultiScreenProvider>();
                               final defaultPosition = settingsProvider.defaultScreenPosition;

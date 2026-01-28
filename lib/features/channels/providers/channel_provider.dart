@@ -30,6 +30,9 @@ class ChannelProvider extends ChangeNotifier {
 
   // Load channels for a specific playlist
   Future<void> loadChannels(int playlistId) async {
+    ServiceLocator.log.i('加载播放列表频道: $playlistId', tag: 'ChannelProvider');
+    final startTime = DateTime.now();
+    
     _isLoading = true;
     _error = null;
     notifyListeners();
@@ -43,10 +46,15 @@ class ChannelProvider extends ChangeNotifier {
       );
 
       _channels = results.map((r) => Channel.fromMap(r)).toList();
+      ServiceLocator.log.d('加载了 ${_channels.length} 个频道', tag: 'ChannelProvider');
 
       _updateGroups();
+      
+      final loadTime = DateTime.now().difference(startTime).inMilliseconds;
+      ServiceLocator.log.i('频道加载完成，耗时: ${loadTime}ms', tag: 'ChannelProvider');
       _error = null;
     } catch (e) {
+      ServiceLocator.log.e('加载频道失败', tag: 'ChannelProvider', error: e);
       _error = 'Failed to load channels: $e';
       _channels = [];
       _groups = [];
@@ -261,9 +269,9 @@ class ChannelProvider extends ChangeNotifier {
       _updateGroups();
       notifyListeners();
 
-      debugPrint('DEBUG: 已将 ${channelIds.length} 个频道标记为失效');
+      ServiceLocator.log.d('DEBUG: 已将 ${channelIds.length} 个频道标记为失效');
     } catch (e) {
-      debugPrint('DEBUG: 标记失效频道时出错: $e');
+      ServiceLocator.log.d('DEBUG: 标记失效频道时出错: $e');
       _error = 'Failed to mark channels as unavailable: $e';
       notifyListeners();
     }
@@ -276,7 +284,7 @@ class ChannelProvider extends ChangeNotifier {
       final originalGroup = extractOriginalGroup(channel.groupName);
 
       if (originalGroup == null) {
-        debugPrint('DEBUG: 频道不是失效频道，无需恢复');
+        ServiceLocator.log.d('DEBUG: 频道不是失效频道，无需恢复');
         return false;
       }
 
@@ -295,7 +303,7 @@ class ChannelProvider extends ChangeNotifier {
       _updateGroups();
       notifyListeners();
 
-      debugPrint('DEBUG: 已恢复频道到分组: $originalGroup');
+      ServiceLocator.log.d('DEBUG: 已恢复频道到分组: $originalGroup');
       return true;
     } catch (e) {
       _error = 'Failed to restore channel: $e';
@@ -317,7 +325,7 @@ class ChannelProvider extends ChangeNotifier {
       _updateGroups();
       notifyListeners();
 
-      debugPrint('DEBUG: 已删除 $count 个失效频道');
+      ServiceLocator.log.d('DEBUG: 已删除 $count 个失效频道');
       return count;
     } catch (e) {
       _error = 'Failed to delete unavailable channels: $e';

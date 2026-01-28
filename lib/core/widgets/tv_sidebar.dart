@@ -7,6 +7,7 @@ import '../navigation/app_router.dart';
 import '../i18n/app_strings.dart';
 import 'tv_focusable.dart';
 import '../../features/settings/providers/settings_provider.dart';
+import '../services/service_locator.dart';
 
 /// TV端共享侧边栏组件
 /// 失去焦点收起，获得焦点展开
@@ -77,7 +78,7 @@ class _TVSidebarState extends State<TVSidebar> {
       _NavItem(icon: Icons.search_rounded, label: AppStrings.of(context)?.search ?? 'Search', route: AppRouter.search),
       _NavItem(icon: Icons.settings_rounded, label: AppStrings.of(context)?.settings ?? 'Settings', route: AppRouter.settings),
     ];
-    debugPrint('TVSidebar: _getNavItems returned ${items.length} items');
+    ServiceLocator.log.d('TVSidebar: _getNavItems returned ${items.length} items');
     return items;
   }
 

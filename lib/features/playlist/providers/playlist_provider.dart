@@ -43,6 +43,9 @@ class PlaylistProvider extends ChangeNotifier {
 
   // Load all playlists from database
   Future<void> loadPlaylists() async {
+    ServiceLocator.log.i('开始加载播放列表', tag: 'PlaylistProvider');
+    final startTime = DateTime.now();
+    
     _isLoading = true;
     _error = null;
     notifyListeners();
@@ -54,6 +57,7 @@ class PlaylistProvider extends ChangeNotifier {
       );
 
       _playlists = results.map((r) => Playlist.fromMap(r)).toList();
+      ServiceLocator.log.d('从数据库加载了 ${_playlists.length} 个播放列表', tag: 'PlaylistProvider');
 
       // Load channel counts for each playlist
       for (int i = 0; i < _playlists.length; i++) {
@@ -76,10 +80,14 @@ class PlaylistProvider extends ChangeNotifier {
           (p) => p.isActive,
           orElse: () => _playlists.first,
         );
+        ServiceLocator.log.d('设置活动播放列表: ${_activePlaylist?.name}', tag: 'PlaylistProvider');
       }
 
+      final loadTime = DateTime.now().difference(startTime).inMilliseconds;
+      ServiceLocator.log.i('播放列表加载完成，耗时: ${loadTime}ms', tag: 'PlaylistProvider');
       _error = null;
     } catch (e) {
+      ServiceLocator.log.e('加载播放列表失败', tag: 'PlaylistProvider', error: e);
       _error = 'Failed to load playlists: $e';
       _playlists = [];
     }
@@ -119,6 +127,10 @@ class PlaylistProvider extends ChangeNotifier {
 
   // Add a new playlist from URL
   Future<Playlist?> addPlaylistFromUrl(String name, String url) async {
+    ServiceLocator.log.i('从URL添加播放列表: $name', tag: 'PlaylistProvider');
+    ServiceLocator.log.d('URL: $url', tag: 'PlaylistProvider');
+    final startTime = DateTime.now();
+    
     _isLoading = true;
     _importProgress = 0.0;
     _error = null;
@@ -140,7 +152,7 @@ class PlaylistProvider extends ChangeNotifier {
 
       // Detect format and parse accordingly
       final format = _detectPlaylistFormat(url);
-      debugPrint('DEBUG: 检测到播放列表格式: $format');
+      ServiceLocator.log.i('检测到播放列表格式: $format', tag: 'PlaylistProvider');
 
       final List<Channel> channels;
       if (format == 'txt') {
@@ -153,7 +165,7 @@ class PlaylistProvider extends ChangeNotifier {
       if (format == 'm3u') {
         _lastExtractedEpgUrl = M3UParser.lastParseResult?.epgUrl;
         if (_lastExtractedEpgUrl != null) {
-          debugPrint('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
+          ServiceLocator.log.d('从M3U提取到EPG URL: $_lastExtractedEpgUrl', tag: 'PlaylistProvider');
           // Save EPG URL to playlist
           await ServiceLocator.database.update(
             'playlists',
@@ -168,8 +180,11 @@ class PlaylistProvider extends ChangeNotifier {
       notifyListeners();
 
       if (channels.isEmpty) {
+        ServiceLocator.log.w('播放列表中没有找到频道', tag: 'PlaylistProvider');
         throw Exception('No channels found in playlist');
       }
+      
+      ServiceLocator.log.i('解析到 ${channels.length} 个频道', tag: 'PlaylistProvider');
 
       // Use batch for much faster insertion
       final batch = ServiceLocator.database.db.batch();
@@ -195,8 +210,12 @@ class PlaylistProvider extends ChangeNotifier {
       // Reload playlists
       await loadPlaylists();
 
+      final totalTime = DateTime.now().difference(startTime).inMilliseconds;
+      ServiceLocator.log.i('播放列表添加成功，总耗时: ${totalTime}ms', tag: 'PlaylistProvider');
+
       return _playlists.firstWhere((p) => p.id == playlistId);
     } catch (e) {
+      ServiceLocator.log.e('添加播放列表失败', tag: 'PlaylistProvider', error: e);
       // 如果失败，删除已创建的播放列表记录
       if (playlistId != null) {
         try {
@@ -235,7 +254,7 @@ class PlaylistProvider extends ChangeNotifier {
 
       // Detect format and parse accordingly
       final format = _detectPlaylistFormat('', content: content);
-      debugPrint('DEBUG: 检测到播放列表格式: $format');
+      ServiceLocator.log.d('DEBUG: 检测到播放列表格式: $format');
 
       final List<Channel> channels;
       if (format == 'txt') {
@@ -248,7 +267,7 @@ class PlaylistProvider extends ChangeNotifier {
       if (format == 'm3u') {
         _lastExtractedEpgUrl = M3UParser.lastParseResult?.epgUrl;
         if (_lastExtractedEpgUrl != null) {
-          debugPrint('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
+          ServiceLocator.log.d('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
           // Save EPG URL to playlist
           await ServiceLocator.database.update(
             'playlists',
@@ -278,7 +297,7 @@ class PlaylistProvider extends ChangeNotifier {
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final tempFile = await File('${tempDir.path}/playlist_${playlistId}_$timestamp.m3u').writeAsString(content);
 
-      debugPrint('DEBUG: 保存临时播放列表文件: ${tempFile.path}');
+      ServiceLocator.log.d('DEBUG: 保存临时播放列表文件: ${tempFile.path}');
 
       // Update playlist with last updated timestamp, counts and file path
       await ServiceLocator.database.update(
@@ -300,7 +319,7 @@ class PlaylistProvider extends ChangeNotifier {
 
       return _playlists.firstWhere((p) => p.id == playlistId);
     } catch (e) {
-      debugPrint('DEBUG: 添加内容播放列表时出错: $e');
+      ServiceLocator.log.d('DEBUG: 添加内容播放列表时出错: $e');
       _error = 'Failed to add playlist: $e';
       _isLoading = false;
       notifyListeners();
@@ -330,7 +349,7 @@ class PlaylistProvider extends ChangeNotifier {
 
       // Detect format and parse accordingly
       final format = _detectPlaylistFormat(filePath);
-      debugPrint('DEBUG: 检测到播放列表格式: $format');
+      ServiceLocator.log.d('DEBUG: 检测到播放列表格式: $format');
 
       final List<Channel> channels;
       if (format == 'txt') {
@@ -343,7 +362,7 @@ class PlaylistProvider extends ChangeNotifier {
       if (format == 'm3u') {
         _lastExtractedEpgUrl = M3UParser.lastParseResult?.epgUrl;
         if (_lastExtractedEpgUrl != null) {
-          debugPrint('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
+          ServiceLocator.log.d('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
         }
       }
 
@@ -388,11 +407,11 @@ class PlaylistProvider extends ChangeNotifier {
   Future<bool> refreshPlaylist(Playlist playlist) async {
     if (playlist.id == null) return false;
 
-    debugPrint('DEBUG: 开始刷新播放列表: ${playlist.name} (ID: ${playlist.id})');
-    debugPrint('DEBUG: playlist.url = ${playlist.url}');
-    debugPrint('DEBUG: playlist.filePath = ${playlist.filePath}');
-    debugPrint('DEBUG: playlist.isRemote = ${playlist.isRemote}');
-    debugPrint('DEBUG: playlist.isLocal = ${playlist.isLocal}');
+    ServiceLocator.log.d('DEBUG: 开始刷新播放列表: ${playlist.name} (ID: ${playlist.id})');
+    ServiceLocator.log.d('DEBUG: playlist.url = ${playlist.url}');
+    ServiceLocator.log.d('DEBUG: playlist.filePath = ${playlist.filePath}');
+    ServiceLocator.log.d('DEBUG: playlist.isRemote = ${playlist.isRemote}');
+    ServiceLocator.log.d('DEBUG: playlist.isLocal = ${playlist.isLocal}');
 
     _isLoading = true;
     _importProgress = 0.0;
@@ -412,19 +431,19 @@ class PlaylistProvider extends ChangeNotifier {
       }
 
       final freshPlaylist = Playlist.fromMap(dbResults.first);
-      debugPrint('DEBUG: 从数据库重新加载 - URL: ${freshPlaylist.url}, FilePath: ${freshPlaylist.filePath}');
+      ServiceLocator.log.d('DEBUG: 从数据库重新加载 - URL: ${freshPlaylist.url}, FilePath: ${freshPlaylist.filePath}');
 
       List<Channel> channels;
 
-      debugPrint('DEBUG: 播放列表源类型: ${freshPlaylist.isRemote ? "远程URL" : freshPlaylist.isLocal ? "本地文件" : "未知"}');
-      debugPrint('DEBUG: 播放列表源路径: ${freshPlaylist.sourcePath}');
+      ServiceLocator.log.d('DEBUG: 播放列表源类型: ${freshPlaylist.isRemote ? "远程URL" : freshPlaylist.isLocal ? "本地文件" : "未知"}');
+      ServiceLocator.log.d('DEBUG: 播放列表源路径: ${freshPlaylist.sourcePath}');
 
       if (freshPlaylist.isRemote) {
-        debugPrint('DEBUG: 开始从URL解析播放列表: ${freshPlaylist.url}');
+        ServiceLocator.log.d('DEBUG: 开始从URL解析播放列表: ${freshPlaylist.url}');
         
         // Detect format and parse accordingly
         final format = _detectPlaylistFormat(freshPlaylist.url!);
-        debugPrint('DEBUG: 检测到播放列表格式: $format');
+        ServiceLocator.log.d('DEBUG: 检测到播放列表格式: $format');
         
         if (format == 'txt') {
           channels = await TXTParser.parseFromUrl(freshPlaylist.url!, playlist.id!);
@@ -436,22 +455,22 @@ class PlaylistProvider extends ChangeNotifier {
         if (format == 'm3u') {
           _lastExtractedEpgUrl = M3UParser.lastParseResult?.epgUrl;
           if (_lastExtractedEpgUrl != null) {
-            debugPrint('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
+            ServiceLocator.log.d('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
           }
         }
       } else if (freshPlaylist.isLocal) {
-        debugPrint('DEBUG: 开始从本地文件解析播放列表: ${freshPlaylist.filePath}');
+        ServiceLocator.log.d('DEBUG: 开始从本地文件解析播放列表: ${freshPlaylist.filePath}');
 
         // Check if file exists before trying to parse
         final file = File(freshPlaylist.filePath!);
         if (!await file.exists()) {
-          debugPrint('DEBUG: 本地文件不存在: ${freshPlaylist.filePath}');
+          ServiceLocator.log.d('DEBUG: 本地文件不存在: ${freshPlaylist.filePath}');
           throw Exception('Local playlist file not found: ${freshPlaylist.filePath}');
         }
 
         // Detect format and parse accordingly
         final format = _detectPlaylistFormat(freshPlaylist.filePath!);
-        debugPrint('DEBUG: 检测到播放列表格式: $format');
+        ServiceLocator.log.d('DEBUG: 检测到播放列表格式: $format');
         
         if (format == 'txt') {
           channels = await TXTParser.parseFromFile(freshPlaylist.filePath!, playlist.id!);
@@ -463,16 +482,16 @@ class PlaylistProvider extends ChangeNotifier {
         if (format == 'm3u') {
           _lastExtractedEpgUrl = M3UParser.lastParseResult?.epgUrl;
           if (_lastExtractedEpgUrl != null) {
-            debugPrint('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
+            ServiceLocator.log.d('DEBUG: 从M3U提取到EPG URL: $_lastExtractedEpgUrl');
           }
         }
       } else {
         // Check if this is a content-imported playlist without a proper file path
-        debugPrint('DEBUG: 播放列表源无效，URL: ${freshPlaylist.url}, 文件路径: ${freshPlaylist.filePath}');
+        ServiceLocator.log.d('DEBUG: 播放列表源无效，URL: ${freshPlaylist.url}, 文件路径: ${freshPlaylist.filePath}');
         throw Exception('Invalid playlist source - URL: ${freshPlaylist.url}, File: ${freshPlaylist.filePath}');
       }
 
-      debugPrint('DEBUG: 解析完成，共找到 ${channels.length} 个频道');
+      ServiceLocator.log.d('DEBUG: 解析完成，共找到 ${channels.length} 个频道');
 
       _importProgress = 0.5;
       notifyListeners();
@@ -481,13 +500,13 @@ class PlaylistProvider extends ChangeNotifier {
       // 如果插入失败，事务会回滚，旧数据不会丢失
       await ServiceLocator.database.db.transaction((txn) async {
         // Delete existing channels
-        debugPrint('DEBUG: 开始删除现有频道数据...');
+        ServiceLocator.log.d('DEBUG: 开始删除现有频道数据...');
         final deleteResult = await txn.delete(
           'channels',
           where: 'playlist_id = ?',
           whereArgs: [playlist.id],
         );
-        debugPrint('DEBUG: 已删除 $deleteResult 个旧频道记录');
+        ServiceLocator.log.d('DEBUG: 已删除 $deleteResult 个旧频道记录');
 
         // Insert new channels - 使用批量插入以提高性能
         final batch = txn.batch();
@@ -496,11 +515,11 @@ class PlaylistProvider extends ChangeNotifier {
           batch.insert('channels', channelMap);
         }
         await batch.commit(noResult: true);
-        debugPrint('DEBUG: 已插入 ${channels.length} 个新频道记录');
+        ServiceLocator.log.d('DEBUG: 已插入 ${channels.length} 个新频道记录');
       });
 
       // Update playlist timestamp and EPG URL
-      debugPrint('DEBUG: 更新播放列表时间戳和EPG URL...');
+      ServiceLocator.log.d('DEBUG: 更新播放列表时间戳和EPG URL...');
       final updateData = <String, dynamic>{
         'last_updated': DateTime.now().millisecondsSinceEpoch,
         'channel_count': channels.length,
@@ -509,7 +528,7 @@ class PlaylistProvider extends ChangeNotifier {
       // 如果提取到了 EPG URL，也更新到数据库
       if (_lastExtractedEpgUrl != null) {
         updateData['epg_url'] = _lastExtractedEpgUrl;
-        debugPrint('DEBUG: 保存EPG URL到数据库: $_lastExtractedEpgUrl');
+        ServiceLocator.log.d('DEBUG: 保存EPG URL到数据库: $_lastExtractedEpgUrl');
       }
       
       await ServiceLocator.database.update(
@@ -520,18 +539,18 @@ class PlaylistProvider extends ChangeNotifier {
       );
 
       _importProgress = 1.0;
-      debugPrint('DEBUG: 刷新完成，进度: 100%');
+      ServiceLocator.log.d('DEBUG: 刷新完成，进度: 100%');
       notifyListeners();
 
       // Reload playlists
-      debugPrint('DEBUG: 重新加载播放列表数据...');
+      ServiceLocator.log.d('DEBUG: 重新加载播放列表数据...');
       await loadPlaylists();
 
-      debugPrint('DEBUG: 播放列表刷新成功完成');
+      ServiceLocator.log.d('DEBUG: 播放列表刷新成功完成');
       return true;
     } catch (e) {
-      debugPrint('DEBUG: 刷新播放列表时发生错误: $e');
-      debugPrint('DEBUG: 错误堆栈: ${StackTrace.current}');
+      ServiceLocator.log.d('DEBUG: 刷新播放列表时发生错误: $e');
+      ServiceLocator.log.d('DEBUG: 错误堆栈: ${StackTrace.current}');
       _error = 'Failed to refresh playlist: $e';
       _isLoading = false;
       notifyListeners();
@@ -566,10 +585,10 @@ class PlaylistProvider extends ChangeNotifier {
           final file = File(playlist.filePath!);
           if (await file.exists()) {
             await file.delete();
-            debugPrint('DEBUG: 已删除临时播放列表文件: ${playlist.filePath}');
+            ServiceLocator.log.d('DEBUG: 已删除临时播放列表文件: ${playlist.filePath}');
           }
         } catch (e) {
-          debugPrint('DEBUG: 删除临时文件时出错: $e');
+          ServiceLocator.log.d('DEBUG: 删除临时文件时出错: $e');
         }
       }
 
@@ -582,11 +601,11 @@ class PlaylistProvider extends ChangeNotifier {
           _activePlaylist = _playlists.first;
           // Save the new active playlist to database
           await ServiceLocator.prefs.setInt('active_playlist_id', _activePlaylist!.id!);
-          debugPrint('DEBUG: 删除后切换到播放列表: ${_activePlaylist!.name} (ID: ${_activePlaylist!.id})');
+          ServiceLocator.log.d('DEBUG: 删除后切换到播放列表: ${_activePlaylist!.name} (ID: ${_activePlaylist!.id})');
         } else {
           _activePlaylist = null;
           await ServiceLocator.prefs.remove('active_playlist_id');
-          debugPrint('DEBUG: 没有剩余播放列表');
+          ServiceLocator.log.d('DEBUG: 没有剩余播放列表');
         }
       }
 
@@ -601,7 +620,7 @@ class PlaylistProvider extends ChangeNotifier {
 
   // Set active playlist
   void setActivePlaylist(Playlist playlist, {Function(int)? onPlaylistChanged, FavoritesProvider? favoritesProvider}) async {
-    debugPrint('DEBUG: 设置激活播放列表: ${playlist.name} (ID: ${playlist.id})');
+    ServiceLocator.log.d('DEBUG: 设置激活播放列表: ${playlist.name} (ID: ${playlist.id})');
     _activePlaylist = playlist;
 
     // Update database to mark this playlist as active
@@ -621,7 +640,7 @@ class PlaylistProvider extends ChangeNotifier {
           whereArgs: [playlist.id],
         );
       } catch (e) {
-        debugPrint('DEBUG: 更新数据库激活状态时出错: $e');
+        ServiceLocator.log.d('DEBUG: 更新数据库激活状态时出错: $e');
       }
     }
 
@@ -631,21 +650,21 @@ class PlaylistProvider extends ChangeNotifier {
     // Trigger channel loading via callback
     if (playlist.id != null && onPlaylistChanged != null) {
       try {
-        debugPrint('DEBUG: 触发播放列表频道加载回调...');
+        ServiceLocator.log.d('DEBUG: 触发播放列表频道加载回调...');
         onPlaylistChanged(playlist.id!);
       } catch (e) {
-        debugPrint('DEBUG: 执行播放列表频道加载回调时出错: $e');
+        ServiceLocator.log.d('DEBUG: 执行播放列表频道加载回调时出错: $e');
       }
     }
 
     // Update favorites provider with the new active playlist
     if (playlist.id != null && favoritesProvider != null) {
       try {
-        debugPrint('DEBUG: 更新收藏夹提供者的激活播放列表ID...');
+        ServiceLocator.log.d('DEBUG: 更新收藏夹提供者的激活播放列表ID...');
         favoritesProvider.setActivePlaylistId(playlist.id!);
         await favoritesProvider.loadFavorites();
       } catch (e) {
-        debugPrint('DEBUG: 更新收藏夹时出错: $e');
+        ServiceLocator.log.d('DEBUG: 更新收藏夹时出错: $e');
       }
     }
   }

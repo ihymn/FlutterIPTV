@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 
 import '../models/channel.dart';
+import '../services/service_locator.dart';
 
 /// Parser for TXT playlist files (genre format)
 /// Format: 
@@ -14,7 +14,7 @@ class TXTParser {
   /// Parse TXT content from a URL
   static Future<List<Channel>> parseFromUrl(String url, int playlistId) async {
     try {
-      debugPrint('DEBUG: 开始从URL获取TXT播放列表内容: $url');
+      ServiceLocator.log.d('DEBUG: 开始从URL获取TXT播放列表内容: $url');
 
       final dio = Dio();
       dio.options.connectTimeout = const Duration(seconds: 30);
@@ -28,15 +28,15 @@ class TXTParser {
         ),
       );
 
-      debugPrint('DEBUG: 成功获取TXT播放列表内容，状态码: ${response.statusCode}');
-      debugPrint('DEBUG: 内容大小: ${response.data.toString().length} 字符');
+      ServiceLocator.log.d('DEBUG: 成功获取TXT播放列表内容，状态码: ${response.statusCode}');
+      ServiceLocator.log.d('DEBUG: 内容大小: ${response.data.toString().length} 字符');
 
       final channels = parse(response.data.toString(), playlistId);
-      debugPrint('DEBUG: TXT URL解析完成，共解析出 ${channels.length} 个频道');
+      ServiceLocator.log.d('DEBUG: TXT URL解析完成，共解析出 ${channels.length} 个频道');
 
       return channels;
     } catch (e) {
-      debugPrint('DEBUG: 从URL获取TXT播放列表时出错: $e');
+      ServiceLocator.log.d('DEBUG: 从URL获取TXT播放列表时出错: $e');
       String errorMsg = 'Failed to load playlist';
       final errorStr = e.toString().toLowerCase();
       if (errorStr.contains('404')) {
@@ -57,23 +57,23 @@ class TXTParser {
   /// Parse TXT content from a local file
   static Future<List<Channel>> parseFromFile(String filePath, int playlistId) async {
     try {
-      debugPrint('DEBUG: 开始从本地文件读取TXT播放列表: $filePath');
+      ServiceLocator.log.d('DEBUG: 开始从本地文件读取TXT播放列表: $filePath');
       final file = File(filePath);
 
       if (!await file.exists()) {
-        debugPrint('DEBUG: 文件不存在: $filePath');
+        ServiceLocator.log.d('DEBUG: 文件不存在: $filePath');
         throw Exception('File does not exist: $filePath');
       }
 
       final content = await file.readAsString();
-      debugPrint('DEBUG: 成功读取TXT本地文件，内容大小: ${content.length} 字符');
+      ServiceLocator.log.d('DEBUG: 成功读取TXT本地文件，内容大小: ${content.length} 字符');
 
       final channels = parse(content, playlistId);
-      debugPrint('DEBUG: TXT本地文件解析完成，共解析出 ${channels.length} 个频道');
+      ServiceLocator.log.d('DEBUG: TXT本地文件解析完成，共解析出 ${channels.length} 个频道');
 
       return channels;
     } catch (e) {
-      debugPrint('DEBUG: 读取TXT本地播放列表文件时出错: $e');
+      ServiceLocator.log.d('DEBUG: 读取TXT本地播放列表文件时出错: $e');
       throw Exception('Error reading playlist file: $e');
     }
   }
@@ -83,15 +83,15 @@ class TXTParser {
   ///         Channel Name,URL
   /// Merges channels with same name into single channel with multiple sources
   static List<Channel> parse(String content, int playlistId) {
-    debugPrint('DEBUG: 开始解析TXT内容，播放列表ID: $playlistId');
+    ServiceLocator.log.d('DEBUG: 开始解析TXT内容，播放列表ID: $playlistId');
 
     final List<Channel> rawChannels = [];
     final lines = LineSplitter.split(content).toList();
 
-    debugPrint('DEBUG: TXT内容总行数: ${lines.length}');
+    ServiceLocator.log.d('DEBUG: TXT内容总行数: ${lines.length}');
 
     if (lines.isEmpty) {
-      debugPrint('DEBUG: TXT内容为空，返回空频道列表');
+      ServiceLocator.log.d('DEBUG: TXT内容为空，返回空频道列表');
       return rawChannels;
     }
 
@@ -110,7 +110,7 @@ class TXTParser {
         if (currentGroup.isEmpty) {
           currentGroup = 'Uncategorized';
         }
-        debugPrint('DEBUG: 找到分类: $currentGroup');
+        ServiceLocator.log.d('DEBUG: 找到分类: $currentGroup');
         continue;
       }
 
@@ -133,23 +133,23 @@ class TXTParser {
         } else {
           invalidLineCount++;
           if (name.isEmpty) {
-            debugPrint('DEBUG: 第${i + 1}行频道名称为空: $line');
+            ServiceLocator.log.d('DEBUG: 第${i + 1}行频道名称为空: $line');
           } else {
-            debugPrint('DEBUG: 第${i + 1}行URL无效: $url');
+            ServiceLocator.log.d('DEBUG: 第${i + 1}行URL无效: $url');
           }
         }
       } else {
         invalidLineCount++;
-        debugPrint('DEBUG: 第${i + 1}行格式不正确: $line');
+        ServiceLocator.log.d('DEBUG: 第${i + 1}行格式不正确: $line');
       }
     }
 
-    debugPrint('DEBUG: TXT原始解析完成 - 有效频道: $validChannelCount, 无效行: $invalidLineCount');
+    ServiceLocator.log.d('DEBUG: TXT原始解析完成 - 有效频道: $validChannelCount, 无效行: $invalidLineCount');
 
     // Merge channels with same name into single channel with multiple sources
     final List<Channel> mergedChannels = _mergeChannelSources(rawChannels);
     
-    debugPrint('DEBUG: TXT合并后频道数: ${mergedChannels.length} (原始: ${rawChannels.length})');
+    ServiceLocator.log.d('DEBUG: TXT合并后频道数: ${mergedChannels.length} (原始: ${rawChannels.length})');
 
     return mergedChannels;
   }

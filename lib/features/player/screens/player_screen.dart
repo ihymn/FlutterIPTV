@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:video_player/video_player.dart';
@@ -25,6 +24,7 @@ import '../../settings/providers/dlna_provider.dart';
 import '../../epg/providers/epg_provider.dart';
 import '../../multi_screen/providers/multi_screen_provider.dart';
 import '../../multi_screen/widgets/multi_screen_player.dart';
+import '../../../core/services/service_locator.dart';
 
 class PlayerScreen extends StatefulWidget {
   final String channelUrl;
@@ -113,9 +113,9 @@ class _PlayerScreenState extends State<PlayerScreen>
       try {
         await WakelockPlus.enable();
         final enabled = await WakelockPlus.enabled;
-        debugPrint('PlayerScreen: WakelockPlus enabled: $enabled');
+        ServiceLocator.log.d('PlayerScreen: WakelockPlus enabled: $enabled');
       } catch (e) {
-        debugPrint('PlayerScreen: Failed to enable wakelock: $e');
+        ServiceLocator.log.d('PlayerScreen: Failed to enable wakelock: $e');
       }
     }
   }
@@ -197,7 +197,7 @@ class _PlayerScreenState extends State<PlayerScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    debugPrint('PlayerScreen: AppLifecycleState changed to $state');
+    ServiceLocator.log.d('PlayerScreen: AppLifecycleState changed to $state');
   }
 
   @override
@@ -217,7 +217,7 @@ class _PlayerScreenState extends State<PlayerScreen>
     // Check if we should use native player on Android TV
     if (PlatformDetector.isTV && PlatformDetector.isAndroid) {
       final nativeAvailable = await NativePlayerChannel.isAvailable();
-      debugPrint('PlayerScreen: Native player available: $nativeAvailable');
+      ServiceLocator.log.d('PlayerScreen: Native player available: $nativeAvailable');
       if (nativeAvailable && mounted) {
         _usingNativePlayer = true;
 
@@ -226,9 +226,9 @@ class _PlayerScreenState extends State<PlayerScreen>
         try {
           final dlnaProvider = context.read<DlnaProvider>();
           isDlnaMode = dlnaProvider.isActiveSession;
-          debugPrint('PlayerScreen: DLNA isActiveSession=$isDlnaMode');
+          ServiceLocator.log.d('PlayerScreen: DLNA isActiveSession=$isDlnaMode');
         } catch (e) {
-          debugPrint('PlayerScreen: Failed to get DlnaProvider: $e');
+          ServiceLocator.log.d('PlayerScreen: Failed to get DlnaProvider: $e');
         }
 
         // 获取频道列表
@@ -281,7 +281,7 @@ class _PlayerScreenState extends State<PlayerScreen>
           isSeekableList = channels.map((c) => c.isSeekable).toList();
         }
 
-        debugPrint(
+        ServiceLocator.log.d(
             'PlayerScreen: Launching native player for ${widget.channelName} (isDlna=$isDlnaMode, index $currentIndex of ${urls.length})');
 
         // 获取缓冲强度设置和显示设置
@@ -311,7 +311,7 @@ class _PlayerScreenState extends State<PlayerScreen>
           showVideoInfo: showVideoInfo,
           progressBarMode: settingsProvider.progressBarMode, // 传递进度条显示模式
           onClosed: () {
-            debugPrint('PlayerScreen: Native player closed callback');
+            ServiceLocator.log.d('PlayerScreen: Native player closed callback');
             // 停止 DLNA 同步定时器
             _dlnaSyncTimer?.cancel();
             _dlnaSyncTimer = null;
@@ -432,7 +432,7 @@ class _PlayerScreenState extends State<PlayerScreen>
       try {
         ScaffoldMessenger.of(context).clearSnackBars();
       } catch (e) {
-        debugPrint('PlayerScreen: Error clearing SnackBars: $e');
+        ServiceLocator.log.d('PlayerScreen: Error clearing SnackBars: $e');
         return;
       }
       
@@ -464,7 +464,7 @@ class _PlayerScreenState extends State<PlayerScreen>
           try {
             scaffoldMessenger.hideCurrentSnackBar();
           } catch (e) {
-            debugPrint('PlayerScreen: Error hiding SnackBar: $e');
+            ServiceLocator.log.d('PlayerScreen: Error hiding SnackBar: $e');
           }
           _errorShown = false;
         }
@@ -538,7 +538,7 @@ class _PlayerScreenState extends State<PlayerScreen>
 
   @override
   void dispose() {
-    debugPrint(
+    ServiceLocator.log.d(
         'PlayerScreen: dispose() called, _usingNativePlayer=$_usingNativePlayer, _wasMultiScreenMode=$_wasMultiScreenMode');
     
     // 首先移除 provider 监听器，防止后续更新触发错误显示
@@ -554,7 +554,7 @@ class _PlayerScreenState extends State<PlayerScreen>
     try {
       ScaffoldMessenger.of(context).clearSnackBars();
     } catch (e) {
-      debugPrint('PlayerScreen: Error clearing SnackBars in dispose: $e');
+      ServiceLocator.log.d('PlayerScreen: Error clearing SnackBars in dispose: $e');
     }
     
     WidgetsBinding.instance.removeObserver(this);
@@ -575,7 +575,7 @@ class _PlayerScreenState extends State<PlayerScreen>
     if (_isFullScreen && PlatformDetector.isWindows) {
       final success = WindowsFullscreenNative.exitFullScreen();
       if (!success) {
-        debugPrint('Native exitFullScreen failed in dispose, using window_manager');
+        ServiceLocator.log.d('Native exitFullScreen failed in dispose, using window_manager');
         unawaited(windowManager.setFullScreen(false));
       }
     }
@@ -589,7 +589,7 @@ class _PlayerScreenState extends State<PlayerScreen>
     if (!_usingNativePlayer &&
         _playerProvider != null &&
         !_wasMultiScreenMode) {
-      debugPrint('PlayerScreen: calling _playerProvider.stop() in silent mode');
+      ServiceLocator.log.d('PlayerScreen: calling _playerProvider.stop() in silent mode');
       _playerProvider!.stop(silent: true); // 静默模式，不触发 notifyListeners
     }
 
@@ -615,13 +615,13 @@ class _PlayerScreenState extends State<PlayerScreen>
   void _saveMultiScreenState() {
     // 避免重复保存
     if (_multiScreenStateSaved) {
-      debugPrint('PlayerScreen: Multi-screen state already saved, skipping');
+      ServiceLocator.log.d('PlayerScreen: Multi-screen state already saved, skipping');
       return;
     }
 
     try {
       if (_multiScreenProvider == null || _settingsProvider == null) {
-        debugPrint(
+        ServiceLocator.log.d(
             'PlayerScreen: Cannot save multi-screen state - providers not available');
         return;
       }
@@ -635,14 +635,14 @@ class _PlayerScreenState extends State<PlayerScreen>
 
       final activeIndex = _multiScreenProvider!.activeScreenIndex;
 
-      debugPrint(
+      ServiceLocator.log.d(
           'PlayerScreen: Saving multi-screen state - channelIds: $channelIds, activeIndex: $activeIndex');
 
       // 保存分屏状态
       _settingsProvider!.saveLastMultiScreen(channelIds, activeIndex);
       _multiScreenStateSaved = true;
     } catch (e) {
-      debugPrint('PlayerScreen: Error saving multi-screen state: $e');
+      ServiceLocator.log.d('PlayerScreen: Error saving multi-screen state: $e');
     }
   }
 
@@ -1091,24 +1091,24 @@ class _PlayerScreenState extends State<PlayerScreen>
 
     // Back (explicit handling for some remotes)
     if (key == LogicalKeyboardKey.backspace) {
-      debugPrint('========================================');
-      debugPrint('PlayerScreen: Back key pressed (backspace)');
+      ServiceLocator.log.d('========================================');
+      ServiceLocator.log.d('PlayerScreen: Back key pressed (backspace)');
       
       // 先清除所有错误提示和状态
-      debugPrint('PlayerScreen: Clearing error state');
+      ServiceLocator.log.d('PlayerScreen: Clearing error state');
       _errorHideTimer?.cancel();
       _errorShown = false;
       ScaffoldMessenger.of(context).clearSnackBars();
-      debugPrint('PlayerScreen: SnackBars cleared');
+      ServiceLocator.log.d('PlayerScreen: SnackBars cleared');
       
       // 不需要手动调用 stop()，dispose 会自动处理
-      debugPrint('PlayerScreen: Navigating back (stop will be called in dispose)');
+      ServiceLocator.log.d('PlayerScreen: Navigating back (stop will be called in dispose)');
       
       if (Navigator.canPop(context)) {
-        debugPrint('PlayerScreen: Popping navigation');
+        ServiceLocator.log.d('PlayerScreen: Popping navigation');
         Navigator.of(context).pop();
       }
-      debugPrint('========================================');
+      ServiceLocator.log.d('========================================');
       return KeyEventResult.handled;
     }
 
@@ -1127,7 +1127,7 @@ class _PlayerScreenState extends State<PlayerScreen>
           try {
             ScaffoldMessenger.of(context).clearSnackBars();
           } catch (e) {
-            debugPrint('PlayerScreen: Error clearing SnackBars in onPopInvoked: $e');
+            ServiceLocator.log.d('PlayerScreen: Error clearing SnackBars in onPopInvoked: $e');
           }
         }
       },
@@ -1852,11 +1852,11 @@ class _PlayerScreenState extends State<PlayerScreen>
               return TVFocusable(
                 onSelect: () async {
                   if (currentChannel != null) {
-                    debugPrint(
+                    ServiceLocator.log.d(
                         'TV播放器: 尝试切换收藏状态 - 频道: ${currentChannel.name}, ID: ${currentChannel.id}');
                     final success =
                         await favorites.toggleFavorite(currentChannel);
-                    debugPrint('TV播放器: 收藏切换${success ? "成功" : "失败"}');
+                    ServiceLocator.log.d('TV播放器: 收藏切换${success ? "成功" : "失败"}');
 
                     if (success) {
                       final newIsFav =
@@ -1871,7 +1871,7 @@ class _PlayerScreenState extends State<PlayerScreen>
                       );
                     }
                   } else {
-                    debugPrint('TV播放器: 当前频道为空，无法切换收藏');
+                    ServiceLocator.log.d('TV播放器: 当前频道为空，无法切换收藏');
                   }
                 },
                 focusScale: 1.0,
@@ -2523,7 +2523,7 @@ class _PlayerScreenState extends State<PlayerScreen>
       });
     } else {
       // 如果原生 API 失败，回退到 window_manager
-      debugPrint('Native fullscreen failed, falling back to window_manager');
+      ServiceLocator.log.d('Native fullscreen failed, falling back to window_manager');
       windowManager
           .isFullScreen()
           .then((value) => windowManager.setFullScreen(!value));

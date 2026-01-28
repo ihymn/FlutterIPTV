@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/services/service_locator.dart';
+import '../../../core/services/log_service.dart';
 
 class SettingsProvider extends ChangeNotifier {
   // Keys for SharedPreferences
@@ -36,6 +37,7 @@ class SettingsProvider extends ChangeNotifier {
   static const String _keyLightColorScheme = 'light_color_scheme';
   static const String _keyFontFamily = 'font_family';
   static const String _keySimpleMenu = 'simple_menu';
+  static const String _keyLogLevel = 'log_level'; // debug, release, off
 
   // Settings values
   String _themeMode = 'dark';
@@ -71,6 +73,7 @@ class SettingsProvider extends ChangeNotifier {
   String _lightColorScheme = 'sky'; // 明亮模式配色方案（默认天空）
   String _fontFamily = 'Arial'; // 字体设置（默认Arial，英文环境）
   bool _simpleMenu = true; // 是否使用简单菜单栏（不展开）- 默认启用
+  String _logLevel = 'off'; // 日志级别：debug, release, off - 默认关闭
 
   // Getters
   String get themeMode => _themeMode;
@@ -105,6 +108,7 @@ class SettingsProvider extends ChangeNotifier {
   String get lightColorScheme => _lightColorScheme;
   String get fontFamily => _fontFamily;
   bool get simpleMenu => _simpleMenu;
+  String get logLevel => _logLevel;
   
   /// 获取当前应该使用的配色方案
   String get currentColorScheme {
@@ -182,6 +186,9 @@ class SettingsProvider extends ChangeNotifier {
     // 加载简单菜单设置
     _simpleMenu = prefs.getBool(_keySimpleMenu) ?? true;
     
+    // 加载日志级别设置
+    _logLevel = prefs.getString(_keyLogLevel) ?? 'off';
+    
     // 不在构造函数中调用 notifyListeners()，避免 build 期间触发重建
   }
 
@@ -233,6 +240,7 @@ class SettingsProvider extends ChangeNotifier {
     await prefs.setString(_keyLightColorScheme, _lightColorScheme);
     await prefs.setString(_keyFontFamily, _fontFamily);
     await prefs.setBool(_keySimpleMenu, _simpleMenu);
+    await prefs.setString(_keyLogLevel, _logLevel);
   }
 
   // Setters with persistence
@@ -452,25 +460,25 @@ class SettingsProvider extends ChangeNotifier {
   
   /// 设置黑暗模式配色方案
   Future<void> setDarkColorScheme(String scheme) async {
-    debugPrint('SettingsProvider: 设置黑暗配色方案 - $scheme');
+    ServiceLocator.log.d('SettingsProvider: 设置黑暗配色方案 - $scheme');
     _darkColorScheme = scheme;
     await _saveSettings();
-    debugPrint('SettingsProvider: 配色方案已保存，通知监听者');
+    ServiceLocator.log.d('SettingsProvider: 配色方案已保存，通知监听者');
     notifyListeners();
   }
   
   /// 设置明亮模式配色方案
   Future<void> setLightColorScheme(String scheme) async {
-    debugPrint('SettingsProvider: 设置明亮配色方案 - $scheme');
+    ServiceLocator.log.d('SettingsProvider: 设置明亮配色方案 - $scheme');
     _lightColorScheme = scheme;
     await _saveSettings();
-    debugPrint('SettingsProvider: 配色方案已保存，通知监听者');
+    ServiceLocator.log.d('SettingsProvider: 配色方案已保存，通知监听者');
     notifyListeners();
   }
 
   /// 设置字体
   Future<void> setFontFamily(String fontFamily) async {
-    debugPrint('SettingsProvider: 设置字体 - $fontFamily');
+    ServiceLocator.log.d('SettingsProvider: 设置字体 - $fontFamily');
     _fontFamily = fontFamily;
     await _saveSettings();
     notifyListeners();
@@ -478,9 +486,27 @@ class SettingsProvider extends ChangeNotifier {
 
   /// 设置简单菜单栏
   Future<void> setSimpleMenu(bool value) async {
-    debugPrint('SettingsProvider: 设置简单菜单栏 - $value');
+    ServiceLocator.log.d('SettingsProvider: 设置简单菜单栏 - $value');
     _simpleMenu = value;
     await _saveSettings();
+    notifyListeners();
+  }
+
+  /// 设置日志级别
+  Future<void> setLogLevel(String level) async {
+    ServiceLocator.log.d('SettingsProvider: 设置日志级别 - $level');
+    _logLevel = level;
+    await _saveSettings();
+    
+    // 更新日志服务
+    final logLevel = switch (level) {
+      'debug' => LogLevel.debug,
+      'release' => LogLevel.release,
+      'off' => LogLevel.off,
+      _ => LogLevel.release,
+    };
+    await ServiceLocator.log.setLogLevel(logLevel);
+    
     notifyListeners();
   }
 

@@ -2407,7 +2407,31 @@ class NativePlayerFragment : Fragment() {
         Log.d(TAG, "onResume")
         // 确保屏幕常亮
         activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        player?.playWhenReady = true
+        
+        // 检查播放器状态，如果播放器存在但没有在播放，尝试恢复播放
+        player?.let { p ->
+            if (p.playbackState == Player.STATE_IDLE || p.playbackState == Player.STATE_ENDED) {
+                // 播放器处于空闲或结束状态，需要重新加载
+                Log.d(TAG, "Player in IDLE/ENDED state, reloading media...")
+                val sources = getCurrentSources()
+                if (sources.isNotEmpty() && currentSourceIndex < sources.size) {
+                    val urlToPlay = sources[currentSourceIndex]
+                    playUrl(urlToPlay)
+                }
+            } else {
+                // 播放器状态正常，直接恢复播放
+                p.playWhenReady = true
+            }
+        } ?: run {
+            // 播放器不存在，重新初始化并播放
+            Log.d(TAG, "Player is null, reinitializing...")
+            initializePlayer()
+            val sources = getCurrentSources()
+            if (sources.isNotEmpty() && currentSourceIndex < sources.size) {
+                val urlToPlay = sources[currentSourceIndex]
+                playUrl(urlToPlay)
+            }
+        }
     }
 
     override fun onPause() {

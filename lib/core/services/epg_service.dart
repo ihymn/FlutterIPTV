@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart';
 import 'package:flutter/foundation.dart';
+import './service_locator.dart';
 
 /// EPG 节目信息
 class EpgProgram {
@@ -169,14 +170,14 @@ class EpgService {
     _isLoading = true;
 
     try {
-      debugPrint('EPG: Loading from $url');
+      ServiceLocator.log.d('EPG: Loading from $url');
 
       final response = await http.get(Uri.parse(url)).timeout(
             const Duration(seconds: 30),
           );
 
       if (response.statusCode != 200) {
-        debugPrint('EPG: HTTP error ${response.statusCode}');
+        ServiceLocator.log.d('EPG: HTTP error ${response.statusCode}');
         return false;
       }
 
@@ -203,12 +204,12 @@ class EpgService {
         _nameIndex.addAll(result['nameIndex'] as Map<String, String>);
 
         _lastUpdate = DateTime.now();
-        debugPrint('EPG: Loaded ${_programs.length} channels, ${_programs.values.fold(0, (sum, list) => sum + list.length)} programs');
+        ServiceLocator.log.d('EPG: Loaded ${_programs.length} channels, ${_programs.values.fold(0, (sum, list) => sum + list.length)} programs');
         return true;
       }
       return false;
     } catch (e) {
-      debugPrint('EPG: Error loading: $e');
+      ServiceLocator.log.d('EPG: Error loading: $e');
       return false;
     } finally {
       _isLoading = false;

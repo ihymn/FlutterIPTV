@@ -5,26 +5,21 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/services/local_server_service.dart';
 import '../../../core/services/service_locator.dart';
 import '../../../core/widgets/tv_focusable.dart';
-import '../../../core/i18n/app_strings.dart';
 
-/// Dialog for scanning QR code to search channels on TV
-class QrSearchDialog extends StatefulWidget {
-  final Function(String query) onSearchReceived;
-  
-  const QrSearchDialog({
-    super.key,
-    required this.onSearchReceived,
-  });
+/// Dialog for exporting logs via QR code
+class QrLogExportDialog extends StatefulWidget {
+  const QrLogExportDialog({super.key});
 
   @override
-  State<QrSearchDialog> createState() => _QrSearchDialogState();
+  State<QrLogExportDialog> createState() => _QrLogExportDialogState();
 }
 
-class _QrSearchDialogState extends State<QrSearchDialog> {
+class _QrLogExportDialogState extends State<QrLogExportDialog> {
   final LocalServerService _serverService = LocalServerService();
   bool _isLoading = true;
   bool _isServerRunning = false;
   String? _error;
+  String? _logContent;
 
   @override
   void initState() {
@@ -39,40 +34,59 @@ class _QrSearchDialogState extends State<QrSearchDialog> {
   }
 
   Future<void> _startServer() async {
-    ServiceLocator.log.d('开始启动搜索服务器...');
-
     setState(() {
       _isLoading = true;
       _error = null;
     });
 
-    // Set up callback
-    _serverService.onSearchReceived = _handleSearchReceived;
+    // 先导出日志内容
+    try {
+      final logFiles = await ServiceLocator.log.getLogFiles();
+      if (logFiles.isEmpty) {
+        setState(() {
+          _isLoading = false;
+          _error = '没有可用的日志文件';
+        });
+        return;
+      }
 
+      // 合并所有日志文件
+      final buffer = StringBuffer();
+      buffer.writeln('========================================');
+      buffer.writeln('Lotus IPTV 日志导出');
+      buffer.writeln('导出时间: ${DateTime.now()}');
+      buffer.writeln('========================================\n');
+
+      for (final file in logFiles) {
+        buffer.writeln('\n========== ${file.path.split('/').last.split('\\').last} ==========\n');
+        final content = await file.readAsString();
+        buffer.writeln(content);
+      }
+
+      _logContent = buffer.toString();
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _error = '读取日志文件失败: $e';
+      });
+      return;
+    }
+
+    // 启动服务器
     final success = await _serverService.start();
-    ServiceLocator.log.d('搜索服务器启动结果: ${success ? "成功" : "失败"}');
-    if (success) {
-      ServiceLocator.log.d('搜索服务器URL: ${_serverService.serverUrl}');
+    
+    // 设置日志内容到服务器
+    if (success && _logContent != null) {
+      _serverService.setLogContent(_logContent!);
     }
 
     setState(() {
       _isLoading = false;
       _isServerRunning = success;
       if (!success) {
-        _error = _serverService.lastError ?? 
-                (AppStrings.of(context)?.serverStartFailed ?? 'Failed to start local server. Please check network connection.');
+        _error = _serverService.lastError ?? '启动服务器失败，请检查网络连接';
       }
     });
-  }
-
-  void _handleSearchReceived(String query) {
-    ServiceLocator.log.d('收到搜索请求: $query');
-    
-    if (mounted) {
-      // 关闭对话框并执行搜索
-      Navigator.of(context).pop();
-      widget.onSearchReceived(query);
-    }
   }
 
   @override
@@ -100,19 +114,19 @@ class _QrSearchDialogState extends State<QrSearchDialog> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppTheme.primaryColor.withAlpha(51),
+                      color: AppTheme.getPrimaryColor(context).withAlpha(51),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.qr_code_scanner_rounded,
-                      color: AppTheme.primaryColor,
+                      color: AppTheme.getPrimaryColor(context),
                       size: 22,
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      AppStrings.of(context)?.scanToSearch ?? 'Scan to Search',
+                      '扫码查看日志',
                       style: TextStyle(
                         color: AppTheme.getTextPrimary(context),
                         fontSize: isMobile ? 16 : 18,
@@ -126,7 +140,12 @@ class _QrSearchDialogState extends State<QrSearchDialog> {
               const SizedBox(height: 20),
 
               // Content
-              if (_isLoading) _buildLoadingState() else if (_error != null) _buildErrorState() else if (_isServerRunning) _buildQrCodeState(isMobile),
+              if (_isLoading)
+                _buildLoadingState()
+              else if (_error != null)
+                _buildErrorState()
+              else if (_isServerRunning)
+                _buildQrCodeState(isMobile),
 
               const SizedBox(height: 20),
 
@@ -146,7 +165,7 @@ class _QrSearchDialogState extends State<QrSearchDialog> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: Text(AppStrings.of(context)?.close ?? 'Close'),
+                    child: const Text('关闭'),
                   ),
                 ),
               ),
@@ -170,7 +189,7 @@ class _QrSearchDialogState extends State<QrSearchDialog> {
         ),
         const SizedBox(height: 16),
         Text(
-          AppStrings.of(context)?.startingServer ?? 'Starting server...',
+          '正在准备日志...',
           style: TextStyle(color: AppTheme.getTextSecondary(context)),
         ),
       ],
@@ -200,7 +219,7 @@ class _QrSearchDialogState extends State<QrSearchDialog> {
               backgroundColor: AppTheme.primaryColor,
               foregroundColor: Colors.white,
             ),
-            child: Text(AppStrings.of(context)?.retry ?? 'Retry'),
+            child: const Text('重试'),
           ),
         ),
       ],
@@ -208,6 +227,9 @@ class _QrSearchDialogState extends State<QrSearchDialog> {
   }
 
   Widget _buildQrCodeState(bool isMobile) {
+    // 生成日志查看URL（包含日志内容）
+    final logUrl = '${_serverService.serverUrl}/logs';
+    
     if (isMobile) {
       // 手机端：纵向布局
       return Column(
@@ -220,7 +242,7 @@ class _QrSearchDialogState extends State<QrSearchDialog> {
               borderRadius: BorderRadius.circular(12),
             ),
             child: QrImageView(
-              data: _serverService.searchUrl,
+              data: logUrl,
               version: QrVersions.auto,
               size: 200,
               backgroundColor: Colors.white,
@@ -239,11 +261,11 @@ class _QrSearchDialogState extends State<QrSearchDialog> {
             ),
             child: Column(
               children: [
-                _buildStep('1', AppStrings.of(context)?.qrSearchStep1 ?? 'Scan the QR code with your phone'),
+                _buildStep('1', '使用手机扫描二维码'),
                 const SizedBox(height: 8),
-                _buildStep('2', AppStrings.of(context)?.qrSearchStep2 ?? 'Enter search query on the webpage'),
+                _buildStep('2', '在浏览器中查看日志内容'),
                 const SizedBox(height: 8),
-                _buildStep('3', AppStrings.of(context)?.qrSearchStep3 ?? 'Results will appear on TV automatically'),
+                _buildStep('3', '可以复制或分享日志给开发者'),
               ],
             ),
           ),
@@ -267,7 +289,7 @@ class _QrSearchDialogState extends State<QrSearchDialog> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    _serverService.searchUrl,
+                    logUrl,
                     style: TextStyle(
                       color: AppTheme.getTextMuted(context),
                       fontSize: 11,
@@ -275,6 +297,35 @@ class _QrSearchDialogState extends State<QrSearchDialog> {
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Log info
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.green.withAlpha(51),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.check_circle_outline_rounded,
+                  color: Colors.green,
+                  size: 16,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '日志已准备就绪，大小: ${(_logContent?.length ?? 0) ~/ 1024} KB',
+                    style: const TextStyle(
+                      color: Colors.green,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
               ],
@@ -296,7 +347,7 @@ class _QrSearchDialogState extends State<QrSearchDialog> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: QrImageView(
-            data: _serverService.searchUrl,
+            data: logUrl,
             version: QrVersions.auto,
             size: 160,
             backgroundColor: Colors.white,
@@ -320,11 +371,11 @@ class _QrSearchDialogState extends State<QrSearchDialog> {
                 ),
                 child: Column(
                   children: [
-                    _buildStep('1', AppStrings.of(context)?.qrSearchStep1 ?? 'Scan the QR code with your phone'),
+                    _buildStep('1', '使用手机扫描二维码'),
                     const SizedBox(height: 8),
-                    _buildStep('2', AppStrings.of(context)?.qrSearchStep2 ?? 'Enter search query on the webpage'),
+                    _buildStep('2', '在浏览器中查看日志内容'),
                     const SizedBox(height: 8),
-                    _buildStep('3', AppStrings.of(context)?.qrSearchStep3 ?? 'Results will appear on TV automatically'),
+                    _buildStep('3', '可以复制或分享日志给开发者'),
                   ],
                 ),
               ),
@@ -348,11 +399,40 @@ class _QrSearchDialogState extends State<QrSearchDialog> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        _serverService.searchUrl,
+                        logUrl,
                         style: TextStyle(
                           color: AppTheme.getTextMuted(context),
                           fontSize: 13,
                           fontFamily: 'monospace',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Log info
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.green.withAlpha(51),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.check_circle_outline_rounded,
+                      color: Colors.green,
+                      size: 16,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        '日志已准备就绪，大小: ${(_logContent?.length ?? 0) ~/ 1024} KB',
+                        style: const TextStyle(
+                          color: Colors.green,
+                          fontSize: 13,
                         ),
                       ),
                     ),
@@ -373,14 +453,14 @@ class _QrSearchDialogState extends State<QrSearchDialog> {
           width: 22,
           height: 22,
           decoration: BoxDecoration(
-            color: AppTheme.primaryColor.withAlpha(51),
+            color: AppTheme.getPrimaryColor(context).withAlpha(51),
             shape: BoxShape.circle,
           ),
           child: Center(
             child: Text(
               number,
-              style: const TextStyle(
-                color: AppTheme.primaryColor,
+              style: TextStyle(
+                color: AppTheme.getPrimaryColor(context),
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
               ),

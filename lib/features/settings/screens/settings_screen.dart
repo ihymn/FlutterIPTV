@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +13,7 @@ import '../../../core/i18n/app_strings.dart';
 import '../../../core/services/service_locator.dart';
 import '../providers/settings_provider.dart';
 import '../providers/dlna_provider.dart';
+import '../widgets/qr_log_export_dialog.dart';
 import '../../epg/providers/epg_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -409,6 +412,46 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   subtitle: '${AppStrings.of(context)?.changePinSubtitle ?? 'Update your parental control PIN'} ${AppStrings.of(context)?.notImplemented ?? '(Not implemented)'}',
                   icon: Icons.pin_rounded,
                   onTap: () => _showChangePinDialog(context, settings),
+                ),
+              ],
+            ]),
+
+            const SizedBox(height: 24),
+
+            // Developer & Debug Settings
+            _buildSectionHeader(AppStrings.of(context)?.developerAndDebug ?? 'Developer & Debug'),
+            _buildSettingsCard([
+              _buildSelectTile(
+                context,
+                title: AppStrings.of(context)?.logLevel ?? 'Log Level',
+                subtitle: _getLogLevelLabel(context, settings.logLevel),
+                icon: Icons.bug_report_rounded,
+                onTap: () => _showLogLevelDialog(context, settings),
+              ),
+              _buildDivider(),
+              _buildActionTile(
+                context,
+                title: AppStrings.of(context)?.exportLogs ?? 'Export Logs',
+                subtitle: AppStrings.of(context)?.exportLogsSubtitle ?? 'Export log files for diagnostics',
+                icon: Icons.file_download_rounded,
+                onTap: () => _exportLogs(context),
+              ),
+              _buildDivider(),
+              _buildActionTile(
+                context,
+                title: AppStrings.of(context)?.clearLogs ?? 'Clear Logs',
+                subtitle: AppStrings.of(context)?.clearLogsSubtitle ?? 'Delete all log files',
+                icon: Icons.delete_sweep_rounded,
+                onTap: () => _clearLogs(context),
+              ),
+              if (settings.logLevel != 'off') ...[
+                _buildDivider(),
+                _buildActionTile(
+                  context,
+                  title: AppStrings.of(context)?.logFileLocation ?? 'Log File Location',
+                  subtitle: ServiceLocator.log.logFilePath ?? 'Unknown',
+                  icon: Icons.folder_rounded,
+                  onTap: () => _openLogFolder(context),
                 ),
               ],
             ]),
@@ -1535,6 +1578,160 @@ class _SettingsScreenState extends State<SettingsScreen> {
         );
       },
     );
+  }
+
+  void _showLogLevelDialog(BuildContext context, SettingsProvider settings) {
+    final options = ['debug', 'release', 'off'];
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          backgroundColor: AppTheme.surfaceColor,
+          title: Text(
+            AppStrings.of(context)?.logLevel ?? 'Log Level',
+            style: const TextStyle(color: AppTheme.textPrimary),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: options.map((level) {
+              return RadioListTile<String>(
+                title: Text(
+                  _getLogLevelLabel(context, level),
+                  style: const TextStyle(color: AppTheme.textPrimary),
+                ),
+                subtitle: Text(
+                  _getLogLevelDescription(context, level),
+                  style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+                ),
+                value: level,
+                groupValue: settings.logLevel,
+                onChanged: (value) async {
+                  if (value != null) {
+                    await settings.setLogLevel(value);
+                    if (dialogContext.mounted) {
+                      Navigator.pop(dialogContext);
+                      _showSuccess(context, '${AppStrings.of(context)?.logLevel ?? "Log level"}: ${_getLogLevelLabel(context, value)}');
+                    }
+                  }
+                },
+                activeColor: AppTheme.getPrimaryColor(dialogContext),
+              );
+            }).toList(),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _exportLogs(BuildContext context) async {
+    // 显示二维码对话框
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const QrLogExportDialog(),
+    );
+  }
+
+  Future<void> _clearLogs(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppTheme.surfaceColor,
+        title: Text(
+          AppStrings.of(context)?.clearLogsConfirm ?? 'Clear Logs',
+          style: const TextStyle(color: AppTheme.textPrimary),
+        ),
+        content: Text(
+          AppStrings.of(context)?.clearLogsConfirmMessage ?? 'Are you sure you want to delete all log files? This action cannot be undone.',
+          style: const TextStyle(color: AppTheme.textSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(AppStrings.of(context)?.cancel ?? 'Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(
+              AppStrings.of(context)?.delete ?? 'Delete',
+              style: const TextStyle(color: AppTheme.errorColor),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      try {
+        await ServiceLocator.log.clearLogs();
+        if (context.mounted) {
+          _showSuccess(context, AppStrings.of(context)?.logsCleared ?? 'Logs cleared');
+        }
+      } catch (e) {
+        if (context.mounted) {
+          _showError(context, '${AppStrings.of(context)?.error ?? "Error"}: $e');
+        }
+      }
+    }
+  }
+
+  Future<void> _openLogFolder(BuildContext context) async {
+    try {
+      final logPath = ServiceLocator.log.logFilePath;
+      if (logPath == null) {
+        _showError(context, 'Log file path not available');
+        return;
+      }
+
+      // 获取日志文件所在的目录
+      final logDir = logPath.substring(0, logPath.lastIndexOf(Platform.pathSeparator));
+      
+      if (Platform.isWindows) {
+        // Windows: 使用 explorer 打开文件夹
+        await Process.run('explorer', [logDir]);
+      } else if (Platform.isMacOS) {
+        // macOS: 使用 open 命令
+        await Process.run('open', [logDir]);
+      } else if (Platform.isLinux) {
+        // Linux: 使用 xdg-open 命令
+        await Process.run('xdg-open', [logDir]);
+      } else {
+        _showError(context, 'Opening folders is not supported on this platform');
+      }
+    } catch (e) {
+      if (context.mounted) {
+        _showError(context, 'Failed to open folder: $e');
+      }
+    }
+  }
+
+  String _getLogLevelLabel(BuildContext context, String level) {
+    final strings = AppStrings.of(context);
+    switch (level) {
+      case 'debug':
+        return strings?.logLevelDebug ?? 'Debug';
+      case 'release':
+        return strings?.logLevelRelease ?? 'Release';
+      case 'off':
+        return strings?.logLevelOff ?? 'Off';
+      default:
+        return level;
+    }
+  }
+
+  String _getLogLevelDescription(BuildContext context, String level) {
+    final strings = AppStrings.of(context);
+    switch (level) {
+      case 'debug':
+        return strings?.logLevelDebugDesc ?? 'Log everything for development and debugging';
+      case 'release':
+        return strings?.logLevelReleaseDesc ?? 'Only log warnings and errors (recommended)';
+      case 'off':
+        return strings?.logLevelOffDesc ?? 'Do not log anything';
+      default:
+        return '';
+    }
   }
 
   // 获取当前应用版本

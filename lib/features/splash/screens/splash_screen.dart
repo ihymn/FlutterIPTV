@@ -46,21 +46,32 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   }
 
   Future<void> _initializeApp() async {
+    ServiceLocator.log.i('开始初始化应用服务', tag: 'SplashScreen');
+    final startTime = DateTime.now();
+    
     try {
       // Initialize core services
+      ServiceLocator.log.d('初始化核心服务...', tag: 'SplashScreen');
       await ServiceLocator.init();
+      ServiceLocator.log.d('初始化 TV 检测...', tag: 'SplashScreen');
       await TVDetectionChannel.initialize();
 
       // Load data
       if (mounted) {
+        ServiceLocator.log.d('加载播放列表数据...', tag: 'SplashScreen');
         final playlistProvider = context.read<PlaylistProvider>();
         await playlistProvider.loadPlaylists();
+        
+        ServiceLocator.log.d('播放列表加载完成: ${playlistProvider.playlists.length} 个', tag: 'SplashScreen');
         
         // 播放列表加载完成后，通知自动刷新服务进行检查
         AutoRefreshService().checkOnStartup();
       }
+      
+      final initTime = DateTime.now().difference(startTime).inMilliseconds;
+      ServiceLocator.log.i('应用初始化完成，耗时: ${initTime}ms', tag: 'SplashScreen');
     } catch (e) {
-      debugPrint('Initialization failed: $e');
+      ServiceLocator.log.e('应用初始化失败', tag: 'SplashScreen', error: e);
     }
 
     // Ensure minimum splash display time

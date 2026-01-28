@@ -135,13 +135,13 @@ class PlayerProvider extends ChangeNotifier {
   bool _errorDisplayed = false; // 标记错误是否已被显示
 
   void _setError(String error) {
-    debugPrint('PlayerProvider: _setError 被调用 - 当前重试次数: $_retryCount/$_maxRetries, 错误: $error');
+    ServiceLocator.log.d('PlayerProvider: _setError 被调用 - 当前重试次数: $_retryCount/$_maxRetries, 错误: $error');
     
     // 忽略 seek 相关的错误（直播流不支持 seek）
     if (error.contains('seekable') || 
         error.contains('Cannot seek') || 
         error.contains('seek in this stream')) {
-      debugPrint('PlayerProvider: 忽略 seek 错误（直播流不支持拖动）');
+      ServiceLocator.log.d('PlayerProvider: 忽略 seek 错误（直播流不支持拖动）');
       return;
     }
     
@@ -149,14 +149,14 @@ class PlayerProvider extends ChangeNotifier {
     if (error.contains('Error decoding audio') || 
         error.contains('audio decoder') ||
         error.contains('Audio decoding')) {
-      debugPrint('PlayerProvider: 忽略音频解码警告（可能只是部分帧解码失败）');
+      ServiceLocator.log.d('PlayerProvider: 忽略音频解码警告（可能只是部分帧解码失败）');
       return;
     }
     
     // 尝试自动重试（重试阶段不受防抖限制）
     if (_retryCount < _maxRetries && _currentChannel != null) {
       _retryCount++;
-      debugPrint('PlayerProvider: 播放错误，尝试重试 ($_retryCount/$_maxRetries): $error');
+      ServiceLocator.log.d('PlayerProvider: 播放错误，尝试重试 ($_retryCount/$_maxRetries): $error');
       _retryTimer?.cancel();
       _retryTimer = Timer(const Duration(milliseconds: 500), () {
         if (_currentChannel != null) {
@@ -171,7 +171,7 @@ class PlayerProvider extends ChangeNotifier {
       final currentSourceIndex = _currentChannel!.currentSourceIndex;
       final totalSources = _currentChannel!.sourceCount;
       
-      debugPrint('PlayerProvider: 当前源索引: $currentSourceIndex, 总源数: $totalSources');
+      ServiceLocator.log.d('PlayerProvider: 当前源索引: $currentSourceIndex, 总源数: $totalSources');
       
       // 计算下一个源索引（不使用模运算，避免循环）
       int nextIndex = currentSourceIndex + 1;
@@ -179,7 +179,7 @@ class PlayerProvider extends ChangeNotifier {
       // 检查下一个源是否存在
       if (nextIndex < totalSources) {
         // 下一个源存在，先检测再尝试
-        debugPrint('PlayerProvider: 当前源 (${currentSourceIndex + 1}/$totalSources) 重试失败，检测源 ${nextIndex + 1}');
+        ServiceLocator.log.d('PlayerProvider: 当前源 (${currentSourceIndex + 1}/$totalSources) 重试失败，检测源 ${nextIndex + 1}');
         
         // 标记开始自动检测
         _isAutoDetecting = true;
@@ -187,7 +187,7 @@ class PlayerProvider extends ChangeNotifier {
         _checkAndSwitchToNextSource(nextIndex, error);
         return;
       } else {
-        debugPrint('PlayerProvider: 已到达最后一个源 (${currentSourceIndex + 1}/$totalSources)，停止尝试');
+        ServiceLocator.log.d('PlayerProvider: 已到达最后一个源 (${currentSourceIndex + 1}/$totalSources)，停止尝试');
       }
     }
     
@@ -204,7 +204,7 @@ class PlayerProvider extends ChangeNotifier {
     _lastErrorMessage = error;
     _lastErrorTime = now;
     
-    debugPrint('PlayerProvider: 播放失败，显示错误');
+    ServiceLocator.log.d('PlayerProvider: 播放失败，显示错误');
     _state = PlayerState.error;
     _error = error;
     notifyListeners();
@@ -220,7 +220,7 @@ class PlayerProvider extends ChangeNotifier {
     _state = PlayerState.loading;
     notifyListeners();
     
-    debugPrint('PlayerProvider: 检测源 ${nextIndex + 1}/${_currentChannel!.sourceCount}');
+    ServiceLocator.log.d('PlayerProvider: 检测源 ${nextIndex + 1}/${_currentChannel!.sourceCount}');
     
     final testService = ChannelTestService();
     final tempChannel = Channel(
@@ -238,7 +238,7 @@ class PlayerProvider extends ChangeNotifier {
     if (!_isAutoDetecting) return; // 检测完成后再次检查是否被取消
     
     if (!result.isAvailable) {
-      debugPrint('PlayerProvider: 源 ${nextIndex + 1} 不可用: ${result.error}，继续尝试下一个源');
+      ServiceLocator.log.d('PlayerProvider: 源 ${nextIndex + 1} 不可用: ${result.error}，继续尝试下一个源');
       
       // 检查是否还有更多源
       final totalSources = _currentChannel!.sourceCount;
@@ -249,7 +249,7 @@ class PlayerProvider extends ChangeNotifier {
         _checkAndSwitchToNextSource(nextNextIndex, originalError);
       } else {
         // 已到达最后一个源，显示错误
-        debugPrint('PlayerProvider: 已到达最后一个源，所有源都不可用');
+        ServiceLocator.log.d('PlayerProvider: 已到达最后一个源，所有源都不可用');
         _isAutoDetecting = false;
         _state = PlayerState.error;
         _error = '所有 $totalSources 个源均不可用';
@@ -258,7 +258,7 @@ class PlayerProvider extends ChangeNotifier {
       return;
     }
     
-    debugPrint('PlayerProvider: 源 ${nextIndex + 1} 可用 (${result.responseTime}ms)，切换');
+    ServiceLocator.log.d('PlayerProvider: 源 ${nextIndex + 1} 可用 (${result.responseTime}ms)，切换');
     _isAutoDetecting = false;
     _retryCount = 0; // 重置重试计数
     _isAutoSwitching = true; // 标记为自动切换
@@ -271,14 +271,14 @@ class PlayerProvider extends ChangeNotifier {
   Future<void> _retryPlayback() async {
     if (_currentChannel == null) return;
     
-    debugPrint('PlayerProvider: 正在重试播放 ${_currentChannel!.name}, 当前源索引: ${_currentChannel!.currentSourceIndex}, 重试计数: $_retryCount');
+    ServiceLocator.log.d('PlayerProvider: 正在重试播放 ${_currentChannel!.name}, 当前源索引: ${_currentChannel!.currentSourceIndex}, 重试计数: $_retryCount');
     _state = PlayerState.loading;
     _error = null;
     notifyListeners();
     
     // 使用 currentUrl 而不是 url，以使用当前选择的源
     final url = _currentChannel!.currentUrl;
-    debugPrint('PlayerProvider: 重试URL: $url');
+    ServiceLocator.log.d('PlayerProvider: 重试URL: $url');
     
     try {
       if (_useExoPlayer) {
@@ -289,9 +289,9 @@ class PlayerProvider extends ChangeNotifier {
       }
       // 注意：不在这里重置 _retryCount，因为播放器可能还会异步报错
       // 重试计数会在播放真正稳定后（playing 状态持续一段时间）或切换频道时重置
-      debugPrint('PlayerProvider: 重试命令已发送');
+      ServiceLocator.log.d('PlayerProvider: 重试命令已发送');
     } catch (e) {
-      debugPrint('PlayerProvider: 重试失败: $e');
+      ServiceLocator.log.d('PlayerProvider: 重试失败: $e');
       // 重试失败，继续尝试或显示错误
       _setError('Failed to play channel: $e');
     }
@@ -391,7 +391,7 @@ class PlayerProvider extends ChangeNotifier {
         // 使用延迟确保播放真正开始，而不是短暂的状态变化
         Future.delayed(const Duration(seconds: 3), () {
           if (_state == PlayerState.playing && _currentChannel != null) {
-            debugPrint('PlayerProvider: 播放稳定，重置重试计数');
+            ServiceLocator.log.d('PlayerProvider: 播放稳定，重置重试计数');
             _retryCount = 0;
           }
         });
@@ -568,6 +568,12 @@ class PlayerProvider extends ChangeNotifier {
   // ============ Public API ============
 
   Future<void> playChannel(Channel channel) async {
+    ServiceLocator.log.i('========== 开始播放频道 ==========', tag: 'PlayerProvider');
+    ServiceLocator.log.i('频道: ${channel.name} (ID: ${channel.id})', tag: 'PlayerProvider');
+    ServiceLocator.log.d('URL: ${channel.url}', tag: 'PlayerProvider');
+    ServiceLocator.log.d('源数量: ${channel.sourceCount}', tag: 'PlayerProvider');
+    final playStartTime = DateTime.now();
+    
     _currentChannel = channel;
     _state = PlayerState.loading;
     _error = null;
@@ -581,14 +587,18 @@ class PlayerProvider extends ChangeNotifier {
 
     // 如果有多个源，先检测找到第一个可用的源
     if (channel.hasMultipleSources) {
-      debugPrint('PlayerProvider: 频道有 ${channel.sourceCount} 个源，开始检测可用源...');
+      ServiceLocator.log.i('频道有 ${channel.sourceCount} 个源，开始检测可用源', tag: 'PlayerProvider');
+      final detectStartTime = DateTime.now();
+      
       final availableSourceIndex = await _findFirstAvailableSource(channel);
+      
+      final detectTime = DateTime.now().difference(detectStartTime).inMilliseconds;
       
       if (availableSourceIndex != null) {
         channel.currentSourceIndex = availableSourceIndex;
-        debugPrint('PlayerProvider: 找到可用源 ${availableSourceIndex + 1}/${channel.sourceCount}');
+        ServiceLocator.log.i('找到可用源 ${availableSourceIndex + 1}/${channel.sourceCount}，检测耗时: ${detectTime}ms', tag: 'PlayerProvider');
       } else {
-        debugPrint('PlayerProvider: 所有源都不可用');
+        ServiceLocator.log.e('所有 ${channel.sourceCount} 个源都不可用，检测耗时: ${detectTime}ms', tag: 'PlayerProvider');
         _setError('所有 ${channel.sourceCount} 个源均不可用');
         return;
       }
@@ -596,16 +606,26 @@ class PlayerProvider extends ChangeNotifier {
 
     // 使用 currentUrl 而不是 url，以保留当前选择的源索引
     final playUrl = channel.currentUrl;
-    debugPrint('PlayerProvider: playChannel - ${channel.name}, sourceIndex=${channel.currentSourceIndex}, url=$playUrl');
+    ServiceLocator.log.d('准备播放URL: $playUrl', tag: 'PlayerProvider');
 
     try {
+      final playerInitStartTime = DateTime.now();
+      
       if (_useExoPlayer) {
+        ServiceLocator.log.d('使用 ExoPlayer', tag: 'PlayerProvider');
         await _initExoPlayer(playUrl);
       } else {
+        ServiceLocator.log.d('使用 MediaKit', tag: 'PlayerProvider');
         await _mediaKitPlayer?.open(Media(playUrl));
         _state = PlayerState.playing;
       }
+      
+      final playerInitTime = DateTime.now().difference(playerInitStartTime).inMilliseconds;
+      final totalTime = DateTime.now().difference(playStartTime).inMilliseconds;
+      ServiceLocator.log.i('播放器初始化完成，耗时: ${playerInitTime}ms', tag: 'PlayerProvider');
+      ServiceLocator.log.i('========== 频道播放总耗时: ${totalTime}ms ==========', tag: 'PlayerProvider');
     } catch (e) {
+      ServiceLocator.log.e('播放频道失败', tag: 'PlayerProvider', error: e);
       _setError('Failed to play channel: $e');
       return;
     }
@@ -614,6 +634,7 @@ class PlayerProvider extends ChangeNotifier {
 
   /// 查找第一个可用的源
   Future<int?> _findFirstAvailableSource(Channel channel) async {
+    ServiceLocator.log.d('开始检测 ${channel.sourceCount} 个源', tag: 'PlayerProvider');
     final testService = ChannelTestService();
     
     for (int i = 0; i < channel.sourceCount; i++) {
@@ -632,18 +653,21 @@ class PlayerProvider extends ChangeNotifier {
         playlistId: channel.playlistId,
       );
       
-      debugPrint('PlayerProvider: 检测源 ${i + 1}/${channel.sourceCount}: ${channel.sources[i]}');
+      ServiceLocator.log.d('检测源 ${i + 1}/${channel.sourceCount}', tag: 'PlayerProvider');
+      final testStartTime = DateTime.now();
       
       final result = await testService.testChannel(tempChannel);
+      final testTime = DateTime.now().difference(testStartTime).inMilliseconds;
       
       if (result.isAvailable) {
-        debugPrint('PlayerProvider: 源 ${i + 1} 可用 (${result.responseTime}ms)');
+        ServiceLocator.log.i('✓ 源 ${i + 1} 可用，响应时间: ${result.responseTime}ms，检测耗时: ${testTime}ms', tag: 'PlayerProvider');
         return i;
       } else {
-        debugPrint('PlayerProvider: 源 ${i + 1} 不可用: ${result.error}');
+        ServiceLocator.log.w('✗ 源 ${i + 1} 不可用: ${result.error}，检测耗时: ${testTime}ms', tag: 'PlayerProvider');
       }
     }
     
+    ServiceLocator.log.e('所有 ${channel.sourceCount} 个源都不可用', tag: 'PlayerProvider');
     return null; // 所有源都不可用
   }
 
@@ -832,12 +856,12 @@ class PlayerProvider extends ChangeNotifier {
     final newIndex = (_currentChannel!.currentSourceIndex + 1) % _currentChannel!.sourceCount;
     _currentChannel!.currentSourceIndex = newIndex;
     
-    debugPrint('PlayerProvider: 手动切换到源 ${newIndex + 1}/${_currentChannel!.sourceCount}');
+    ServiceLocator.log.d('PlayerProvider: 手动切换到源 ${newIndex + 1}/${_currentChannel!.sourceCount}');
     
     // 只有在非自动切换时才重置（手动切换时重置）
     if (!_isAutoSwitching) {
       _retryCount = 0;
-      debugPrint('PlayerProvider: 手动切换源，重置重试状态');
+      ServiceLocator.log.d('PlayerProvider: 手动切换源，重置重试状态');
     }
     
     // Play the new source
@@ -855,12 +879,12 @@ class PlayerProvider extends ChangeNotifier {
     final newIndex = (_currentChannel!.currentSourceIndex - 1 + _currentChannel!.sourceCount) % _currentChannel!.sourceCount;
     _currentChannel!.currentSourceIndex = newIndex;
     
-    debugPrint('PlayerProvider: 手动切换到源 ${newIndex + 1}/${_currentChannel!.sourceCount}');
+    ServiceLocator.log.d('PlayerProvider: 手动切换到源 ${newIndex + 1}/${_currentChannel!.sourceCount}');
     
     // 只有在非自动切换时才重置（手动切换时重置）
     if (!_isAutoSwitching) {
       _retryCount = 0;
-      debugPrint('PlayerProvider: 手动切换源，重置重试状态');
+      ServiceLocator.log.d('PlayerProvider: 手动切换源，重置重试状态');
     }
     
     // Play the new source
@@ -870,6 +894,10 @@ class PlayerProvider extends ChangeNotifier {
   /// Play the current source of the current channel
   Future<void> _playCurrentSource() async {
     if (_currentChannel == null) return;
+    
+    // 记录日志
+    ServiceLocator.log.d('开始播放频道源', tag: 'PlayerProvider');
+    ServiceLocator.log.d('频道: ${_currentChannel!.name}, 源索引: ${_currentChannel!.currentSourceIndex}/${_currentChannel!.sourceCount}', tag: 'PlayerProvider');
     
     // 检测当前源是否可用
     final testService = ChannelTestService();
@@ -883,16 +911,17 @@ class PlayerProvider extends ChangeNotifier {
       playlistId: _currentChannel!.playlistId,
     );
     
-    debugPrint('PlayerProvider: 检测源 ${_currentChannel!.currentSourceIndex + 1}/${_currentChannel!.sourceCount}');
+    ServiceLocator.log.i('检测源可用性: ${_currentChannel!.currentUrl}', tag: 'PlayerProvider');
+    
     final result = await testService.testChannel(tempChannel);
     
     if (!result.isAvailable) {
-      debugPrint('PlayerProvider: 源不可用: ${result.error}');
+      ServiceLocator.log.w('源不可用: ${result.error}', tag: 'PlayerProvider');
       _setError('源不可用: ${result.error}');
       return;
     }
     
-    debugPrint('PlayerProvider: 源可用 (${result.responseTime}ms)');
+    ServiceLocator.log.i('源可用，响应时间: ${result.responseTime}ms', tag: 'PlayerProvider');
     
     final url = _currentChannel!.currentUrl;
     _state = PlayerState.loading;
@@ -908,7 +937,9 @@ class PlayerProvider extends ChangeNotifier {
         await _mediaKitPlayer?.open(Media(url));
         _state = PlayerState.playing;
       }
+      ServiceLocator.log.i('播放成功', tag: 'PlayerProvider');
     } catch (e) {
+      ServiceLocator.log.e('播放失败', tag: 'PlayerProvider', error: e);
       _setError('Failed to play source: $e');
       return;
     }

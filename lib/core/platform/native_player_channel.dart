@@ -1,10 +1,10 @@
 import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart';
 import 'platform_detector.dart';
 import '../services/epg_service.dart';
 import '../../features/favorites/providers/favorites_provider.dart';
 import '../../features/channels/providers/channel_provider.dart';
 import '../../features/settings/providers/settings_provider.dart';
+import '../services/service_locator.dart';
 
 /// Service to launch native Android player via MethodChannel
 class NativePlayerChannel {
@@ -33,13 +33,13 @@ class NativePlayerChannel {
     // Listen for player closed event from native
     _channel.setMethodCallHandler((call) async {
       if (call.method == 'onPlayerClosed') {
-        debugPrint('NativePlayerChannel: Player closed from native');
+        ServiceLocator.log.d('NativePlayerChannel: Player closed from native');
         // 保存单频道播放状态
         _saveSingleChannelState(call.arguments);
         _onPlayerClosedCallback?.call();
         _onPlayerClosedCallback = null;
       } else if (call.method == 'onMultiScreenClosed') {
-        debugPrint('NativePlayerChannel: Multi-screen closed from native');
+        ServiceLocator.log.d('NativePlayerChannel: Multi-screen closed from native');
         // 保存分屏状态
         _saveMultiScreenState(call.arguments);
         _onMultiScreenClosedCallback?.call();
@@ -79,35 +79,35 @@ class NativePlayerChannel {
     if (channelIndex == null ||
         _favoritesProvider == null ||
         _channelProvider == null) {
-      debugPrint(
+      ServiceLocator.log.d(
           'NativePlayerChannel: toggleFavorite - invalid params: index=$channelIndex, favProv=${_favoritesProvider != null}, chanProv=${_channelProvider != null}');
       return null;
     }
 
     final channels = _channelProvider!.channels;
     if (channelIndex < 0 || channelIndex >= channels.length) {
-      debugPrint(
+      ServiceLocator.log.d(
           'NativePlayerChannel: toggleFavorite - invalid index: $channelIndex, channels=${channels.length}');
       return null;
     }
 
     final channel = channels[channelIndex];
-    debugPrint(
+    ServiceLocator.log.d(
         'NativePlayerChannel: toggleFavorite - channel: ${channel.name}, id: ${channel.id}');
 
     if (channel.id == null) {
-      debugPrint('NativePlayerChannel: toggleFavorite - channel has no id');
+      ServiceLocator.log.d('NativePlayerChannel: toggleFavorite - channel has no id');
       return null;
     }
 
     // Check current favorite status before toggle
     final wasFavorite = _favoritesProvider!.isFavorite(channel.id!);
-    debugPrint(
+    ServiceLocator.log.d(
         'NativePlayerChannel: toggleFavorite - wasFavorite: $wasFavorite');
 
     // Toggle favorite
     final success = await _favoritesProvider!.toggleFavorite(channel);
-    debugPrint('NativePlayerChannel: toggleFavorite - success: $success');
+    ServiceLocator.log.d('NativePlayerChannel: toggleFavorite - success: $success');
 
     if (!success) {
       return null;
@@ -115,7 +115,7 @@ class NativePlayerChannel {
 
     // Return the new favorite status (opposite of what it was)
     final isFavoriteNow = !wasFavorite;
-    debugPrint(
+    ServiceLocator.log.d(
         'NativePlayerChannel: toggleFavorite - isFavoriteNow: $isFavoriteNow');
     return isFavoriteNow;
   }
@@ -124,26 +124,26 @@ class NativePlayerChannel {
     if (channelIndex == null ||
         _favoritesProvider == null ||
         _channelProvider == null) {
-      debugPrint(
+      ServiceLocator.log.d(
           'NativePlayerChannel: isFavorite - invalid params: index=$channelIndex, favProv=${_favoritesProvider != null}, chanProv=${_channelProvider != null}');
       return false;
     }
 
     final channels = _channelProvider!.channels;
     if (channelIndex < 0 || channelIndex >= channels.length) {
-      debugPrint(
+      ServiceLocator.log.d(
           'NativePlayerChannel: isFavorite - invalid index: $channelIndex, channels=${channels.length}');
       return false;
     }
 
     final channel = channels[channelIndex];
     if (channel.id == null) {
-      debugPrint('NativePlayerChannel: isFavorite - channel has no id');
+      ServiceLocator.log.d('NativePlayerChannel: isFavorite - channel has no id');
       return false;
     }
 
     final isFav = _favoritesProvider!.isFavorite(channel.id!);
-    debugPrint(
+    ServiceLocator.log.d(
         'NativePlayerChannel: isFavorite - channel: ${channel.name}, isFavorite: $isFav');
     return isFav;
   }
@@ -151,13 +151,13 @@ class NativePlayerChannel {
   /// 保存分屏状态
   static void _saveMultiScreenState(dynamic arguments) {
     if (_settingsProvider == null || _channelProvider == null) {
-      debugPrint(
+      ServiceLocator.log.d(
           'NativePlayerChannel: _saveMultiScreenState - providers not set');
       return;
     }
 
     if (arguments == null) {
-      debugPrint('NativePlayerChannel: _saveMultiScreenState - no arguments');
+      ServiceLocator.log.d('NativePlayerChannel: _saveMultiScreenState - no arguments');
       return;
     }
 
@@ -168,7 +168,7 @@ class NativePlayerChannel {
       final int activeIndex = args['activeIndex'] as int? ?? 0;
 
       if (screenStates == null) {
-        debugPrint(
+        ServiceLocator.log.d(
             'NativePlayerChannel: _saveMultiScreenState - no screenStates');
         return;
       }
@@ -190,20 +190,20 @@ class NativePlayerChannel {
         }
       }
 
-      debugPrint(
+      ServiceLocator.log.d(
           'NativePlayerChannel: _saveMultiScreenState - channelIds: $channelIds, activeIndex: $activeIndex');
 
       // 保存分屏状态
       _settingsProvider!.saveLastMultiScreen(channelIds, activeIndex);
     } catch (e) {
-      debugPrint('NativePlayerChannel: _saveMultiScreenState error: $e');
+      ServiceLocator.log.d('NativePlayerChannel: _saveMultiScreenState error: $e');
     }
   }
 
   /// 保存单频道播放状态
   static void _saveSingleChannelState(dynamic arguments) {
     if (_settingsProvider == null || _channelProvider == null) {
-      debugPrint(
+      ServiceLocator.log.d(
           'NativePlayerChannel: _saveSingleChannelState - providers not set');
       return;
     }
@@ -219,26 +219,26 @@ class NativePlayerChannel {
 
       // 如果是从分屏退出到单频道播放的，不覆盖分屏状态
       if (skipSave) {
-        debugPrint(
+        ServiceLocator.log.d(
             'NativePlayerChannel: _saveSingleChannelState - skipSave=true, keeping multi-screen state');
         return;
       }
 
       if (channelIndex == null || channelIndex < 0) {
-        debugPrint(
+        ServiceLocator.log.d(
             'NativePlayerChannel: _saveSingleChannelState - no valid channelIndex');
         return;
       }
 
       final channels = _channelProvider!.channels;
       if (channelIndex >= channels.length) {
-        debugPrint(
+        ServiceLocator.log.d(
             'NativePlayerChannel: _saveSingleChannelState - channelIndex out of range');
         return;
       }
 
       final channelId = channels[channelIndex].id;
-      debugPrint(
+      ServiceLocator.log.d(
           'NativePlayerChannel: _saveSingleChannelState - channelIndex: $channelIndex, channelId: $channelId');
 
       if (channelId != null) {
@@ -246,7 +246,7 @@ class NativePlayerChannel {
         _settingsProvider!.saveLastSingleChannel(channelId);
       }
     } catch (e) {
-      debugPrint('NativePlayerChannel: _saveSingleChannelState error: $e');
+      ServiceLocator.log.d('NativePlayerChannel: _saveSingleChannelState error: $e');
     }
   }
 
@@ -259,7 +259,7 @@ class NativePlayerChannel {
           await _channel.invokeMethod<bool>('isNativePlayerAvailable');
       return result ?? false;
     } catch (e) {
-      debugPrint('NativePlayerChannel: isAvailable error: $e');
+      ServiceLocator.log.d('NativePlayerChannel: isAvailable error: $e');
       return false;
     }
   }
@@ -290,7 +290,7 @@ class NativePlayerChannel {
       init(); // Ensure initialized
       _onPlayerClosedCallback = onClosed;
 
-      debugPrint(
+      ServiceLocator.log.d(
           'NativePlayerChannel: launching player with url=$url, name=$name, index=$index, channels=${urls?.length ?? 0}, isDlna=$isDlnaMode, buffer=$bufferStrength, progressBarMode=$progressBarMode');
       final result = await _channel.invokeMethod<bool>('launchPlayer', {
         'url': url,
@@ -311,10 +311,10 @@ class NativePlayerChannel {
         'showVideoInfo': showVideoInfo,
         'progressBarMode': progressBarMode, // 传递进度条显示模式
       });
-      debugPrint('NativePlayerChannel: launch result=$result');
+      ServiceLocator.log.d('NativePlayerChannel: launch result=$result');
       return result ?? false;
     } catch (e) {
-      debugPrint('NativePlayerChannel: launchPlayer error: $e');
+      ServiceLocator.log.d('NativePlayerChannel: launchPlayer error: $e');
       _onPlayerClosedCallback = null;
       return false;
     }
@@ -325,7 +325,7 @@ class NativePlayerChannel {
     try {
       await _channel.invokeMethod('closePlayer');
     } catch (e) {
-      debugPrint('NativePlayerChannel: closePlayer error: $e');
+      ServiceLocator.log.d('NativePlayerChannel: closePlayer error: $e');
     }
   }
 
@@ -334,7 +334,7 @@ class NativePlayerChannel {
     try {
       await _channel.invokeMethod('pause');
     } catch (e) {
-      debugPrint('NativePlayerChannel: pause error: $e');
+      ServiceLocator.log.d('NativePlayerChannel: pause error: $e');
     }
   }
 
@@ -343,7 +343,7 @@ class NativePlayerChannel {
     try {
       await _channel.invokeMethod('play');
     } catch (e) {
-      debugPrint('NativePlayerChannel: play error: $e');
+      ServiceLocator.log.d('NativePlayerChannel: play error: $e');
     }
   }
 
@@ -352,7 +352,7 @@ class NativePlayerChannel {
     try {
       await _channel.invokeMethod('seekTo', {'position': positionMs});
     } catch (e) {
-      debugPrint('NativePlayerChannel: seekTo error: $e');
+      ServiceLocator.log.d('NativePlayerChannel: seekTo error: $e');
     }
   }
 
@@ -361,7 +361,7 @@ class NativePlayerChannel {
     try {
       await _channel.invokeMethod('setVolume', {'volume': volume});
     } catch (e) {
-      debugPrint('NativePlayerChannel: setVolume error: $e');
+      ServiceLocator.log.d('NativePlayerChannel: setVolume error: $e');
     }
   }
 
@@ -373,7 +373,7 @@ class NativePlayerChannel {
         return Map<String, dynamic>.from(result);
       }
     } catch (e) {
-      debugPrint('NativePlayerChannel: getPlaybackState error: $e');
+      ServiceLocator.log.d('NativePlayerChannel: getPlaybackState error: $e');
     }
     return null;
   }
@@ -397,7 +397,7 @@ class NativePlayerChannel {
       init(); // Ensure initialized
       _onMultiScreenClosedCallback = onClosed;
 
-      debugPrint(
+      ServiceLocator.log.d(
           'NativePlayerChannel: launching multi-screen with ${urls.length} channels, initial=$initialChannelIndex, volumeBoost=$volumeBoostDb, defaultScreen=$defaultScreenPosition, restoreActive=$restoreActiveIndex, restoreChannels=$restoreScreenChannels');
       final result = await _channel.invokeMethod<bool>('launchMultiScreen', {
         'urls': urls,
@@ -411,10 +411,10 @@ class NativePlayerChannel {
         'restoreActiveIndex': restoreActiveIndex,
         'restoreScreenChannels': restoreScreenChannels,
       });
-      debugPrint('NativePlayerChannel: multi-screen launch result=$result');
+      ServiceLocator.log.d('NativePlayerChannel: multi-screen launch result=$result');
       return result ?? false;
     } catch (e) {
-      debugPrint('NativePlayerChannel: launchMultiScreen error: $e');
+      ServiceLocator.log.d('NativePlayerChannel: launchMultiScreen error: $e');
       _onMultiScreenClosedCallback = null;
       return false;
     }
@@ -425,7 +425,7 @@ class NativePlayerChannel {
     try {
       await _channel.invokeMethod('closeMultiScreen');
     } catch (e) {
-      debugPrint('NativePlayerChannel: closeMultiScreen error: $e');
+      ServiceLocator.log.d('NativePlayerChannel: closeMultiScreen error: $e');
     }
   }
 }

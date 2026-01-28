@@ -3,7 +3,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path/path.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter/foundation.dart';
+import '../services/service_locator.dart';
 
 class DatabaseHelper {
   static Database? _database;
@@ -11,12 +11,19 @@ class DatabaseHelper {
   static const int _databaseVersion = 4; // Upgraded for epg_url column
 
   Future<void> initialize() async {
-    if (_database != null) return;
+    ServiceLocator.log.d('DatabaseHelper: 开始初始化数据库');
+    final startTime = DateTime.now();
+    
+    if (_database != null) {
+      ServiceLocator.log.d('DatabaseHelper: 数据库已初始化，跳过');
+      return;
+    }
 
     // Note: FFI initialization is handled in main.dart
 
     final Directory appDir = await getApplicationDocumentsDirectory();
     final String path = join(appDir.path, _databaseName);
+    ServiceLocator.log.d('DatabaseHelper: 数据库路径: $path');
 
     _database = await openDatabase(
       path,
@@ -24,6 +31,9 @@ class DatabaseHelper {
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
+    
+    final initTime = DateTime.now().difference(startTime).inMilliseconds;
+    ServiceLocator.log.d('DatabaseHelper: 数据库初始化完成，耗时: ${initTime}ms');
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -111,7 +121,7 @@ class DatabaseHelper {
         await db.execute('ALTER TABLE playlists ADD COLUMN channel_count INTEGER DEFAULT 0');
       } catch (e) {
         // Ignore if column already exists
-        debugPrint('Migration error (ignored): $e');
+        ServiceLocator.log.d('Migration error (ignored): $e');
       }
     }
     if (oldVersion < 3) {
@@ -120,7 +130,7 @@ class DatabaseHelper {
         await db.execute('ALTER TABLE channels ADD COLUMN sources TEXT');
       } catch (e) {
         // Ignore if column already exists
-        debugPrint('Migration error (ignored): $e');
+        ServiceLocator.log.d('Migration error (ignored): $e');
       }
     }
     if (oldVersion < 4) {
@@ -129,7 +139,7 @@ class DatabaseHelper {
         await db.execute('ALTER TABLE playlists ADD COLUMN epg_url TEXT');
       } catch (e) {
         // Ignore if column already exists
-        debugPrint('Migration error (ignored): $e');
+        ServiceLocator.log.d('Migration error (ignored): $e');
       }
     }
   }

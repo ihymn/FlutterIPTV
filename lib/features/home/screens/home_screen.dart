@@ -11,6 +11,7 @@ import '../../../core/widgets/channel_card.dart';
 import '../../../core/platform/platform_detector.dart';
 import '../../../core/i18n/app_strings.dart';
 import '../../../core/services/update_service.dart';
+import '../../../core/services/service_locator.dart';
 import '../../../core/models/app_update.dart';
 import '../../../core/utils/card_size_calculator.dart';
 import '../../channels/providers/channel_provider.dart';
@@ -36,7 +37,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   int _selectedNavIndex = 0;
   List<Channel> _recommendedChannels = [];
   int? _lastPlaylistId; // 跟踪上次的播放列表ID
@@ -47,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this); // 监听应用生命周期
     _loadData();
     _loadVersion();
     _checkForUpdates();
@@ -56,6 +58,18 @@ class _HomeScreenState extends State<HomeScreen> {
       context.read<PlaylistProvider>().addListener(_onPlaylistProviderChanged);
       context.read<FavoritesProvider>().addListener(_onFavoritesProviderChanged);
     });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    ServiceLocator.log.i('应用生命周期变化: $state', tag: 'HomeScreen');
+    
+    // 当应用从后台恢复时，检查并重新加载数据
+    if (state == AppLifecycleState.resumed) {
+      ServiceLocator.log.i('应用从后台恢复，检查数据状态', tag: 'HomeScreen');
+      _checkAndReloadIfNeeded();
+    }
   }
 
   Future<void> _checkForUpdates() async {
@@ -88,6 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this); // 移除生命周期监听
     // 移除监听器时需要小心，因为 context 可能已经不可用
     super.dispose();
   }
@@ -144,35 +159,70 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    // 检查是否需要重新加载数据（应用恢复时）
+    _checkAndReloadIfNeeded();
+  }
+
+  /// 检查并在需要时重新加载数据（处理应用恢复场景）
+  void _checkAndReloadIfNeeded() {
+    final playlistProvider = context.read<PlaylistProvider>();
+    final channelProvider = context.read<ChannelProvider>();
+    
+    // 如果播放列表已加载但频道列表为空，说明可能是应用恢复后状态丢失
+    if (playlistProvider.hasPlaylists && 
+        !playlistProvider.isLoading && 
+        channelProvider.channels.isEmpty && 
+        !channelProvider.isLoading) {
+      ServiceLocator.log.w('检测到数据状态异常：播放列表存在但频道为空', tag: 'HomeScreen');
+      _loadData();
+    }
   }
 
   Future<void> _loadData() async {
+    ServiceLocator.log.i('开始加载首页数据', tag: 'HomeScreen');
+    final startTime = DateTime.now();
+    
     final playlistProvider = context.read<PlaylistProvider>();
     final channelProvider = context.read<ChannelProvider>();
     final favoritesProvider = context.read<FavoritesProvider>();
     final settingsProvider = context.read<SettingsProvider>();
     final epgProvider = context.read<EpgProvider>();
 
+    // 如果播放列表为空，先加载播放列表
+    if (!playlistProvider.hasPlaylists) {
+      ServiceLocator.log.w('播放列表为空，重新加载', tag: 'HomeScreen');
+      await playlistProvider.loadPlaylists();
+    }
+
     if (playlistProvider.hasPlaylists) {
       final activePlaylist = playlistProvider.activePlaylist;
       _lastPlaylistId = activePlaylist?.id;
+      ServiceLocator.log.d('活动播放列表: ${activePlaylist?.name} (ID: ${activePlaylist?.id})', tag: 'HomeScreen');
+      
       if (activePlaylist != null && activePlaylist.id != null) {
+        ServiceLocator.log.d('加载播放列表频道: ${activePlaylist.id}', tag: 'HomeScreen');
         await channelProvider.loadChannels(activePlaylist.id!);
       } else {
+        ServiceLocator.log.d('加载所有频道', tag: 'HomeScreen');
         await channelProvider.loadAllChannels();
       }
+      
+      ServiceLocator.log.d('加载收藏列表', tag: 'HomeScreen');
       await favoritesProvider.loadFavorites();
       _refreshRecommendedChannels();
       
+      final loadTime = DateTime.now().difference(startTime).inMilliseconds;
+      ServiceLocator.log.i('首页数据加载完成，耗时: ${loadTime}ms，频道数: ${channelProvider.channels.length}', tag: 'HomeScreen');
+      
       // 加载 EPG（使用播放列表的 EPG URL，如果失败则使用设置中的兜底 URL）
       if (activePlaylist?.epgUrl != null && activePlaylist!.epgUrl!.isNotEmpty) {
-        debugPrint('HomeScreen: 初始加载播放列表的 EPG URL: ${activePlaylist.epgUrl}');
+        ServiceLocator.log.d('HomeScreen: 初始加载播放列表的 EPG URL: ${activePlaylist.epgUrl}');
         await epgProvider.loadEpg(
           activePlaylist.epgUrl!,
           fallbackUrl: settingsProvider.epgUrl,
         );
       } else if (settingsProvider.epgUrl != null && settingsProvider.epgUrl!.isNotEmpty) {
-        debugPrint('HomeScreen: 初始加载设置中的兜底 EPG URL: ${settingsProvider.epgUrl}');
+        ServiceLocator.log.d('HomeScreen: 初始加载设置中的兜底 EPG URL: ${settingsProvider.epgUrl}');
         await epgProvider.loadEpg(settingsProvider.epgUrl!);
       }
       
@@ -200,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
           
           // 自动触发继续播放
           if (lastChannel != null || isMultiScreenMode) {
-            debugPrint('HomeScreen: Auto-play triggered - isMultiScreen=$isMultiScreenMode');
+            ServiceLocator.log.d('HomeScreen: Auto-play triggered - isMultiScreen=$isMultiScreenMode');
             _continuePlayback(channelProvider, lastChannel, isMultiScreenMode, settingsProvider);
           }
         });
@@ -368,8 +418,24 @@ class _HomeScreenState extends State<HomeScreen> {
     return Consumer2<PlaylistProvider, ChannelProvider>(
       builder: (context, playlistProvider, channelProvider, _) {
         if (!playlistProvider.hasPlaylists) return _buildEmptyState();
+        
         // 播放列表正在刷新或频道正在加载时显示加载状态
         if (playlistProvider.isLoading || channelProvider.isLoading) {
+          return const Center(child: CircularProgressIndicator(color: AppTheme.primaryColor));
+        }
+        
+        // 如果播放列表已加载但频道为空，尝试重新加载
+        if (playlistProvider.hasPlaylists && channelProvider.channels.isEmpty) {
+          // 使用 addPostFrameCallback 避免在 build 期间调用 setState
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted && !channelProvider.isLoading) {
+              ServiceLocator.log.d('HomeScreen: 频道列表为空，触发重新加载');
+              final activePlaylist = playlistProvider.activePlaylist;
+              if (activePlaylist?.id != null) {
+                channelProvider.loadChannels(activePlaylist!.id!);
+              }
+            }
+          });
           return const Center(child: CircularProgressIndicator(color: AppTheme.primaryColor));
         }
 
@@ -429,8 +495,8 @@ class _HomeScreenState extends State<HomeScreen> {
     Channel? lastChannel;
     final bool isMultiScreenMode = settingsProvider.lastPlayMode == 'multi' && settingsProvider.hasMultiScreenState;
     
-    debugPrint('HomeScreen: lastPlayMode=${settingsProvider.lastPlayMode}, hasMultiScreenState=${settingsProvider.hasMultiScreenState}, isMultiScreenMode=$isMultiScreenMode');
-    debugPrint('HomeScreen: lastMultiScreenChannels=${settingsProvider.lastMultiScreenChannels}');
+    ServiceLocator.log.d('HomeScreen: lastPlayMode=${settingsProvider.lastPlayMode}, hasMultiScreenState=${settingsProvider.hasMultiScreenState}, isMultiScreenMode=$isMultiScreenMode');
+    ServiceLocator.log.d('HomeScreen: lastMultiScreenChannels=${settingsProvider.lastMultiScreenChannels}');
 
     if (settingsProvider.rememberLastChannel && settingsProvider.lastChannelId != null) {
       try {
@@ -551,11 +617,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// 继续播放 - 支持单频道和分屏模式
   void _continuePlayback(ChannelProvider provider, Channel? lastChannel, bool isMultiScreenMode, SettingsProvider settingsProvider) {
+    ServiceLocator.log.i('继续播放 - 模式: ${isMultiScreenMode ? "分屏" : "单频道"}', tag: 'HomeScreen');
+    
     if (isMultiScreenMode) {
       // 恢复分屏模式
       _resumeMultiScreen(provider, settingsProvider);
     } else if (lastChannel != null) {
       // 恢复单频道播放
+      ServiceLocator.log.d('恢复单频道播放: ${lastChannel.name}', tag: 'HomeScreen');
       _playChannel(lastChannel);
     }
   }
@@ -576,8 +645,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// 刷新当前播放列表
   Future<void> _refreshCurrentPlaylist(PlaylistProvider playlistProvider, ChannelProvider channelProvider) async {
+    ServiceLocator.log.i('开始刷新当前播放列表', tag: 'HomeScreen');
+    final startTime = DateTime.now();
+    
     final activePlaylist = playlistProvider.activePlaylist;
-    if (activePlaylist == null) return;
+    if (activePlaylist == null) {
+      ServiceLocator.log.w('没有活动播放列表，无法刷新', tag: 'HomeScreen');
+      return;
+    }
 
     // 显示加载提示
     if (!mounted) return;
@@ -588,6 +663,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
 
+    ServiceLocator.log.d('刷新播放列表: ${activePlaylist.name} (ID: ${activePlaylist.id})', tag: 'HomeScreen');
+    
     // 执行刷新
     final success = await playlistProvider.refreshPlaylist(activePlaylist);
 
@@ -609,16 +686,19 @@ class _HomeScreenState extends State<HomeScreen> {
         final updatedPlaylist = playlistProvider.activePlaylist;
         
         if (updatedPlaylist?.epgUrl != null) {
-          debugPrint('HomeScreen: 使用播放列表的 EPG URL 重新加载: ${updatedPlaylist!.epgUrl}');
+          ServiceLocator.log.d('HomeScreen: 使用播放列表的 EPG URL 重新加载: ${updatedPlaylist!.epgUrl}');
           await epgProvider.loadEpg(
             updatedPlaylist.epgUrl!,
             fallbackUrl: settingsProvider.epgUrl,
           );
         } else if (settingsProvider.epgUrl != null) {
-          debugPrint('HomeScreen: 使用设置中的兜底 EPG URL 重新加载: ${settingsProvider.epgUrl}');
+          ServiceLocator.log.d('HomeScreen: 使用设置中的兜底 EPG URL 重新加载: ${settingsProvider.epgUrl}');
           await epgProvider.loadEpg(settingsProvider.epgUrl!);
         }
       }
+      
+      final refreshTime = DateTime.now().difference(startTime).inMilliseconds;
+      ServiceLocator.log.i('播放列表刷新成功，耗时: ${refreshTime}ms', tag: 'HomeScreen');
       
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -628,6 +708,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
     } else {
+      ServiceLocator.log.e('播放列表刷新失败', tag: 'HomeScreen');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('刷新失败'),
@@ -640,9 +721,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// 恢复分屏播放
   Future<void> _resumeMultiScreen(ChannelProvider provider, SettingsProvider settingsProvider) async {
+    ServiceLocator.log.i('开始恢复分屏播放', tag: 'HomeScreen');
+    
     final channels = provider.channels;
     final multiScreenChannelIds = settingsProvider.lastMultiScreenChannels;
     final activeIndex = settingsProvider.activeScreenIndex;
+    
+    ServiceLocator.log.d('分屏频道ID: $multiScreenChannelIds', tag: 'HomeScreen');
+    ServiceLocator.log.d('活动屏幕索引: $activeIndex', tag: 'HomeScreen');
     
     // 设置 providers 用于状态保存
     final favoritesProvider = context.read<FavoritesProvider>();
@@ -671,10 +757,11 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
     
-    debugPrint('HomeScreen: _resumeMultiScreen - channelIds=$multiScreenChannelIds, restoreChannels=$restoreScreenChannels, activeIndex=$activeIndex');
+    ServiceLocator.log.d('恢复屏幕频道: $restoreScreenChannels', tag: 'HomeScreen');
     
     // 检查是否是 Android TV，使用原生分屏
     if (PlatformDetector.isAndroid) {
+      ServiceLocator.log.d('使用 Android TV 原生分屏', tag: 'HomeScreen');
       final urls = channels.map((c) => c.url).toList();
       final names = channels.map((c) => c.name).toList();
       final groups = channels.map((c) => c.groupName ?? '').toList();
@@ -693,11 +780,13 @@ class _HomeScreenState extends State<HomeScreen> {
         restoreActiveIndex: activeIndex,
         restoreScreenChannels: restoreScreenChannels,
         onClosed: () {
-          debugPrint('HomeScreen: Multi-screen closed');
+          ServiceLocator.log.i('原生分屏播放器关闭', tag: 'HomeScreen');
         },
       );
+      ServiceLocator.log.i('原生分屏播放器启动成功', tag: 'HomeScreen');
     } else {
       // Windows/其他平台使用 Flutter 分屏
+      ServiceLocator.log.d('使用 Flutter 分屏', tag: 'HomeScreen');
       if (!mounted) return;
       
       // 预先设置 MultiScreenProvider 的频道状态
@@ -726,11 +815,15 @@ class _HomeScreenState extends State<HomeScreen> {
       // 等待所有频道开始播放
       await Future.wait(futures);
       
+      ServiceLocator.log.d('所有分屏频道加载完成', tag: 'HomeScreen');
+      
       // 等待一小段时间确保所有播放器都已经开始播放
       await Future.delayed(const Duration(milliseconds: 500));
       
       // 所有频道加载完成后，重新应用音量设置确保只有活动屏幕有声音
       await multiScreenProvider.reapplyVolumeToAllScreens();
+      
+      ServiceLocator.log.i('Flutter 分屏播放恢复成功', tag: 'HomeScreen');
       
       // 找到初始频道（用于路由参数）
       Channel? initialChannel;
@@ -961,6 +1054,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _playChannel(Channel channel) {
+    ServiceLocator.log.i('播放频道: ${channel.name} (ID: ${channel.id})', tag: 'HomeScreen');
+      // final startTime = DateTime.now();
+    
     // 保存上次播放的频道ID
     final settingsProvider = context.read<SettingsProvider>();
     final channelProvider = context.read<ChannelProvider>();
@@ -1001,7 +1097,7 @@ class _HomeScreenState extends State<HomeScreen> {
           volumeBoostDb: settingsProvider.volumeBoost,
           defaultScreenPosition: settingsProvider.defaultScreenPosition,
           onClosed: () {
-            debugPrint('HomeScreen: Native multi-screen closed');
+            ServiceLocator.log.d('HomeScreen: Native multi-screen closed');
           },
         );
       } else if (PlatformDetector.isDesktop) {

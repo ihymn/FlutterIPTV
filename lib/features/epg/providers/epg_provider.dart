@@ -37,23 +37,23 @@ class EpgProvider extends ChangeNotifier {
 
     try {
       // Try primary URL first
-      debugPrint('EPG: Attempting to load from primary URL: $url');
+      ServiceLocator.log.d('EPG: Attempting to load from primary URL: $url');
       final success = await _epgService.loadFromUrl(url);
       
       if (success) {
         _lastUpdate = DateTime.now();
-        debugPrint('EPG: Successfully loaded from primary URL');
+        ServiceLocator.log.d('EPG: Successfully loaded from primary URL');
         return true;
       }
       
       // If primary failed and fallback is available, try fallback
       if (fallbackUrl != null && fallbackUrl.isNotEmpty && fallbackUrl != url) {
-        debugPrint('EPG: Primary URL failed, trying fallback URL: $fallbackUrl');
+        ServiceLocator.log.d('EPG: Primary URL failed, trying fallback URL: $fallbackUrl');
         final fallbackSuccess = await _epgService.loadFromUrl(fallbackUrl);
         
         if (fallbackSuccess) {
           _lastUpdate = DateTime.now();
-          debugPrint('EPG: Successfully loaded from fallback URL');
+          ServiceLocator.log.d('EPG: Successfully loaded from fallback URL');
           return true;
         }
       }
@@ -62,7 +62,7 @@ class EpgProvider extends ChangeNotifier {
       return false;
     } catch (e) {
       _error = e.toString();
-      debugPrint('EPG: Error loading: $e');
+      ServiceLocator.log.d('EPG: Error loading: $e');
       return false;
     } finally {
       _isLoading = false;

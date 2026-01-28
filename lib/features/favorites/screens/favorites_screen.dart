@@ -12,6 +12,7 @@ import '../../settings/providers/settings_provider.dart';
 import '../../channels/providers/channel_provider.dart';
 import '../../multi_screen/providers/multi_screen_provider.dart';
 import '../../../core/platform/native_player_channel.dart';
+import '../../../core/services/service_locator.dart';
 
 class FavoritesScreen extends StatefulWidget {
   final bool embedded;
@@ -65,7 +66,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           volumeBoostDb: settingsProvider.volumeBoost,
           defaultScreenPosition: settingsProvider.defaultScreenPosition,
           onClosed: () {
-            debugPrint('FavoritesScreen: Native multi-screen closed');
+            ServiceLocator.log.d('FavoritesScreen: Native multi-screen closed');
           },
         );
       } else if (PlatformDetector.isDesktop) {

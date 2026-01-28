@@ -1,8 +1,8 @@
 import 'dart:ui';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'color_scheme_data.dart';
 import 'color_scheme_manager.dart';
+import '../services/service_locator.dart';
 
 class AppTheme {
   // Lotus Theme - Brand Colors
@@ -210,7 +210,7 @@ class AppTheme {
   /// 根据字体名称获取fontFamily
   /// 使用项目内字体文件，确保所有平台一致
   static String? resolveFontFamily(String fontName) {
-    if (fontName == 'System' || fontName == null) {
+    if (fontName == 'System') {
       return null;
     }
     return fontMap[fontName];
@@ -699,14 +699,14 @@ extension AppThemeDynamic on AppTheme {
   /// 根据配色方案 ID 生成黑暗主题
   static ThemeData getDarkTheme(String schemeId, [String? fontFamily]) {
     final scheme = ColorSchemeManager.instance.getDarkScheme(schemeId);
-    debugPrint('AppTheme: 生成黑暗主题 - schemeId=$schemeId, primaryColor=${scheme.primaryColor}, secondaryColor=${scheme.secondaryColor}, fontFamily=$fontFamily');
+    ServiceLocator.log.d('AppTheme: 生成黑暗主题 - schemeId=$schemeId, primaryColor=${scheme.primaryColor}, secondaryColor=${scheme.secondaryColor}, fontFamily=$fontFamily');
     return _buildDarkTheme(scheme, fontFamily);
   }
   
   /// 根据配色方案 ID 生成明亮主题
   static ThemeData getLightTheme(String schemeId, [String? fontFamily]) {
     final scheme = ColorSchemeManager.instance.getLightScheme(schemeId);
-    debugPrint('AppTheme: 生成明亮主题 - schemeId=$schemeId, primaryColor=${scheme.primaryColor}, secondaryColor=${scheme.secondaryColor}, fontFamily=$fontFamily');
+    ServiceLocator.log.d('AppTheme: 生成明亮主题 - schemeId=$schemeId, primaryColor=${scheme.primaryColor}, secondaryColor=${scheme.secondaryColor}, fontFamily=$fontFamily');
     return _buildLightTheme(scheme, fontFamily);
   }
   

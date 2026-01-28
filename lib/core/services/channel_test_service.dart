@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import '../models/channel.dart';
+import './service_locator.dart';
 
 /// 频道测试结果
 class ChannelTestResult {
@@ -199,7 +200,7 @@ class ChannelTestService {
       final isAvailable = statusCode >= 200 && statusCode < 400;
 
       final contentType = response.headers.contentType?.toString() ?? '';
-      debugPrint('测试频道 ${channel.name}: HTTP $statusCode, Content-Type: $contentType');
+      ServiceLocator.log.d('测试频道 ${channel.name}: HTTP $statusCode, Content-Type: $contentType');
 
       return ChannelTestResult(
         channel: channel,

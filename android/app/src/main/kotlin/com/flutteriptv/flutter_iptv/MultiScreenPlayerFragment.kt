@@ -1116,10 +1116,37 @@ class MultiScreenPlayerFragment : Fragment() {
         // 确保屏幕常亮
         activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         
-        // 恢复播放
+        // 恢复播放 - 检查播放器状态
         for (i in 0..3) {
             if (screenStates[i].channelIndex >= 0) {
-                players[i]?.play()
+                players[i]?.let { p ->
+                    if (p.playbackState == Player.STATE_IDLE || p.playbackState == Player.STATE_ENDED) {
+                        // 播放器处于空闲或结束状态，需要重新加载
+                        Log.d(TAG, "Screen $i player in IDLE/ENDED state, reloading...")
+                        val channelIndex = screenStates[i].channelIndex
+                        val sourceIndex = screenStates[i].currentSourceIndex
+                        if (channelIndex >= 0 && channelIndex < channelUrls.size) {
+                            val sources = channelSources.getOrNull(channelIndex) ?: arrayListOf()
+                            if (sourceIndex >= 0 && sourceIndex < sources.size) {
+                                playChannelOnScreen(i, channelIndex, sourceIndex)
+                            }
+                        }
+                    } else {
+                        // 播放器状态正常，直接恢复播放
+                        p.play()
+                    }
+                } ?: run {
+                    // 播放器不存在，重新初始化并播放
+                    Log.d(TAG, "Screen $i player is null, reinitializing...")
+                    val channelIndex = screenStates[i].channelIndex
+                    val sourceIndex = screenStates[i].currentSourceIndex
+                    if (channelIndex >= 0 && channelIndex < channelUrls.size) {
+                        val sources = channelSources.getOrNull(channelIndex) ?: arrayListOf()
+                        if (sourceIndex >= 0 && sourceIndex < sources.size) {
+                            playChannelOnScreen(i, channelIndex, sourceIndex)
+                        }
+                    }
+                }
             }
         }
     }

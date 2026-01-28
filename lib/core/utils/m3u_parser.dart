@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 
 import '../models/channel.dart';
+import '../services/service_locator.dart';
 
 /// Result of M3U parsing containing channels and metadata
 class M3UParseResult {
@@ -28,7 +28,7 @@ class M3UParser {
   /// Parse M3U content from a URL
   static Future<List<Channel>> parseFromUrl(String url, int playlistId) async {
     try {
-      debugPrint('DEBUG: 开始从URL获取播放列表内容: $url');
+      ServiceLocator.log.d('DEBUG: 开始从URL获取播放列表内容: $url');
 
       // Use Dio for better handling of large files and redirects
       final dio = Dio();
@@ -43,15 +43,15 @@ class M3UParser {
         ),
       );
 
-      debugPrint('DEBUG: 成功获取播放列表内容，状态码: ${response.statusCode}');
-      debugPrint('DEBUG: 内容大小: ${response.data.toString().length} 字符');
+      ServiceLocator.log.d('DEBUG: 成功获取播放列表内容，状态码: ${response.statusCode}');
+      ServiceLocator.log.d('DEBUG: 内容大小: ${response.data.toString().length} 字符');
 
       final channels = parse(response.data.toString(), playlistId);
-      debugPrint('DEBUG: URL解析完成，共解析出 ${channels.length} 个频道');
+      ServiceLocator.log.d('DEBUG: URL解析完成，共解析出 ${channels.length} 个频道');
 
       return channels;
     } catch (e) {
-      debugPrint('DEBUG: 从URL获取播放列表时出错: $e');
+      ServiceLocator.log.d('DEBUG: 从URL获取播放列表时出错: $e');
       // 简化错误信息
       String errorMsg = 'Failed to load playlist';
       final errorStr = e.toString().toLowerCase();
@@ -73,23 +73,23 @@ class M3UParser {
   /// Parse M3U content from a local file
   static Future<List<Channel>> parseFromFile(String filePath, int playlistId) async {
     try {
-      debugPrint('DEBUG: 开始从本地文件读取播放列表: $filePath');
+      ServiceLocator.log.d('DEBUG: 开始从本地文件读取播放列表: $filePath');
       final file = File(filePath);
 
       if (!await file.exists()) {
-        debugPrint('DEBUG: 文件不存在: $filePath');
+        ServiceLocator.log.d('DEBUG: 文件不存在: $filePath');
         throw Exception('File does not exist: $filePath');
       }
 
       final content = await file.readAsString();
-      debugPrint('DEBUG: 成功读取本地文件，内容大小: ${content.length} 字符');
+      ServiceLocator.log.d('DEBUG: 成功读取本地文件，内容大小: ${content.length} 字符');
 
       final channels = parse(content, playlistId);
-      debugPrint('DEBUG: 本地文件解析完成，共解析出 ${channels.length} 个频道');
+      ServiceLocator.log.d('DEBUG: 本地文件解析完成，共解析出 ${channels.length} 个频道');
 
       return channels;
     } catch (e) {
-      debugPrint('DEBUG: 读取本地播放列表文件时出错: $e');
+      ServiceLocator.log.d('DEBUG: 读取本地播放列表文件时出错: $e');
       throw Exception('Error reading playlist file: $e');
     }
   }
@@ -98,16 +98,16 @@ class M3UParser {
   /// Parse M3U content string
   /// Merges channels with same tvg-name/epgId into single channel with multiple sources
   static List<Channel> parse(String content, int playlistId) {
-    debugPrint('DEBUG: 开始解析M3U内容，播放列表ID: $playlistId');
+    ServiceLocator.log.d('DEBUG: 开始解析M3U内容，播放列表ID: $playlistId');
 
     final List<Channel> rawChannels = [];
     final lines = LineSplitter.split(content).toList();
     String? epgUrl;
 
-    debugPrint('DEBUG: 内容总行数: ${lines.length}');
+    ServiceLocator.log.d('DEBUG: 内容总行数: ${lines.length}');
 
     if (lines.isEmpty) {
-      debugPrint('DEBUG: 内容为空，返回空频道列表');
+      ServiceLocator.log.d('DEBUG: 内容为空，返回空频道列表');
       return rawChannels;
     }
 
@@ -121,14 +121,14 @@ class M3UParser {
         final extractedUrl = _extractEpgUrl(line);
         if (extractedUrl != null) {
           epgUrl = extractedUrl;
-          debugPrint('DEBUG: 从M3U头部提取到EPG URL: $epgUrl');
+          ServiceLocator.log.d('DEBUG: 从M3U头部提取到EPG URL: $epgUrl');
           break;
         }
       }
     }
 
     if (!foundHeader) {
-      debugPrint('DEBUG: 警告 - 缺少M3U头部标记，尝试继续解析');
+      ServiceLocator.log.d('DEBUG: 警告 - 缺少M3U头部标记，尝试继续解析');
     }
 
     String? currentName;
@@ -174,10 +174,10 @@ class M3UParser {
             validChannelCount++;
           } else {
             invalidUrlCount++;
-            debugPrint('DEBUG: 无效的URL在第${i + 1}行: $line');
+            ServiceLocator.log.d('DEBUG: 无效的URL在第${i + 1}行: $line');
           }
         } else {
-          debugPrint('DEBUG: 找到URL但没有对应的频道名称在第${i + 1}行: $line');
+          ServiceLocator.log.d('DEBUG: 找到URL但没有对应的频道名称在第${i + 1}行: $line');
         }
 
         // Reset for next entry
@@ -188,12 +188,12 @@ class M3UParser {
       }
     }
 
-    debugPrint('DEBUG: 原始解析完成 - 有效频道: $validChannelCount, 无效URL: $invalidUrlCount');
+    ServiceLocator.log.d('DEBUG: 原始解析完成 - 有效频道: $validChannelCount, 无效URL: $invalidUrlCount');
 
     // Merge channels with same epgId (tvg-name) into single channel with multiple sources
     final List<Channel> mergedChannels = _mergeChannelSources(rawChannels);
     
-    debugPrint('DEBUG: 合并后频道数: ${mergedChannels.length} (原始: ${rawChannels.length})');
+    ServiceLocator.log.d('DEBUG: 合并后频道数: ${mergedChannels.length} (原始: ${rawChannels.length})');
 
     // Save parse result with EPG URL
     _lastParseResult = M3UParseResult(channels: mergedChannels, epgUrl: epgUrl);
@@ -306,7 +306,7 @@ class M3UParser {
 
     // Debug logging for logo parsing
     if (logo != null && logo.isNotEmpty) {
-      debugPrint('DEBUG: 解析到台标URL: $logo, 频道: $name');
+      ServiceLocator.log.d('DEBUG: 解析到台标URL: $logo, 频道: $name');
     }
 
     return {
@@ -347,12 +347,12 @@ class M3UParser {
            uri.scheme == 'mms' || uri.scheme == 'mmsh' || uri.scheme == 'mmst');
 
       if (!isValid) {
-        debugPrint('DEBUG: URL验证失败 - Scheme: ${uri.scheme}, Host: ${uri.host}');
+        ServiceLocator.log.d('DEBUG: URL验证失败 - Scheme: ${uri.scheme}, Host: ${uri.host}');
       }
 
       return isValid;
     } catch (e) {
-      debugPrint('DEBUG: URL解析错误: $url, 错误: $e');
+      ServiceLocator.log.d('DEBUG: URL解析错误: $url, 错误: $e');
       return false;
     }
   }

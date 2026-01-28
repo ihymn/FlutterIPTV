@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/local_server_service.dart';
+import '../../../core/services/service_locator.dart';
 import '../../../core/widgets/tv_focusable.dart';
 import '../../../core/i18n/app_strings.dart';
 import '../../channels/providers/channel_provider.dart';
@@ -41,7 +42,7 @@ class _QrImportDialogState extends State<QrImportDialog> {
   }
 
   Future<void> _startServer() async {
-    debugPrint('DEBUG: 开始启动本地服务器...');
+    ServiceLocator.log.d('开始启动本地服务器...');
 
     setState(() {
       _isLoading = true;
@@ -53,9 +54,9 @@ class _QrImportDialogState extends State<QrImportDialog> {
     _serverService.onContentReceived = _handleContentReceived;
 
     final success = await _serverService.start();
-    debugPrint('DEBUG: 服务器启动结果: ${success ? "成功" : "失败"}');
+    ServiceLocator.log.d('服务器启动结果: ${success ? "成功" : "失败"}');
     if (success) {
-      debugPrint('DEBUG: 服务器URL: ${_serverService.serverUrl}');
+      ServiceLocator.log.d('服务器URL: ${_serverService.serverUrl}');
     }
 
     setState(() {
@@ -72,7 +73,7 @@ class _QrImportDialogState extends State<QrImportDialog> {
   void _handleUrlReceived(String url, String name) async {
     if (_isImporting) return;
 
-    debugPrint('DEBUG: 收到URL导入请求 - 名称: $name, URL: $url');
+    ServiceLocator.log.d('收到URL导入请求 - 名称: $name, URL: $url');
 
     setState(() {
       _isImporting = true;
@@ -81,11 +82,11 @@ class _QrImportDialogState extends State<QrImportDialog> {
 
     try {
       final provider = context.read<PlaylistProvider>();
-      debugPrint('DEBUG: 开始通过URL添加播放列表...');
+      ServiceLocator.log.d('开始通过URL添加播放列表...');
       final playlist = await provider.addPlaylistFromUrl(name, url);
 
       if (playlist != null && mounted) {
-        debugPrint('DEBUG: 播放列表添加成功: ${playlist.name} (ID: ${playlist.id})');
+        ServiceLocator.log.d('播放列表添加成功: ${playlist.name} (ID: ${playlist.id})');
 
         // 设置新导入的播放列表为激活状态
         final playlistProvider = context.read<PlaylistProvider>();
@@ -95,7 +96,7 @@ class _QrImportDialogState extends State<QrImportDialog> {
         // 加载新播放列表的频道
         final channelProvider = context.read<ChannelProvider>();
         if (playlist.id != null) {
-          debugPrint('DEBUG: 加载新导入播放列表的频道...');
+          ServiceLocator.log.d('加载新导入播放列表的频道...');
           await channelProvider.loadChannels(playlist.id!);
         }
 
@@ -109,10 +110,10 @@ class _QrImportDialogState extends State<QrImportDialog> {
             final fallbackEpgUrl = settingsProvider.epgUrl;
             
             if (playlistEpgUrl != null && playlistEpgUrl.isNotEmpty) {
-              debugPrint('DEBUG: 加载播放列表EPG: $playlistEpgUrl (兜底: $fallbackEpgUrl)');
+              ServiceLocator.log.d('加载播放列表EPG: $playlistEpgUrl (兜底: $fallbackEpgUrl)');
               await epgProvider.loadEpg(playlistEpgUrl, fallbackUrl: fallbackEpgUrl);
             } else if (fallbackEpgUrl != null && fallbackEpgUrl.isNotEmpty) {
-              debugPrint('DEBUG: 使用兜底EPG URL: $fallbackEpgUrl');
+              ServiceLocator.log.d('使用兜底EPG URL: $fallbackEpgUrl');
               await epgProvider.loadEpg(fallbackEpgUrl);
             }
           }
@@ -129,15 +130,15 @@ class _QrImportDialogState extends State<QrImportDialog> {
           Navigator.of(context).pop(true);
         }
       } else {
-        debugPrint('DEBUG: 播放列表添加失败');
+        ServiceLocator.log.d('播放列表添加失败');
         setState(() {
           _receivedMessage = '✗ ${AppStrings.of(context)?.importFailed ?? "Import failed"}';
           _isImporting = false;
         });
       }
     } catch (e) {
-      debugPrint('DEBUG: URL导入过程中发生错误: $e');
-      debugPrint('DEBUG: 错误堆栈: ${StackTrace.current}');
+      ServiceLocator.log.d('URL导入过程中发生错误: $e');
+      ServiceLocator.log.d('错误堆栈: ${StackTrace.current}');
       setState(() {
         _receivedMessage = '✗ ${AppStrings.of(context)?.importFailed ?? "Import failed"}: $e';
         _isImporting = false;
@@ -148,7 +149,7 @@ class _QrImportDialogState extends State<QrImportDialog> {
   void _handleContentReceived(String content, String name) async {
     if (_isImporting) return;
 
-    debugPrint('DEBUG: 收到内容导入请求 - 名称: $name, 内容长度: ${content.length}');
+    ServiceLocator.log.d('收到内容导入请求 - 名称: $name, 内容长度: ${content.length}');
 
     setState(() {
       _isImporting = true;
@@ -157,11 +158,11 @@ class _QrImportDialogState extends State<QrImportDialog> {
 
     try {
       final provider = context.read<PlaylistProvider>();
-      debugPrint('DEBUG: 开始通过内容添加播放列表...');
+      ServiceLocator.log.d('开始通过内容添加播放列表...');
       final playlist = await provider.addPlaylistFromContent(name, content);
 
       if (playlist != null && mounted) {
-        debugPrint('DEBUG: 播放列表添加成功: ${playlist.name} (ID: ${playlist.id})');
+        ServiceLocator.log.d('播放列表添加成功: ${playlist.name} (ID: ${playlist.id})');
 
         // 设置新导入的播放列表为激活状态
         final playlistProvider = context.read<PlaylistProvider>();
@@ -171,7 +172,7 @@ class _QrImportDialogState extends State<QrImportDialog> {
         // 加载新播放列表的频道
         final channelProvider = context.read<ChannelProvider>();
         if (playlist.id != null) {
-          debugPrint('DEBUG: 加载新导入播放列表的频道...');
+          ServiceLocator.log.d('加载新导入播放列表的频道...');
           await channelProvider.loadChannels(playlist.id!);
         }
 
@@ -185,10 +186,10 @@ class _QrImportDialogState extends State<QrImportDialog> {
             final fallbackEpgUrl = settingsProvider.epgUrl;
             
             if (playlistEpgUrl != null && playlistEpgUrl.isNotEmpty) {
-              debugPrint('DEBUG: 加载播放列表EPG: $playlistEpgUrl (兜底: $fallbackEpgUrl)');
+              ServiceLocator.log.d('加载播放列表EPG: $playlistEpgUrl (兜底: $fallbackEpgUrl)');
               await epgProvider.loadEpg(playlistEpgUrl, fallbackUrl: fallbackEpgUrl);
             } else if (fallbackEpgUrl != null && fallbackEpgUrl.isNotEmpty) {
-              debugPrint('DEBUG: 使用兜底EPG URL: $fallbackEpgUrl');
+              ServiceLocator.log.d('使用兜底EPG URL: $fallbackEpgUrl');
               await epgProvider.loadEpg(fallbackEpgUrl);
             }
           }
@@ -205,15 +206,15 @@ class _QrImportDialogState extends State<QrImportDialog> {
           Navigator.of(context).pop(true);
         }
       } else {
-        debugPrint('DEBUG: 播放列表添加失败');
+        ServiceLocator.log.d('播放列表添加失败');
         setState(() {
           _receivedMessage = '✗ ${AppStrings.of(context)?.importFailed ?? "Import failed"}';
           _isImporting = false;
         });
       }
     } catch (e) {
-      debugPrint('DEBUG: 内容导入过程中发生错误: $e');
-      debugPrint('DEBUG: 错误堆栈: ${StackTrace.current}');
+      ServiceLocator.log.d('内容导入过程中发生错误: $e');
+      ServiceLocator.log.d('错误堆栈: ${StackTrace.current}');
       setState(() {
         _receivedMessage = '✗ ${AppStrings.of(context)?.importFailed ?? "Import failed"}: $e';
         _isImporting = false;

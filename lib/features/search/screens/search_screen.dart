@@ -10,6 +10,7 @@ import '../../../core/widgets/channel_card.dart';
 import '../../../core/platform/platform_detector.dart';
 import '../../../core/i18n/app_strings.dart';
 import '../../../core/utils/card_size_calculator.dart';
+import '../../../core/services/service_locator.dart';
 import '../../channels/providers/channel_provider.dart';
 import '../../favorites/providers/favorites_provider.dart';
 import '../../settings/providers/settings_provider.dart';
@@ -752,7 +753,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             volumeBoostDb: settingsProvider.volumeBoost,
                             defaultScreenPosition: settingsProvider.defaultScreenPosition,
                             onClosed: () {
-                              debugPrint('SearchScreen: Native multi-screen closed');
+                              ServiceLocator.log.d('Native multi-screen closed', tag: 'SearchScreen');
                             },
                           );
                         } else if (PlatformDetector.isDesktop) {
