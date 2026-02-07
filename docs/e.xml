@@ -43910,6 +43910,435 @@
 	<programme channel="中国天气" start="20260206235600 +0800" stop="20260206235900 +0800">
 		<title lang="zh">七天城市预报</title>
 	</programme>
+	<programme channel="中国天气" start="20260207000000 +0800" stop="20260207010000 +0800">
+		<title lang="zh">伴眠时段</title>
+	</programme>
+	<programme channel="中国天气" start="20260207010000 +0800" stop="20260207020000 +0800">
+		<title lang="zh">伴眠时段</title>
+	</programme>
+	<programme channel="中国天气" start="20260207020000 +0800" stop="20260207022500 +0800">
+		<title lang="zh">谈风说水</title>
+	</programme>
+	<programme channel="中国天气" start="20260207022500 +0800" stop="20260207025000 +0800">
+		<title lang="zh">三农新气象</title>
+	</programme>
+	<programme channel="中国天气" start="20260207025000 +0800" stop="20260207030000 +0800">
+		<title lang="zh">太阳系新探索</title>
+	</programme>
+	<programme channel="中国天气" start="20260207030000 +0800" stop="20260207032500 +0800">
+		<title lang="zh">谈风说水</title>
+	</programme>
+	<programme channel="中国天气" start="20260207032500 +0800" stop="20260207035000 +0800">
+		<title lang="zh">三农新气象</title>
+	</programme>
+	<programme channel="中国天气" start="20260207035000 +0800" stop="20260207040000 +0800">
+		<title lang="zh">太阳系新探索</title>
+	</programme>
+	<programme channel="中国天气" start="20260207040000 +0800" stop="20260207042500 +0800">
+		<title lang="zh">谈风说水</title>
+	</programme>
+	<programme channel="中国天气" start="20260207042500 +0800" stop="20260207045000 +0800">
+		<title lang="zh">三农新气象</title>
+	</programme>
+	<programme channel="中国天气" start="20260207045000 +0800" stop="20260207050000 +0800">
+		<title lang="zh">太阳系新探索</title>
+	</programme>
+	<programme channel="中国天气" start="20260207050000 +0800" stop="20260207052500 +0800">
+		<title lang="zh">谈风说水</title>
+	</programme>
+	<programme channel="中国天气" start="20260207052500 +0800" stop="20260207055000 +0800">
+		<title lang="zh">三农新气象</title>
+	</programme>
+	<programme channel="中国天气" start="20260207055000 +0800" stop="20260207060000 +0800">
+		<title lang="zh">太阳系新探索</title>
+	</programme>
+	<programme channel="中国天气" start="20260207060000 +0800" stop="20260207063000 +0800">
+		<title lang="zh">谈风说水</title>
+	</programme>
+	<programme channel="中国天气" start="20260207063000 +0800" stop="20260207070000 +0800">
+		<title lang="zh">三农新气象</title>
+	</programme>
+	<programme channel="中国天气" start="20260207070000 +0800" stop="20260207070300 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207070300 +0800" stop="20260207070600 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207070600 +0800" stop="20260207072100 +0800">
+		<title lang="zh">古气候探秘</title>
+	</programme>
+	<programme channel="中国天气" start="20260207072100 +0800" stop="20260207072600 +0800">
+		<title lang="zh">中国天然氧吧天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207072600 +0800" stop="20260207073000 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207073000 +0800" stop="20260207073500 +0800">
+		<title lang="zh">中国天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207073500 +0800" stop="20260207075600 +0800">
+		<title lang="zh">古代减灾工程</title>
+	</programme>
+	<programme channel="中国天气" start="20260207075600 +0800" stop="20260207080000 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207080000 +0800" stop="20260207080500 +0800">
+		<title lang="zh">七天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207080500 +0800" stop="20260207081000 +0800">
+		<title lang="zh">中国天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207081000 +0800" stop="20260207081300 +0800">
+		<title lang="zh">国际城市三天预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207081300 +0800" stop="20260207081600 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207081800 +0800" stop="20260207082100 +0800">
+		<title lang="zh">节气宣传片</title>
+	</programme>
+	<programme channel="中国天气" start="20260207082100 +0800" stop="20260207082600 +0800">
+		<title lang="zh">优秀旅游城市</title>
+	</programme>
+	<programme channel="中国天气" start="20260207082600 +0800" stop="20260207083000 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207083000 +0800" stop="20260207085000 +0800">
+		<title lang="zh">古代减灾工程</title>
+	</programme>
+	<programme channel="中国天气" start="20260207085000 +0800" stop="20260207085500 +0800">
+		<title lang="zh">中国天然氧吧天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207085600 +0800" stop="20260207090000 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207090000 +0800" stop="20260207090500 +0800">
+		<title lang="zh">优秀旅游城市</title>
+	</programme>
+	<programme channel="中国天气" start="20260207090500 +0800" stop="20260207091000 +0800">
+		<title lang="zh">城市天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207091000 +0800" stop="20260207092000 +0800">
+		<title lang="zh">中国地理探奇</title>
+	</programme>
+	<programme channel="中国天气" start="20260207092000 +0800" stop="20260207092600 +0800">
+		<title lang="zh">中国天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207092600 +0800" stop="20260207093000 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207093000 +0800" stop="20260207095600 +0800">
+		<title lang="zh">谈风说水</title>
+	</programme>
+	<programme channel="中国天气" start="20260207095600 +0800" stop="20260207100000 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207100000 +0800" stop="20260207100300 +0800">
+		<title lang="zh">我的天呐</title>
+	</programme>
+	<programme channel="中国天气" start="20260207100500 +0800" stop="20260207102600 +0800">
+		<title lang="zh">二十四节气</title>
+	</programme>
+	<programme channel="中国天气" start="20260207102600 +0800" stop="20260207103000 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207103000 +0800" stop="20260207105600 +0800">
+		<title lang="zh">中国减灾</title>
+	</programme>
+	<programme channel="中国天气" start="20260207105600 +0800" stop="20260207110000 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207110000 +0800" stop="20260207110500 +0800">
+		<title lang="zh">优秀旅游城市</title>
+	</programme>
+	<programme channel="中国天气" start="20260207110500 +0800" stop="20260207111000 +0800">
+		<title lang="zh">城市天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207111000 +0800" stop="20260207112500 +0800">
+		<title lang="zh">黄河启示录</title>
+	</programme>
+	<programme channel="中国天气" start="20260207112600 +0800" stop="20260207113000 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207113000 +0800" stop="20260207113500 +0800">
+		<title lang="zh">中国天然氧吧天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207113500 +0800" stop="20260207113800 +0800">
+		<title lang="zh">世界城市三天预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207114000 +0800" stop="20260207115600 +0800">
+		<title lang="zh">黄河启示录</title>
+	</programme>
+	<programme channel="中国天气" start="20260207115600 +0800" stop="20260207120000 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207120000 +0800" stop="20260207120500 +0800">
+		<title lang="zh">唐风诗雨</title>
+	</programme>
+	<programme channel="中国天气" start="20260207120500 +0800" stop="20260207121000 +0800">
+		<title lang="zh">七天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207121000 +0800" stop="20260207122000 +0800">
+		<title lang="zh">节气陪你过日子</title>
+	</programme>
+	<programme channel="中国天气" start="20260207122000 +0800" stop="20260207122600 +0800">
+		<title lang="zh">四季养生堂</title>
+	</programme>
+	<programme channel="中国天气" start="20260207122600 +0800" stop="20260207123000 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207123000 +0800" stop="20260207123500 +0800">
+		<title lang="zh">气象灾害预警信号</title>
+	</programme>
+	<programme channel="中国天气" start="20260207123500 +0800" stop="20260207124000 +0800">
+		<title lang="zh">城市天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207124000 +0800" stop="20260207125000 +0800">
+		<title lang="zh">太阳系新探索</title>
+	</programme>
+	<programme channel="中国天气" start="20260207125000 +0800" stop="20260207125300 +0800">
+		<title lang="zh">世界城市三天预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207125600 +0800" stop="20260207130000 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207130000 +0800" stop="20260207130500 +0800">
+		<title lang="zh">城市天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207130500 +0800" stop="20260207131500 +0800">
+		<title lang="zh">中国地理探奇</title>
+	</programme>
+	<programme channel="中国天气" start="20260207131500 +0800" stop="20260207132600 +0800">
+		<title lang="zh">节气陪你过日子</title>
+	</programme>
+	<programme channel="中国天气" start="20260207132600 +0800" stop="20260207133000 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207133000 +0800" stop="20260207133500 +0800">
+		<title lang="zh">中国天然氧吧天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207133500 +0800" stop="20260207135600 +0800">
+		<title lang="zh">二十四节气</title>
+	</programme>
+	<programme channel="中国天气" start="20260207135600 +0800" stop="20260207140000 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207140000 +0800" stop="20260207140300 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207140500 +0800" stop="20260207141000 +0800">
+		<title lang="zh">城市天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207141000 +0800" stop="20260207142200 +0800">
+		<title lang="zh">风云奇队</title>
+	</programme>
+	<programme channel="中国天气" start="20260207142200 +0800" stop="20260207142600 +0800">
+		<title lang="zh">我的天呐</title>
+	</programme>
+	<programme channel="中国天气" start="20260207142600 +0800" stop="20260207143000 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207143000 +0800" stop="20260207143500 +0800">
+		<title lang="zh">气象灾害预警信号</title>
+	</programme>
+	<programme channel="中国天气" start="20260207143500 +0800" stop="20260207144000 +0800">
+		<title lang="zh">优秀旅游城市</title>
+	</programme>
+	<programme channel="中国天气" start="20260207144000 +0800" stop="20260207145600 +0800">
+		<title lang="zh">黄河启示录</title>
+	</programme>
+	<programme channel="中国天气" start="20260207145600 +0800" stop="20260207150000 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207150000 +0800" stop="20260207150500 +0800">
+		<title lang="zh">中国天然氧吧天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207150500 +0800" stop="20260207151000 +0800">
+		<title lang="zh">唐风诗雨</title>
+	</programme>
+	<programme channel="中国天气" start="20260207151000 +0800" stop="20260207152200 +0800">
+		<title lang="zh">风云奇队</title>
+	</programme>
+	<programme channel="中国天气" start="20260207152200 +0800" stop="20260207152600 +0800">
+		<title lang="zh">世界城市三天预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207152600 +0800" stop="20260207153000 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207153000 +0800" stop="20260207153500 +0800">
+		<title lang="zh">气象灾害预警信号</title>
+	</programme>
+	<programme channel="中国天气" start="20260207153500 +0800" stop="20260207154000 +0800">
+		<title lang="zh">优秀旅游城市</title>
+	</programme>
+	<programme channel="中国天气" start="20260207154000 +0800" stop="20260207155500 +0800">
+		<title lang="zh">黄河启示录</title>
+	</programme>
+	<programme channel="中国天气" start="20260207155600 +0800" stop="20260207160000 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207160000 +0800" stop="20260207160500 +0800">
+		<title lang="zh">城市天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207160500 +0800" stop="20260207162600 +0800">
+		<title lang="zh">古代减灾工程</title>
+	</programme>
+	<programme channel="中国天气" start="20260207162600 +0800" stop="20260207163000 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207163000 +0800" stop="20260207163500 +0800">
+		<title lang="zh">气象灾害预警信号</title>
+	</programme>
+	<programme channel="中国天气" start="20260207163500 +0800" stop="20260207165500 +0800">
+		<title lang="zh">古代减灾工程</title>
+	</programme>
+	<programme channel="中国天气" start="20260207165600 +0800" stop="20260207170000 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207170000 +0800" stop="20260207170300 +0800">
+		<title lang="zh">我的天呐</title>
+	</programme>
+	<programme channel="中国天气" start="20260207170500 +0800" stop="20260207172000 +0800">
+		<title lang="zh">古气候探秘</title>
+	</programme>
+	<programme channel="中国天气" start="20260207172000 +0800" stop="20260207172500 +0800">
+		<title lang="zh">优秀旅游城市</title>
+	</programme>
+	<programme channel="中国天气" start="20260207172600 +0800" stop="20260207173000 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207173000 +0800" stop="20260207175600 +0800">
+		<title lang="zh">中国减灾</title>
+	</programme>
+	<programme channel="中国天气" start="20260207175600 +0800" stop="20260207180000 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207180000 +0800" stop="20260207180600 +0800">
+		<title lang="zh">四季养生堂</title>
+	</programme>
+	<programme channel="中国天气" start="20260207180600 +0800" stop="20260207181100 +0800">
+		<title lang="zh">中国天然氧吧天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207181100 +0800" stop="20260207182100 +0800">
+		<title lang="zh">节气陪你过日子</title>
+	</programme>
+	<programme channel="中国天气" start="20260207182100 +0800" stop="20260207182600 +0800">
+		<title lang="zh">七天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207182600 +0800" stop="20260207183000 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207183000 +0800" stop="20260207185600 +0800">
+		<title lang="zh">三农新气象</title>
+	</programme>
+	<programme channel="中国天气" start="20260207185600 +0800" stop="20260207190000 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207190000 +0800" stop="20260207190500 +0800">
+		<title lang="zh">四季养生堂</title>
+	</programme>
+	<programme channel="中国天气" start="20260207190500 +0800" stop="20260207191500 +0800">
+		<title lang="zh">太阳系新探索</title>
+	</programme>
+	<programme channel="中国天气" start="20260207191500 +0800" stop="20260207192000 +0800">
+		<title lang="zh">唐风诗雨</title>
+	</programme>
+	<programme channel="中国天气" start="20260207192000 +0800" stop="20260207192600 +0800">
+		<title lang="zh">优秀旅游城市</title>
+	</programme>
+	<programme channel="中国天气" start="20260207192600 +0800" stop="20260207193000 +0800">
+		<title lang="zh">七天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207193000 +0800" stop="20260207193500 +0800">
+		<title lang="zh">中国天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207193500 +0800" stop="20260207194100 +0800">
+		<title lang="zh">中国减灾科普小片</title>
+	</programme>
+	<programme channel="中国天气" start="20260207194100 +0800" stop="20260207194600 +0800">
+		<title lang="zh">七天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207194900 +0800" stop="20260207195400 +0800">
+		<title lang="zh">优秀旅游城市</title>
+	</programme>
+	<programme channel="中国天气" start="20260207195600 +0800" stop="20260207200000 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207200000 +0800" stop="20260207202600 +0800">
+		<title lang="zh">谈风说水</title>
+	</programme>
+	<programme channel="中国天气" start="20260207202600 +0800" stop="20260207203000 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207203000 +0800" stop="20260207203600 +0800">
+		<title lang="zh">联播天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207203600 +0800" stop="20260207205600 +0800">
+		<title lang="zh">二十四节气</title>
+	</programme>
+	<programme channel="中国天气" start="20260207205600 +0800" stop="20260207210000 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207210000 +0800" stop="20260207210500 +0800">
+		<title lang="zh">城市天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207210500 +0800" stop="20260207211000 +0800">
+		<title lang="zh">中国天然氧吧天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207211000 +0800" stop="20260207211300 +0800">
+		<title lang="zh">我的天呐</title>
+	</programme>
+	<programme channel="中国天气" start="20260207211600 +0800" stop="20260207212100 +0800">
+		<title lang="zh">七天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207212100 +0800" stop="20260207212600 +0800">
+		<title lang="zh">优秀旅游城市</title>
+	</programme>
+	<programme channel="中国天气" start="20260207212600 +0800" stop="20260207213000 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207213000 +0800" stop="20260207213500 +0800">
+		<title lang="zh">中国天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207213500 +0800" stop="20260207214100 +0800">
+		<title lang="zh">联播天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207214100 +0800" stop="20260207215600 +0800">
+		<title lang="zh">古气候探秘</title>
+	</programme>
+	<programme channel="中国天气" start="20260207215600 +0800" stop="20260207220000 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207220000 +0800" stop="20260207220500 +0800">
+		<title lang="zh">城市天气预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207220700 +0800" stop="20260207221000 +0800">
+		<title lang="zh">世界城市三天预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207221000 +0800" stop="20260207222500 +0800">
+		<title lang="zh">古气候探秘</title>
+	</programme>
+	<programme channel="中国天气" start="20260207222600 +0800" stop="20260207223000 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207223000 +0800" stop="20260207225500 +0800">
+		<title lang="zh">中国减灾</title>
+	</programme>
+	<programme channel="中国天气" start="20260207225600 +0800" stop="20260207230000 +0800">
+		<title lang="zh">国内三天城市预报</title>
+	</programme>
+	<programme channel="中国天气" start="20260207230000 +0800" stop="20260207232600 +0800">
+		<title lang="zh">三农新气象</title>
+	</programme>
+	<programme channel="中国天气" start="20260207232600 +0800" stop="20260207233000 +0800">
+		<title lang="zh">生活气象指数</title>
+	</programme>
+	<programme channel="中国天气" start="20260207233000 +0800" stop="20260207235600 +0800">
+		<title lang="zh">谈风说水</title>
+	</programme>
+	<programme channel="中国天气" start="20260207235600 +0800" stop="20260207235900 +0800">
+		<title lang="zh">七天城市预报</title>
+	</programme>
 	<channel id="乐游">
 		<display-name lang="zh">乐游</display-name>
 	</channel>
@@ -58248,6 +58677,195 @@
 	<programme channel="卡酷少儿" start="20260206234100 +0800" stop="20260206235900 +0800">
 		<title lang="zh">喜羊羊与灰太狼之羊村守护者Ⅸ</title>
 	</programme>
+	<programme channel="卡酷少儿" start="20260207000500 +0800" stop="20260207003200 +0800">
+		<title lang="zh">喜羊羊与灰太狼之羊村守护者Ⅸ</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207003200 +0800" stop="20260207005200 +0800">
+		<title lang="zh">音乐公主爱美莉Ⅲ(1)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207005200 +0800" stop="20260207011200 +0800">
+		<title lang="zh">音乐公主爱美莉Ⅲ(2)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207011200 +0800" stop="20260207013200 +0800">
+		<title lang="zh">音乐公主爱美莉Ⅲ(3)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207013200 +0800" stop="20260207015200 +0800">
+		<title lang="zh">音乐公主爱美莉Ⅲ(4)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207015200 +0800" stop="20260207021200 +0800">
+		<title lang="zh">音乐公主爱美莉Ⅲ(5)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207021200 +0800" stop="20260207023200 +0800">
+		<title lang="zh">音乐公主爱美莉Ⅲ(6)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207023200 +0800" stop="20260207025200 +0800">
+		<title lang="zh">猪猪侠之超星五灵侠Ⅶ(1)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207025200 +0800" stop="20260207031200 +0800">
+		<title lang="zh">猪猪侠之超星五灵侠Ⅶ(2)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207031200 +0800" stop="20260207033200 +0800">
+		<title lang="zh">猪猪侠之超星五灵侠Ⅶ(3)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207033200 +0800" stop="20260207035200 +0800">
+		<title lang="zh">猪猪侠之超星五灵侠Ⅶ(4)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207035200 +0800" stop="20260207041200 +0800">
+		<title lang="zh">猪猪侠之超星五灵侠Ⅶ(5)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207041200 +0800" stop="20260207043200 +0800">
+		<title lang="zh">猪猪侠之超星五灵侠Ⅶ(6)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207043200 +0800" stop="20260207045200 +0800">
+		<title lang="zh">猪猪侠之超星五灵侠Ⅶ(7)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207045200 +0800" stop="20260207051200 +0800">
+		<title lang="zh">喜羊羊与灰太狼之羊村守护者Ⅷ</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207051200 +0800" stop="20260207053600 +0800">
+		<title lang="zh">喜羊羊与灰太狼之羊村守护者Ⅷ</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207053600 +0800" stop="20260207060000 +0800">
+		<title lang="zh">喜羊羊与灰太狼之羊村守护者Ⅷ</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207060000 +0800" stop="20260207062000 +0800">
+		<title lang="zh">猪猪侠之恐龙日记Ⅷ(3)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207062000 +0800" stop="20260207064000 +0800">
+		<title lang="zh">猪猪侠之恐龙日记Ⅷ(4)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207064000 +0800" stop="20260207070200 +0800">
+		<title lang="zh">猪猪侠之恐龙日记Ⅷ(5)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207070200 +0800" stop="20260207072500 +0800">
+		<title lang="zh">熊出没之小小世界(21)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207072500 +0800" stop="20260207074500 +0800">
+		<title lang="zh">熊出没之小小世界(22)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207074500 +0800" stop="20260207080600 +0800">
+		<title lang="zh">熊出没之小小世界(23)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207080600 +0800" stop="20260207082600 +0800">
+		<title lang="zh">熊出没之小小世界(24)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207082600 +0800" stop="20260207084800 +0800">
+		<title lang="zh">熊出没之小小世界(25)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207084800 +0800" stop="20260207090800 +0800">
+		<title lang="zh">熊出没之小小世界(26)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207090800 +0800" stop="20260207093300 +0800">
+		<title lang="zh">米奇妙妙大冒险(11)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207093300 +0800" stop="20260207095600 +0800">
+		<title lang="zh">米奇妙妙大冒险(12)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207095600 +0800" stop="20260207102000 +0800">
+		<title lang="zh">海绵宝宝ⅩⅢ(13)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207102000 +0800" stop="20260207104200 +0800">
+		<title lang="zh">海绵宝宝ⅩⅢ(14)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207104200 +0800" stop="20260207110600 +0800">
+		<title lang="zh">海绵宝宝ⅩⅢ(15)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207110600 +0800" stop="20260207112800 +0800">
+		<title lang="zh">海绵宝宝ⅩⅢ(16)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207112800 +0800" stop="20260207115300 +0800">
+		<title lang="zh">海绵宝宝ⅩⅢ(17)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207115300 +0800" stop="20260207121500 +0800">
+		<title lang="zh">海绵宝宝ⅩⅢ(18)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207121500 +0800" stop="20260207123800 +0800">
+		<title lang="zh">无敌鹿战队冰封计划(1)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207123800 +0800" stop="20260207125800 +0800">
+		<title lang="zh">无敌鹿战队Ⅲ(11)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207125800 +0800" stop="20260207132100 +0800">
+		<title lang="zh">熊出没之神奇宝物(15)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207132100 +0800" stop="20260207134100 +0800">
+		<title lang="zh">熊出没之神奇宝物(16)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207134100 +0800" stop="20260207140400 +0800">
+		<title lang="zh">熊出没之神奇宝物(17)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207140400 +0800" stop="20260207142400 +0800">
+		<title lang="zh">熊出没之神奇宝物(18)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207142400 +0800" stop="20260207144700 +0800">
+		<title lang="zh">熊出没之神奇宝物(19)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207144700 +0800" stop="20260207150700 +0800">
+		<title lang="zh">熊出没之神奇宝物(20)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207150700 +0800" stop="20260207152900 +0800">
+		<title lang="zh">熊出没之神奇宝物(21)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207152900 +0800" stop="20260207154900 +0800">
+		<title lang="zh">熊出没之神奇宝物(22)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207154900 +0800" stop="20260207161000 +0800">
+		<title lang="zh">熊出没之神奇宝物(23)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207161000 +0800" stop="20260207163000 +0800">
+		<title lang="zh">熊出没之神奇宝物(24)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207163000 +0800" stop="20260207165200 +0800">
+		<title lang="zh">熊出没之神奇宝物(25)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207165200 +0800" stop="20260207171200 +0800">
+		<title lang="zh">熊出没之神奇宝物(26)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207171200 +0800" stop="20260207172500 +0800">
+		<title lang="zh">海尔兄弟(78)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207172500 +0800" stop="20260207180800 +0800">
+		<title lang="zh">熊出没之伴我熊芯</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207180800 +0800" stop="20260207183100 +0800">
+		<title lang="zh">熊出没之伴我熊芯</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207183100 +0800" stop="20260207191400 +0800">
+		<title lang="zh">熊出没之伴我熊芯</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207191400 +0800" stop="20260207200000 +0800">
+		<title lang="zh">卡酷成长剧场</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207200000 +0800" stop="20260207202300 +0800">
+		<title lang="zh">熊出没之神奇宝物(3)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207202300 +0800" stop="20260207204600 +0800">
+		<title lang="zh">熊出没之神奇宝物(4)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207204600 +0800" stop="20260207210600 +0800">
+		<title lang="zh">熊出没之神奇宝物(5)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207210600 +0800" stop="20260207212800 +0800">
+		<title lang="zh">海尔兄弟20周年纪念版(49)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207212800 +0800" stop="20260207222000 +0800">
+		<title lang="zh">天籁新声</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207222000 +0800" stop="20260207224200 +0800">
+		<title lang="zh">海绵宝宝ⅩⅢ(15)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207224200 +0800" stop="20260207230800 +0800">
+		<title lang="zh">海绵宝宝ⅩⅢ(16)</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207230800 +0800" stop="20260207232800 +0800">
+		<title lang="zh">喜羊羊与灰太狼之羊村守护者Ⅸ</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207232800 +0800" stop="20260207234900 +0800">
+		<title lang="zh">喜羊羊与灰太狼之羊村守护者Ⅸ</title>
+	</programme>
+	<programme channel="卡酷少儿" start="20260207234900 +0800" stop="20260207235900 +0800">
+		<title lang="zh">喜羊羊与灰太狼之羊村守护者Ⅸ</title>
+	</programme>
 	<channel id="厦门卫视">
 		<display-name lang="zh">厦门卫视</display-name>
 	</channel>
@@ -65266,6 +65884,78 @@
 	<programme channel="安多卫视" start="20260206223000 +0800" stop="20260206235900 +0800">
 		<title lang="zh">康巴欢乐汇</title>
 	</programme>
+	<programme channel="安多卫视" start="20260207000000 +0800" stop="20260207022000 +0800">
+		<title lang="zh">剧场</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207022000 +0800" stop="20260207070000 +0800">
+		<title lang="zh">收播</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207070000 +0800" stop="20260207070100 +0800">
+		<title lang="zh">中华人民共和国国歌</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207070100 +0800" stop="20260207071500 +0800">
+		<title lang="zh">央视新闻联播摘要</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207071500 +0800" stop="20260207082000 +0800">
+		<title lang="zh">康巴卫视新闻</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207082000 +0800" stop="20260207085000 +0800">
+		<title lang="zh">星猫动画城</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207085000 +0800" stop="20260207093000 +0800">
+		<title lang="zh">康巴欢乐汇</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207093000 +0800" stop="20260207115000 +0800">
+		<title lang="zh">早间剧场</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207115000 +0800" stop="20260207120000 +0800">
+		<title lang="zh">每日一歌藏歌金曲</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207120000 +0800" stop="20260207121500 +0800">
+		<title lang="zh">央视新闻联播摘要</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207121500 +0800" stop="20260207124000 +0800">
+		<title lang="zh">康巴卫视新闻</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207124000 +0800" stop="20260207132000 +0800">
+		<title lang="zh">向巴聊天</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207132000 +0800" stop="20260207134000 +0800">
+		<title lang="zh">快乐汉藏语</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207134000 +0800" stop="20260207154500 +0800">
+		<title lang="zh">午间剧场</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207154500 +0800" stop="20260207183500 +0800">
+		<title lang="zh">下午剧场</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207183500 +0800" stop="20260207183700 +0800">
+		<title lang="zh">天气预报</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207183700 +0800" stop="20260207191000 +0800">
+		<title lang="zh">星猫动画城</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207191000 +0800" stop="20260207193500 +0800">
+		<title lang="zh">向巴聊天</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207193500 +0800" stop="20260207194500 +0800">
+		<title lang="zh">快乐汉藏语</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207194500 +0800" stop="20260207195000 +0800">
+		<title lang="zh">每日一歌藏歌金曲</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207195000 +0800" stop="20260207213000 +0800">
+		<title lang="zh">康巴剧场</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207213000 +0800" stop="20260207220000 +0800">
+		<title lang="zh">央视新闻联播摘要</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207220000 +0800" stop="20260207223000 +0800">
+		<title lang="zh">走进香巴拉</title>
+	</programme>
+	<programme channel="安多卫视" start="20260207223000 +0800" stop="20260207235900 +0800">
+		<title lang="zh">康巴欢乐汇</title>
+	</programme>
 	<channel id="安徽卫视">
 		<display-name lang="zh">安徽卫视</display-name>
 	</channel>
@@ -69509,6 +70199,141 @@
 		<title lang="zh">家国恩仇记(52)</title>
 	</programme>
 	<programme channel="峨眉电影" start="20260206234000 +0800" stop="20260206235900 +0800">
+		<title lang="zh">购物栏目</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207000000 +0800" stop="20260207000500 +0800">
+		<title lang="zh">购物栏目</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207000500 +0800" stop="20260207011900 +0800">
+		<title lang="zh">影响</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207011900 +0800" stop="20260207013200 +0800">
+		<title lang="zh">跟着电影去旅行电影漫谈等</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207013200 +0800" stop="20260207014400 +0800">
+		<title lang="zh">四川味道</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207014400 +0800" stop="20260207040000 +0800">
+		<title lang="zh">真过影</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207040000 +0800" stop="20260207050400 +0800">
+		<title lang="zh">真过影</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207050400 +0800" stop="20260207070000 +0800">
+		<title lang="zh">真过影</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207070000 +0800" stop="20260207070600 +0800">
+		<title lang="zh">集团宣传家味研究所</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207070600 +0800" stop="20260207074100 +0800">
+		<title lang="zh">影到位(上)</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207074100 +0800" stop="20260207080000 +0800">
+		<title lang="zh">影到位(下)</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207080000 +0800" stop="20260207081600 +0800">
+		<title lang="zh">影到位(下)</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207081600 +0800" stop="20260207085300 +0800">
+		<title lang="zh">经典影院</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207085300 +0800" stop="20260207091300 +0800">
+		<title lang="zh">小峨臻品</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207091300 +0800" stop="20260207095000 +0800">
+		<title lang="zh">经典影院</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207095000 +0800" stop="20260207101200 +0800">
+		<title lang="zh">商务栏目</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207101200 +0800" stop="20260207104700 +0800">
+		<title lang="zh">黑狐(3)</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207104700 +0800" stop="20260207110900 +0800">
+		<title lang="zh">商务栏目</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207110900 +0800" stop="20260207114400 +0800">
+		<title lang="zh">黑狐(4)</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207114400 +0800" stop="20260207120600 +0800">
+		<title lang="zh">商务栏目</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207120600 +0800" stop="20260207124100 +0800">
+		<title lang="zh">黑狐(5)</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207124100 +0800" stop="20260207130300 +0800">
+		<title lang="zh">商务栏目</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207130300 +0800" stop="20260207133800 +0800">
+		<title lang="zh">黑狐(6)</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207133800 +0800" stop="20260207140200 +0800">
+		<title lang="zh">商务栏目</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207140200 +0800" stop="20260207143700 +0800">
+		<title lang="zh">黑狐(7)</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207143700 +0800" stop="20260207145900 +0800">
+		<title lang="zh">商务栏目</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207145900 +0800" stop="20260207153400 +0800">
+		<title lang="zh">黑狐(8)</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207153400 +0800" stop="20260207155400 +0800">
+		<title lang="zh">商务栏目</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207155400 +0800" stop="20260207162100 +0800">
+		<title lang="zh">栏目集锦</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207162100 +0800" stop="20260207165600 +0800">
+		<title lang="zh">黑狐(9)</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207165600 +0800" stop="20260207171800 +0800">
+		<title lang="zh">商务栏目</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207171800 +0800" stop="20260207173400 +0800">
+		<title lang="zh">黑狐(10)</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207173400 +0800" stop="20260207180000 +0800">
+		<title lang="zh">商务栏目</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207180000 +0800" stop="20260207181200 +0800">
+		<title lang="zh">四川味道</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207181200 +0800" stop="20260207182700 +0800">
+		<title lang="zh">栏目集锦</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207182700 +0800" stop="20260207195000 +0800">
+		<title lang="zh">影响12345</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207195000 +0800" stop="20260207200000 +0800">
+		<title lang="zh">购物栏目</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207200000 +0800" stop="20260207200500 +0800">
+		<title lang="zh">公益宣传</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207200500 +0800" stop="20260207204000 +0800">
+		<title lang="zh">家国恩仇记(53)</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207204000 +0800" stop="20260207210500 +0800">
+		<title lang="zh">购物栏目</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207210500 +0800" stop="20260207214000 +0800">
+		<title lang="zh">家国恩仇记(54)</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207214000 +0800" stop="20260207220500 +0800">
+		<title lang="zh">购物栏目</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207220500 +0800" stop="20260207224000 +0800">
+		<title lang="zh">家国恩仇记(55)</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207224000 +0800" stop="20260207230500 +0800">
+		<title lang="zh">购物栏目</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207230500 +0800" stop="20260207234000 +0800">
+		<title lang="zh">家国恩仇记(56)</title>
+	</programme>
+	<programme channel="峨眉电影" start="20260207234000 +0800" stop="20260207235900 +0800">
 		<title lang="zh">购物栏目</title>
 	</programme>
 	<channel id="广东卫视">
@@ -87950,6 +88775,84 @@
 	</programme>
 	<programme channel="精彩影视" start="20260206224200 +0800" stop="20260206235900 +0800">
 		<title lang="zh">飞跃地心</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207000000 +0800" stop="20260207000100 +0800">
+		<title lang="zh">精彩呈现</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207000100 +0800" stop="20260207012700 +0800">
+		<title lang="zh">37次想你</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207012700 +0800" stop="20260207021000 +0800">
+		<title lang="zh">生于70年代(26)</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207021000 +0800" stop="20260207025300 +0800">
+		<title lang="zh">生于70年代(27)</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207025300 +0800" stop="20260207033500 +0800">
+		<title lang="zh">生于70年代(28)</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207033500 +0800" stop="20260207041800 +0800">
+		<title lang="zh">生于70年代(29)</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207041800 +0800" stop="20260207050200 +0800">
+		<title lang="zh">生于70年代(30)</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207050200 +0800" stop="20260207054400 +0800">
+		<title lang="zh">红鲨突击(30)</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207054400 +0800" stop="20260207062600 +0800">
+		<title lang="zh">红鲨突击(31)</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207062600 +0800" stop="20260207070700 +0800">
+		<title lang="zh">红鲨突击(32)</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207070700 +0800" stop="20260207074800 +0800">
+		<title lang="zh">红鲨突击(33)</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207074800 +0800" stop="20260207092200 +0800">
+		<title lang="zh">不二神探</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207092200 +0800" stop="20260207100500 +0800">
+		<title lang="zh">生于70年代(31)</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207100500 +0800" stop="20260207104700 +0800">
+		<title lang="zh">生于70年代(32)</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207104700 +0800" stop="20260207113000 +0800">
+		<title lang="zh">幸福院(1)</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207113000 +0800" stop="20260207121300 +0800">
+		<title lang="zh">幸福院(2)</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207121300 +0800" stop="20260207134600 +0800">
+		<title lang="zh">亲密敌人</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207134600 +0800" stop="20260207152800 +0800">
+		<title lang="zh">驴得水</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207152800 +0800" stop="20260207165800 +0800">
+		<title lang="zh">今天明天</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207165800 +0800" stop="20260207182400 +0800">
+		<title lang="zh">玩命</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207182400 +0800" stop="20260207190500 +0800">
+		<title lang="zh">红鲨突击(34)</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207190500 +0800" stop="20260207194600 +0800">
+		<title lang="zh">红鲨突击(35)</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207194600 +0800" stop="20260207202700 +0800">
+		<title lang="zh">红鲨突击(36)</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207202700 +0800" stop="20260207210800 +0800">
+		<title lang="zh">红鲨突击(37)</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207210800 +0800" stop="20260207223600 +0800">
+		<title lang="zh">梦醒黄金城</title>
+	</programme>
+	<programme channel="精彩影视" start="20260207223600 +0800" stop="20260207235900 +0800">
+		<title lang="zh">西游记之七十二变</title>
 	</programme>
 	<channel id="茶频道">
 		<display-name lang="zh">茶频道</display-name>
