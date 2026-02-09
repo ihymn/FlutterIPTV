@@ -33465,814 +33465,811 @@
 		<title lang="zh">电视剧</title>
 		<desc lang="zh">暂无节目描述</desc>
 	</programme>
-	<channel id="SCTV科教高清">
-		<display-name lang="zh">SCTV科教高清</display-name>
-	</channel>
-	<channel id="SCTV科教高清">
+	<channel id="SCTV科教">
 		<display-name lang="zh">SCTV科教</display-name>
 	</channel>
-	<programme channel="SCTV科教高清" start="20260203000000 +0800" stop="20260203001000 +0800">
+	<programme channel="SCTV科教" start="20260203000000 +0800" stop="20260203001000 +0800">
 		<title lang="zh">科教节目:微讲堂</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203001000 +0800" stop="20260203003500 +0800">
+	<programme channel="SCTV科教" start="20260203001000 +0800" stop="20260203003500 +0800">
 		<title lang="zh">科教节目:微讲堂(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203003500 +0800" stop="20260203010000 +0800">
+	<programme channel="SCTV科教" start="20260203003500 +0800" stop="20260203010000 +0800">
 		<title lang="zh">科教节目:国宝时刻(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203010000 +0800" stop="20260203040000 +0800">
+	<programme channel="SCTV科教" start="20260203010000 +0800" stop="20260203040000 +0800">
 		<title lang="zh">科教节目:生态秘境(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203040000 +0800" stop="20260203043000 +0800">
+	<programme channel="SCTV科教" start="20260203040000 +0800" stop="20260203043000 +0800">
 		<title lang="zh">科教节目:奇趣大自然</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203043000 +0800" stop="20260203053000 +0800">
+	<programme channel="SCTV科教" start="20260203043000 +0800" stop="20260203053000 +0800">
 		<title lang="zh">科教节目:微讲堂</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203053000 +0800" stop="20260203060000 +0800">
+	<programme channel="SCTV科教" start="20260203053000 +0800" stop="20260203060000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203060000 +0800" stop="20260203070500 +0800">
+	<programme channel="SCTV科教" start="20260203060000 +0800" stop="20260203070500 +0800">
 		<title lang="zh">科教节目:生态秘境</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203070500 +0800" stop="20260203072000 +0800">
+	<programme channel="SCTV科教" start="20260203070500 +0800" stop="20260203072000 +0800">
 		<title lang="zh">四川教育新闻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203072000 +0800" stop="20260203073000 +0800">
+	<programme channel="SCTV科教" start="20260203072000 +0800" stop="20260203073000 +0800">
 		<title lang="zh">高考360</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203073000 +0800" stop="20260203080000 +0800">
+	<programme channel="SCTV科教" start="20260203073000 +0800" stop="20260203080000 +0800">
 		<title lang="zh">你好，老同学</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203080000 +0800" stop="20260203083500 +0800">
+	<programme channel="SCTV科教" start="20260203080000 +0800" stop="20260203083500 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203083500 +0800" stop="20260203092000 +0800">
+	<programme channel="SCTV科教" start="20260203083500 +0800" stop="20260203092000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203092000 +0800" stop="20260203102000 +0800">
+	<programme channel="SCTV科教" start="20260203092000 +0800" stop="20260203102000 +0800">
 		<title lang="zh">科教剧场:铁血茶城27</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203102000 +0800" stop="20260203112000 +0800">
+	<programme channel="SCTV科教" start="20260203102000 +0800" stop="20260203112000 +0800">
 		<title lang="zh">科教剧场:铁血茶城28</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203112000 +0800" stop="20260203122000 +0800">
+	<programme channel="SCTV科教" start="20260203112000 +0800" stop="20260203122000 +0800">
 		<title lang="zh">科教剧场:铁血茶城29</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203122000 +0800" stop="20260203132000 +0800">
+	<programme channel="SCTV科教" start="20260203122000 +0800" stop="20260203132000 +0800">
 		<title lang="zh">科教剧场:铁血茶城30</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203132000 +0800" stop="20260203142000 +0800">
+	<programme channel="SCTV科教" start="20260203132000 +0800" stop="20260203142000 +0800">
 		<title lang="zh">科教剧场:铁血茶城31</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203142000 +0800" stop="20260203152000 +0800">
+	<programme channel="SCTV科教" start="20260203142000 +0800" stop="20260203152000 +0800">
 		<title lang="zh">科教剧场:铁血茶城32</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203152000 +0800" stop="20260203162000 +0800">
+	<programme channel="SCTV科教" start="20260203152000 +0800" stop="20260203162000 +0800">
 		<title lang="zh">科教剧场:铁血茶城33</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203162000 +0800" stop="20260203172000 +0800">
+	<programme channel="SCTV科教" start="20260203162000 +0800" stop="20260203172000 +0800">
 		<title lang="zh">科教剧场:铁血茶城34</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203172000 +0800" stop="20260203180000 +0800">
+	<programme channel="SCTV科教" start="20260203172000 +0800" stop="20260203180000 +0800">
 		<title lang="zh">科教剧场:铁血茶城35</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203180000 +0800" stop="20260203183000 +0800">
+	<programme channel="SCTV科教" start="20260203180000 +0800" stop="20260203183000 +0800">
 		<title lang="zh">科教节目:奇趣大自然</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203183000 +0800" stop="20260203190000 +0800">
+	<programme channel="SCTV科教" start="20260203183000 +0800" stop="20260203190000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203190000 +0800" stop="20260203193000 +0800">
+	<programme channel="SCTV科教" start="20260203190000 +0800" stop="20260203193000 +0800">
 		<title lang="zh">转播中央广播电视台新闻联播</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203193000 +0800" stop="20260203194500 +0800">
+	<programme channel="SCTV科教" start="20260203193000 +0800" stop="20260203194500 +0800">
 		<title lang="zh">四川教育新闻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203194500 +0800" stop="20260203200000 +0800">
+	<programme channel="SCTV科教" start="20260203194500 +0800" stop="20260203200000 +0800">
 		<title lang="zh">高考360</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203200000 +0800" stop="20260203202500 +0800">
+	<programme channel="SCTV科教" start="20260203200000 +0800" stop="20260203202500 +0800">
 		<title lang="zh">体育四川</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203202500 +0800" stop="20260203205000 +0800">
+	<programme channel="SCTV科教" start="20260203202500 +0800" stop="20260203205000 +0800">
 		<title lang="zh">生态秘境</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203205000 +0800" stop="20260203210500 +0800">
+	<programme channel="SCTV科教" start="20260203205000 +0800" stop="20260203210500 +0800">
 		<title lang="zh">四川教育新闻(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203210500 +0800" stop="20260203213000 +0800">
+	<programme channel="SCTV科教" start="20260203210500 +0800" stop="20260203213000 +0800">
 		<title lang="zh">高考360(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203213000 +0800" stop="20260203224000 +0800">
+	<programme channel="SCTV科教" start="20260203213000 +0800" stop="20260203224000 +0800">
 		<title lang="zh">晚间剧场: 大西南剿匪记10</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203224000 +0800" stop="20260203233000 +0800">
+	<programme channel="SCTV科教" start="20260203224000 +0800" stop="20260203233000 +0800">
 		<title lang="zh">晚间剧场: 大西南剿匪记11</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260203233000 +0800" stop="20260204001000 +0800">
+	<programme channel="SCTV科教" start="20260203233000 +0800" stop="20260204001000 +0800">
 		<title lang="zh">体育四川</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204001000 +0800" stop="20260204003500 +0800">
+	<programme channel="SCTV科教" start="20260204001000 +0800" stop="20260204003500 +0800">
 		<title lang="zh">科教节目:微讲堂(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204003500 +0800" stop="20260204010000 +0800">
+	<programme channel="SCTV科教" start="20260204003500 +0800" stop="20260204010000 +0800">
 		<title lang="zh">科教节目:国宝时刻(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204010000 +0800" stop="20260204021500 +0800">
+	<programme channel="SCTV科教" start="20260204010000 +0800" stop="20260204021500 +0800">
 		<title lang="zh">科教节目:生态秘境(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204021500 +0800" stop="20260204040000 +0800">
+	<programme channel="SCTV科教" start="20260204021500 +0800" stop="20260204040000 +0800">
 		<title lang="zh">科教节目:奇趣大自然(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204040000 +0800" stop="20260204043000 +0800">
+	<programme channel="SCTV科教" start="20260204040000 +0800" stop="20260204043000 +0800">
 		<title lang="zh">科教节目:奇趣大自然</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204043000 +0800" stop="20260204053000 +0800">
+	<programme channel="SCTV科教" start="20260204043000 +0800" stop="20260204053000 +0800">
 		<title lang="zh">科教节目:微讲堂</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204053000 +0800" stop="20260204060000 +0800">
+	<programme channel="SCTV科教" start="20260204053000 +0800" stop="20260204060000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204060000 +0800" stop="20260204070500 +0800">
+	<programme channel="SCTV科教" start="20260204060000 +0800" stop="20260204070500 +0800">
 		<title lang="zh">科教节目:生态秘境</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204070500 +0800" stop="20260204072000 +0800">
+	<programme channel="SCTV科教" start="20260204070500 +0800" stop="20260204072000 +0800">
 		<title lang="zh">四川教育新闻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204072000 +0800" stop="20260204073000 +0800">
+	<programme channel="SCTV科教" start="20260204072000 +0800" stop="20260204073000 +0800">
 		<title lang="zh">高考360</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204073000 +0800" stop="20260204080000 +0800">
+	<programme channel="SCTV科教" start="20260204073000 +0800" stop="20260204080000 +0800">
 		<title lang="zh">科教节目:微讲堂</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204080000 +0800" stop="20260204083500 +0800">
+	<programme channel="SCTV科教" start="20260204080000 +0800" stop="20260204083500 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204083500 +0800" stop="20260204092000 +0800">
+	<programme channel="SCTV科教" start="20260204083500 +0800" stop="20260204092000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204092000 +0800" stop="20260204102000 +0800">
+	<programme channel="SCTV科教" start="20260204092000 +0800" stop="20260204102000 +0800">
 		<title lang="zh">科教剧场:铁血茶城36</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204102000 +0800" stop="20260204112000 +0800">
+	<programme channel="SCTV科教" start="20260204102000 +0800" stop="20260204112000 +0800">
 		<title lang="zh">科教剧场:铁血茶城37</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204112000 +0800" stop="20260204122000 +0800">
+	<programme channel="SCTV科教" start="20260204112000 +0800" stop="20260204122000 +0800">
 		<title lang="zh">科教剧场:铁血茶城38</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204122000 +0800" stop="20260204132000 +0800">
+	<programme channel="SCTV科教" start="20260204122000 +0800" stop="20260204132000 +0800">
 		<title lang="zh">科教剧场:铁血茶城39</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204132000 +0800" stop="20260204142000 +0800">
+	<programme channel="SCTV科教" start="20260204132000 +0800" stop="20260204142000 +0800">
 		<title lang="zh">科教剧场:铁血茶城40</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204142000 +0800" stop="20260204152000 +0800">
+	<programme channel="SCTV科教" start="20260204142000 +0800" stop="20260204152000 +0800">
 		<title lang="zh">科教剧场:铁血茶城41</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204152000 +0800" stop="20260204162000 +0800">
+	<programme channel="SCTV科教" start="20260204152000 +0800" stop="20260204162000 +0800">
 		<title lang="zh">科教剧场:铁血茶城42</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204162000 +0800" stop="20260204172000 +0800">
+	<programme channel="SCTV科教" start="20260204162000 +0800" stop="20260204172000 +0800">
 		<title lang="zh">科教剧场:铁血茶城43</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204172000 +0800" stop="20260204180000 +0800">
+	<programme channel="SCTV科教" start="20260204172000 +0800" stop="20260204180000 +0800">
 		<title lang="zh">科教剧场:铁血茶城44</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204180000 +0800" stop="20260204183000 +0800">
+	<programme channel="SCTV科教" start="20260204180000 +0800" stop="20260204183000 +0800">
 		<title lang="zh">科教节目:奇趣大自然</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204183000 +0800" stop="20260204190000 +0800">
+	<programme channel="SCTV科教" start="20260204183000 +0800" stop="20260204190000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204190000 +0800" stop="20260204193000 +0800">
+	<programme channel="SCTV科教" start="20260204190000 +0800" stop="20260204193000 +0800">
 		<title lang="zh">转播中央广播电视台新闻联播</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204193000 +0800" stop="20260204194500 +0800">
+	<programme channel="SCTV科教" start="20260204193000 +0800" stop="20260204194500 +0800">
 		<title lang="zh">四川教育新闻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204194500 +0800" stop="20260204200000 +0800">
+	<programme channel="SCTV科教" start="20260204194500 +0800" stop="20260204200000 +0800">
 		<title lang="zh">高考360</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204200000 +0800" stop="20260204202500 +0800">
+	<programme channel="SCTV科教" start="20260204200000 +0800" stop="20260204202500 +0800">
 		<title lang="zh">名校名师名校长</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204202500 +0800" stop="20260204205000 +0800">
+	<programme channel="SCTV科教" start="20260204202500 +0800" stop="20260204205000 +0800">
 		<title lang="zh">生态秘境</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204205000 +0800" stop="20260204210500 +0800">
+	<programme channel="SCTV科教" start="20260204205000 +0800" stop="20260204210500 +0800">
 		<title lang="zh">四川教育新闻(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204210500 +0800" stop="20260204213000 +0800">
+	<programme channel="SCTV科教" start="20260204210500 +0800" stop="20260204213000 +0800">
 		<title lang="zh">高考360(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204213000 +0800" stop="20260204224000 +0800">
+	<programme channel="SCTV科教" start="20260204213000 +0800" stop="20260204224000 +0800">
 		<title lang="zh">晚间剧场: 大西南剿匪记12</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204224000 +0800" stop="20260204233000 +0800">
+	<programme channel="SCTV科教" start="20260204224000 +0800" stop="20260204233000 +0800">
 		<title lang="zh">晚间剧场: 大西南剿匪记13</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260204233000 +0800" stop="20260205001000 +0800">
+	<programme channel="SCTV科教" start="20260204233000 +0800" stop="20260205001000 +0800">
 		<title lang="zh">名校名师名校长</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205001000 +0800" stop="20260205003500 +0800">
+	<programme channel="SCTV科教" start="20260205001000 +0800" stop="20260205003500 +0800">
 		<title lang="zh">科教节目:微讲堂(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205003500 +0800" stop="20260205010000 +0800">
+	<programme channel="SCTV科教" start="20260205003500 +0800" stop="20260205010000 +0800">
 		<title lang="zh">科教节目:国宝时刻(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205010000 +0800" stop="20260205021500 +0800">
+	<programme channel="SCTV科教" start="20260205010000 +0800" stop="20260205021500 +0800">
 		<title lang="zh">科教节目:生态秘境(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205021500 +0800" stop="20260205040000 +0800">
+	<programme channel="SCTV科教" start="20260205021500 +0800" stop="20260205040000 +0800">
 		<title lang="zh">科教节目:奇趣大自然(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205040000 +0800" stop="20260205043000 +0800">
+	<programme channel="SCTV科教" start="20260205040000 +0800" stop="20260205043000 +0800">
 		<title lang="zh">科教节目:奇趣大自然</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205043000 +0800" stop="20260205053000 +0800">
+	<programme channel="SCTV科教" start="20260205043000 +0800" stop="20260205053000 +0800">
 		<title lang="zh">科教节目:微讲堂</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205053000 +0800" stop="20260205060000 +0800">
+	<programme channel="SCTV科教" start="20260205053000 +0800" stop="20260205060000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205060000 +0800" stop="20260205070500 +0800">
+	<programme channel="SCTV科教" start="20260205060000 +0800" stop="20260205070500 +0800">
 		<title lang="zh">科教节目:生态秘境</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205070500 +0800" stop="20260205072000 +0800">
+	<programme channel="SCTV科教" start="20260205070500 +0800" stop="20260205072000 +0800">
 		<title lang="zh">四川教育新闻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205072000 +0800" stop="20260205073000 +0800">
+	<programme channel="SCTV科教" start="20260205072000 +0800" stop="20260205073000 +0800">
 		<title lang="zh">高考360</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205073000 +0800" stop="20260205080000 +0800">
+	<programme channel="SCTV科教" start="20260205073000 +0800" stop="20260205080000 +0800">
 		<title lang="zh">科教节目:微讲堂</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205080000 +0800" stop="20260205083500 +0800">
+	<programme channel="SCTV科教" start="20260205080000 +0800" stop="20260205083500 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205083500 +0800" stop="20260205092000 +0800">
+	<programme channel="SCTV科教" start="20260205083500 +0800" stop="20260205092000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205092000 +0800" stop="20260205102000 +0800">
+	<programme channel="SCTV科教" start="20260205092000 +0800" stop="20260205102000 +0800">
 		<title lang="zh">科教剧场:铁血茶城45</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205102000 +0800" stop="20260205112000 +0800">
+	<programme channel="SCTV科教" start="20260205102000 +0800" stop="20260205112000 +0800">
 		<title lang="zh">科教剧场:铁血茶城46</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205112000 +0800" stop="20260205122000 +0800">
+	<programme channel="SCTV科教" start="20260205112000 +0800" stop="20260205122000 +0800">
 		<title lang="zh">科教剧场:铁血茶城47</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205122000 +0800" stop="20260205132000 +0800">
+	<programme channel="SCTV科教" start="20260205122000 +0800" stop="20260205132000 +0800">
 		<title lang="zh">科教剧场:苍狼01</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205132000 +0800" stop="20260205142000 +0800">
+	<programme channel="SCTV科教" start="20260205132000 +0800" stop="20260205142000 +0800">
 		<title lang="zh">科教剧场:苍狼02</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205142000 +0800" stop="20260205152000 +0800">
+	<programme channel="SCTV科教" start="20260205142000 +0800" stop="20260205152000 +0800">
 		<title lang="zh">科教剧场:苍狼03</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205152000 +0800" stop="20260205162000 +0800">
+	<programme channel="SCTV科教" start="20260205152000 +0800" stop="20260205162000 +0800">
 		<title lang="zh">科教剧场:苍狼04</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205162000 +0800" stop="20260205172000 +0800">
+	<programme channel="SCTV科教" start="20260205162000 +0800" stop="20260205172000 +0800">
 		<title lang="zh">科教剧场:苍狼05</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205172000 +0800" stop="20260205180000 +0800">
+	<programme channel="SCTV科教" start="20260205172000 +0800" stop="20260205180000 +0800">
 		<title lang="zh">科教剧场:苍狼06</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205180000 +0800" stop="20260205183000 +0800">
+	<programme channel="SCTV科教" start="20260205180000 +0800" stop="20260205183000 +0800">
 		<title lang="zh">科教节目:奇趣大自然</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205183000 +0800" stop="20260205190000 +0800">
+	<programme channel="SCTV科教" start="20260205183000 +0800" stop="20260205190000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205190000 +0800" stop="20260205193000 +0800">
+	<programme channel="SCTV科教" start="20260205190000 +0800" stop="20260205193000 +0800">
 		<title lang="zh">转播中央广播电视台新闻联播</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205193000 +0800" stop="20260205194500 +0800">
+	<programme channel="SCTV科教" start="20260205193000 +0800" stop="20260205194500 +0800">
 		<title lang="zh">四川教育新闻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205194500 +0800" stop="20260205200000 +0800">
+	<programme channel="SCTV科教" start="20260205194500 +0800" stop="20260205200000 +0800">
 		<title lang="zh">高考360</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205200000 +0800" stop="20260205202500 +0800">
+	<programme channel="SCTV科教" start="20260205200000 +0800" stop="20260205202500 +0800">
 		<title lang="zh">科教节目:生态秘境</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205202500 +0800" stop="20260205205000 +0800">
+	<programme channel="SCTV科教" start="20260205202500 +0800" stop="20260205205000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205205000 +0800" stop="20260205210500 +0800">
+	<programme channel="SCTV科教" start="20260205205000 +0800" stop="20260205210500 +0800">
 		<title lang="zh">四川教育新闻(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205210500 +0800" stop="20260205213000 +0800">
+	<programme channel="SCTV科教" start="20260205210500 +0800" stop="20260205213000 +0800">
 		<title lang="zh">高考360(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205213000 +0800" stop="20260205224000 +0800">
+	<programme channel="SCTV科教" start="20260205213000 +0800" stop="20260205224000 +0800">
 		<title lang="zh">晚间剧场: 大西南剿匪记14</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205224000 +0800" stop="20260205233000 +0800">
+	<programme channel="SCTV科教" start="20260205224000 +0800" stop="20260205233000 +0800">
 		<title lang="zh">晚间剧场: 大西南剿匪记15</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260205233000 +0800" stop="20260206001000 +0800">
+	<programme channel="SCTV科教" start="20260205233000 +0800" stop="20260206001000 +0800">
 		<title lang="zh">科教节目:微讲堂</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206001000 +0800" stop="20260206003500 +0800">
+	<programme channel="SCTV科教" start="20260206001000 +0800" stop="20260206003500 +0800">
 		<title lang="zh">科教节目:微讲堂(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206003500 +0800" stop="20260206010000 +0800">
+	<programme channel="SCTV科教" start="20260206003500 +0800" stop="20260206010000 +0800">
 		<title lang="zh">科教节目:国宝时刻(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206010000 +0800" stop="20260206021500 +0800">
+	<programme channel="SCTV科教" start="20260206010000 +0800" stop="20260206021500 +0800">
 		<title lang="zh">科教节目:生态秘境(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206021500 +0800" stop="20260206040000 +0800">
+	<programme channel="SCTV科教" start="20260206021500 +0800" stop="20260206040000 +0800">
 		<title lang="zh">科教节目:奇趣大自然(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206040000 +0800" stop="20260206043000 +0800">
+	<programme channel="SCTV科教" start="20260206040000 +0800" stop="20260206043000 +0800">
 		<title lang="zh">科教节目:奇趣大自然</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206043000 +0800" stop="20260206053000 +0800">
+	<programme channel="SCTV科教" start="20260206043000 +0800" stop="20260206053000 +0800">
 		<title lang="zh">科教节目:微讲堂</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206053000 +0800" stop="20260206060000 +0800">
+	<programme channel="SCTV科教" start="20260206053000 +0800" stop="20260206060000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206060000 +0800" stop="20260206070500 +0800">
+	<programme channel="SCTV科教" start="20260206060000 +0800" stop="20260206070500 +0800">
 		<title lang="zh">科教节目:生态秘境</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206070500 +0800" stop="20260206072000 +0800">
+	<programme channel="SCTV科教" start="20260206070500 +0800" stop="20260206072000 +0800">
 		<title lang="zh">四川教育新闻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206072000 +0800" stop="20260206073000 +0800">
+	<programme channel="SCTV科教" start="20260206072000 +0800" stop="20260206073000 +0800">
 		<title lang="zh">高考360</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206073000 +0800" stop="20260206080000 +0800">
+	<programme channel="SCTV科教" start="20260206073000 +0800" stop="20260206080000 +0800">
 		<title lang="zh">科教节目:微讲堂</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206080000 +0800" stop="20260206083500 +0800">
+	<programme channel="SCTV科教" start="20260206080000 +0800" stop="20260206083500 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206083500 +0800" stop="20260206092000 +0800">
+	<programme channel="SCTV科教" start="20260206083500 +0800" stop="20260206092000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206092000 +0800" stop="20260206102000 +0800">
+	<programme channel="SCTV科教" start="20260206092000 +0800" stop="20260206102000 +0800">
 		<title lang="zh">科教剧场:苍狼07</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206102000 +0800" stop="20260206112000 +0800">
+	<programme channel="SCTV科教" start="20260206102000 +0800" stop="20260206112000 +0800">
 		<title lang="zh">科教剧场:苍狼08</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206112000 +0800" stop="20260206122000 +0800">
+	<programme channel="SCTV科教" start="20260206112000 +0800" stop="20260206122000 +0800">
 		<title lang="zh">科教剧场:苍狼09</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206122000 +0800" stop="20260206132000 +0800">
+	<programme channel="SCTV科教" start="20260206122000 +0800" stop="20260206132000 +0800">
 		<title lang="zh">科教剧场:苍狼10</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206132000 +0800" stop="20260206142000 +0800">
+	<programme channel="SCTV科教" start="20260206132000 +0800" stop="20260206142000 +0800">
 		<title lang="zh">科教剧场:苍狼11</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206142000 +0800" stop="20260206152000 +0800">
+	<programme channel="SCTV科教" start="20260206142000 +0800" stop="20260206152000 +0800">
 		<title lang="zh">科教剧场:苍狼12</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206152000 +0800" stop="20260206162000 +0800">
+	<programme channel="SCTV科教" start="20260206152000 +0800" stop="20260206162000 +0800">
 		<title lang="zh">科教剧场:苍狼13</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206162000 +0800" stop="20260206172000 +0800">
+	<programme channel="SCTV科教" start="20260206162000 +0800" stop="20260206172000 +0800">
 		<title lang="zh">科教剧场:苍狼14</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206172000 +0800" stop="20260206180000 +0800">
+	<programme channel="SCTV科教" start="20260206172000 +0800" stop="20260206180000 +0800">
 		<title lang="zh">科教剧场:苍狼15</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206180000 +0800" stop="20260206183000 +0800">
+	<programme channel="SCTV科教" start="20260206180000 +0800" stop="20260206183000 +0800">
 		<title lang="zh">科教节目:奇趣大自然</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206183000 +0800" stop="20260206190000 +0800">
+	<programme channel="SCTV科教" start="20260206183000 +0800" stop="20260206190000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206190000 +0800" stop="20260206193000 +0800">
+	<programme channel="SCTV科教" start="20260206190000 +0800" stop="20260206193000 +0800">
 		<title lang="zh">转播中央广播电视台新闻联播</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206193000 +0800" stop="20260206194500 +0800">
+	<programme channel="SCTV科教" start="20260206193000 +0800" stop="20260206194500 +0800">
 		<title lang="zh">四川教育新闻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206194500 +0800" stop="20260206200000 +0800">
+	<programme channel="SCTV科教" start="20260206194500 +0800" stop="20260206200000 +0800">
 		<title lang="zh">高考360</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206200000 +0800" stop="20260206202500 +0800">
+	<programme channel="SCTV科教" start="20260206200000 +0800" stop="20260206202500 +0800">
 		<title lang="zh">校园全媒体</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206202500 +0800" stop="20260206213000 +0800">
+	<programme channel="SCTV科教" start="20260206202500 +0800" stop="20260206213000 +0800">
 		<title lang="zh">天府家长“慧”特别节目</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206213000 +0800" stop="20260206224000 +0800">
+	<programme channel="SCTV科教" start="20260206213000 +0800" stop="20260206224000 +0800">
 		<title lang="zh">晚间剧场: 大西南剿匪记16</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206224000 +0800" stop="20260206233000 +0800">
+	<programme channel="SCTV科教" start="20260206224000 +0800" stop="20260206233000 +0800">
 		<title lang="zh">晚间剧场: 大西南剿匪记17</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260206233000 +0800" stop="20260207001000 +0800">
+	<programme channel="SCTV科教" start="20260206233000 +0800" stop="20260207001000 +0800">
 		<title lang="zh">科教节目:微讲堂</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207001000 +0800" stop="20260207003500 +0800">
+	<programme channel="SCTV科教" start="20260207001000 +0800" stop="20260207003500 +0800">
 		<title lang="zh">科教节目:微讲堂(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207003500 +0800" stop="20260207010000 +0800">
+	<programme channel="SCTV科教" start="20260207003500 +0800" stop="20260207010000 +0800">
 		<title lang="zh">科教节目:国宝时刻(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207010000 +0800" stop="20260207021500 +0800">
+	<programme channel="SCTV科教" start="20260207010000 +0800" stop="20260207021500 +0800">
 		<title lang="zh">科教节目:生态秘境(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207021500 +0800" stop="20260207040000 +0800">
+	<programme channel="SCTV科教" start="20260207021500 +0800" stop="20260207040000 +0800">
 		<title lang="zh">科教节目:奇趣大自然(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207040000 +0800" stop="20260207043000 +0800">
+	<programme channel="SCTV科教" start="20260207040000 +0800" stop="20260207043000 +0800">
 		<title lang="zh">科教节目:奇趣大自然</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207043000 +0800" stop="20260207053000 +0800">
+	<programme channel="SCTV科教" start="20260207043000 +0800" stop="20260207053000 +0800">
 		<title lang="zh">科教节目:微讲堂</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207053000 +0800" stop="20260207060000 +0800">
+	<programme channel="SCTV科教" start="20260207053000 +0800" stop="20260207060000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207060000 +0800" stop="20260207070500 +0800">
+	<programme channel="SCTV科教" start="20260207060000 +0800" stop="20260207070500 +0800">
 		<title lang="zh">科教节目:生态秘境</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207070500 +0800" stop="20260207072000 +0800">
+	<programme channel="SCTV科教" start="20260207070500 +0800" stop="20260207072000 +0800">
 		<title lang="zh">四川教育新闻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207072000 +0800" stop="20260207073000 +0800">
+	<programme channel="SCTV科教" start="20260207072000 +0800" stop="20260207073000 +0800">
 		<title lang="zh">高考360</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207073000 +0800" stop="20260207080000 +0800">
+	<programme channel="SCTV科教" start="20260207073000 +0800" stop="20260207080000 +0800">
 		<title lang="zh">科教节目:微讲堂</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207080000 +0800" stop="20260207083500 +0800">
+	<programme channel="SCTV科教" start="20260207080000 +0800" stop="20260207083500 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207083500 +0800" stop="20260207092000 +0800">
+	<programme channel="SCTV科教" start="20260207083500 +0800" stop="20260207092000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207092000 +0800" stop="20260207102000 +0800">
+	<programme channel="SCTV科教" start="20260207092000 +0800" stop="20260207102000 +0800">
 		<title lang="zh">科教剧场:苍狼16</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207102000 +0800" stop="20260207112000 +0800">
+	<programme channel="SCTV科教" start="20260207102000 +0800" stop="20260207112000 +0800">
 		<title lang="zh">科教剧场:苍狼17</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207112000 +0800" stop="20260207122000 +0800">
+	<programme channel="SCTV科教" start="20260207112000 +0800" stop="20260207122000 +0800">
 		<title lang="zh">科教剧场:苍狼18</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207122000 +0800" stop="20260207132000 +0800">
+	<programme channel="SCTV科教" start="20260207122000 +0800" stop="20260207132000 +0800">
 		<title lang="zh">科教剧场:苍狼19</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207132000 +0800" stop="20260207142000 +0800">
+	<programme channel="SCTV科教" start="20260207132000 +0800" stop="20260207142000 +0800">
 		<title lang="zh">科教剧场:苍狼20</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207142000 +0800" stop="20260207152000 +0800">
+	<programme channel="SCTV科教" start="20260207142000 +0800" stop="20260207152000 +0800">
 		<title lang="zh">科教剧场:苍狼21</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207152000 +0800" stop="20260207162000 +0800">
+	<programme channel="SCTV科教" start="20260207152000 +0800" stop="20260207162000 +0800">
 		<title lang="zh">科教剧场:苍狼22</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207162000 +0800" stop="20260207172000 +0800">
+	<programme channel="SCTV科教" start="20260207162000 +0800" stop="20260207172000 +0800">
 		<title lang="zh">科教剧场:苍狼23</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207172000 +0800" stop="20260207180000 +0800">
+	<programme channel="SCTV科教" start="20260207172000 +0800" stop="20260207180000 +0800">
 		<title lang="zh">科教剧场:苍狼24</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207180000 +0800" stop="20260207183000 +0800">
+	<programme channel="SCTV科教" start="20260207180000 +0800" stop="20260207183000 +0800">
 		<title lang="zh">科教节目:奇趣大自然</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207183000 +0800" stop="20260207190000 +0800">
+	<programme channel="SCTV科教" start="20260207183000 +0800" stop="20260207190000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207190000 +0800" stop="20260207193000 +0800">
+	<programme channel="SCTV科教" start="20260207190000 +0800" stop="20260207193000 +0800">
 		<title lang="zh">转播中央广播电视台新闻联播</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207193000 +0800" stop="20260207194500 +0800">
+	<programme channel="SCTV科教" start="20260207193000 +0800" stop="20260207194500 +0800">
 		<title lang="zh">四川教育新闻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207194500 +0800" stop="20260207200000 +0800">
+	<programme channel="SCTV科教" start="20260207194500 +0800" stop="20260207200000 +0800">
 		<title lang="zh">高考360</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207200000 +0800" stop="20260207202500 +0800">
+	<programme channel="SCTV科教" start="20260207200000 +0800" stop="20260207202500 +0800">
 		<title lang="zh">科教节目:生态秘境</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207202500 +0800" stop="20260207205000 +0800">
+	<programme channel="SCTV科教" start="20260207202500 +0800" stop="20260207205000 +0800">
 		<title lang="zh">科教节目: 国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207205000 +0800" stop="20260207210500 +0800">
+	<programme channel="SCTV科教" start="20260207205000 +0800" stop="20260207210500 +0800">
 		<title lang="zh">四川教育新闻(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207210500 +0800" stop="20260207213000 +0800">
+	<programme channel="SCTV科教" start="20260207210500 +0800" stop="20260207213000 +0800">
 		<title lang="zh">高考360(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207213000 +0800" stop="20260207224000 +0800">
+	<programme channel="SCTV科教" start="20260207213000 +0800" stop="20260207224000 +0800">
 		<title lang="zh">晚间剧场: 大西南剿匪记18</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207224000 +0800" stop="20260207233000 +0800">
+	<programme channel="SCTV科教" start="20260207224000 +0800" stop="20260207233000 +0800">
 		<title lang="zh">晚间剧场: 大西南剿匪记19</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260207233000 +0800" stop="20260208001000 +0800">
+	<programme channel="SCTV科教" start="20260207233000 +0800" stop="20260208001000 +0800">
 		<title lang="zh">科教节目:微讲堂</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208001000 +0800" stop="20260208003500 +0800">
+	<programme channel="SCTV科教" start="20260208001000 +0800" stop="20260208003500 +0800">
 		<title lang="zh">科教节目:微讲堂(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208003500 +0800" stop="20260208010000 +0800">
+	<programme channel="SCTV科教" start="20260208003500 +0800" stop="20260208010000 +0800">
 		<title lang="zh">科教节目:国宝时刻(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208010000 +0800" stop="20260208021500 +0800">
+	<programme channel="SCTV科教" start="20260208010000 +0800" stop="20260208021500 +0800">
 		<title lang="zh">科教节目:生态秘境(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208021500 +0800" stop="20260208040000 +0800">
+	<programme channel="SCTV科教" start="20260208021500 +0800" stop="20260208040000 +0800">
 		<title lang="zh">科教节目:奇趣大自然(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208040000 +0800" stop="20260208043000 +0800">
+	<programme channel="SCTV科教" start="20260208040000 +0800" stop="20260208043000 +0800">
 		<title lang="zh">科教节目:奇趣大自然</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208043000 +0800" stop="20260208053000 +0800">
+	<programme channel="SCTV科教" start="20260208043000 +0800" stop="20260208053000 +0800">
 		<title lang="zh">科教节目:微讲堂</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208053000 +0800" stop="20260208060000 +0800">
+	<programme channel="SCTV科教" start="20260208053000 +0800" stop="20260208060000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208060000 +0800" stop="20260208070500 +0800">
+	<programme channel="SCTV科教" start="20260208060000 +0800" stop="20260208070500 +0800">
 		<title lang="zh">科教节目:生态秘境</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208070500 +0800" stop="20260208072000 +0800">
+	<programme channel="SCTV科教" start="20260208070500 +0800" stop="20260208072000 +0800">
 		<title lang="zh">四川教育新闻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208072000 +0800" stop="20260208073000 +0800">
+	<programme channel="SCTV科教" start="20260208072000 +0800" stop="20260208073000 +0800">
 		<title lang="zh">高考360</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208073000 +0800" stop="20260208083500 +0800">
+	<programme channel="SCTV科教" start="20260208073000 +0800" stop="20260208083500 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208083500 +0800" stop="20260208092000 +0800">
+	<programme channel="SCTV科教" start="20260208083500 +0800" stop="20260208092000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208092000 +0800" stop="20260208102000 +0800">
+	<programme channel="SCTV科教" start="20260208092000 +0800" stop="20260208102000 +0800">
 		<title lang="zh">科教剧场:苍狼25</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208102000 +0800" stop="20260208112000 +0800">
+	<programme channel="SCTV科教" start="20260208102000 +0800" stop="20260208112000 +0800">
 		<title lang="zh">科教剧场:苍狼26</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208112000 +0800" stop="20260208122000 +0800">
+	<programme channel="SCTV科教" start="20260208112000 +0800" stop="20260208122000 +0800">
 		<title lang="zh">科教剧场:苍狼27</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208122000 +0800" stop="20260208132000 +0800">
+	<programme channel="SCTV科教" start="20260208122000 +0800" stop="20260208132000 +0800">
 		<title lang="zh">科教剧场:苍狼28</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208132000 +0800" stop="20260208142000 +0800">
+	<programme channel="SCTV科教" start="20260208132000 +0800" stop="20260208142000 +0800">
 		<title lang="zh">科教剧场:苍狼29</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208142000 +0800" stop="20260208152000 +0800">
+	<programme channel="SCTV科教" start="20260208142000 +0800" stop="20260208152000 +0800">
 		<title lang="zh">科教剧场:苍狼30</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208152000 +0800" stop="20260208162000 +0800">
+	<programme channel="SCTV科教" start="20260208152000 +0800" stop="20260208162000 +0800">
 		<title lang="zh">科教剧场:苍狼31</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208162000 +0800" stop="20260208172000 +0800">
+	<programme channel="SCTV科教" start="20260208162000 +0800" stop="20260208172000 +0800">
 		<title lang="zh">科教剧场:苍狼32</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208172000 +0800" stop="20260208180000 +0800">
+	<programme channel="SCTV科教" start="20260208172000 +0800" stop="20260208180000 +0800">
 		<title lang="zh">科教剧场:苍狼33</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208180000 +0800" stop="20260208183000 +0800">
+	<programme channel="SCTV科教" start="20260208180000 +0800" stop="20260208183000 +0800">
 		<title lang="zh">科教节目:奇趣大自然</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208183000 +0800" stop="20260208190000 +0800">
+	<programme channel="SCTV科教" start="20260208183000 +0800" stop="20260208190000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208190000 +0800" stop="20260208193000 +0800">
+	<programme channel="SCTV科教" start="20260208190000 +0800" stop="20260208193000 +0800">
 		<title lang="zh">转播中央广播电视台新闻联播</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208193000 +0800" stop="20260208194500 +0800">
+	<programme channel="SCTV科教" start="20260208193000 +0800" stop="20260208194500 +0800">
 		<title lang="zh">四川教育新闻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208194500 +0800" stop="20260208200000 +0800">
+	<programme channel="SCTV科教" start="20260208194500 +0800" stop="20260208200000 +0800">
 		<title lang="zh">高考360</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208200000 +0800" stop="20260208202500 +0800">
+	<programme channel="SCTV科教" start="20260208200000 +0800" stop="20260208202500 +0800">
 		<title lang="zh">你好，老同学</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208202500 +0800" stop="20260208205000 +0800">
+	<programme channel="SCTV科教" start="20260208202500 +0800" stop="20260208205000 +0800">
 		<title lang="zh">科教节目:生态秘境</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208205000 +0800" stop="20260208210500 +0800">
+	<programme channel="SCTV科教" start="20260208205000 +0800" stop="20260208210500 +0800">
 		<title lang="zh">四川教育新闻(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208210500 +0800" stop="20260208213000 +0800">
+	<programme channel="SCTV科教" start="20260208210500 +0800" stop="20260208213000 +0800">
 		<title lang="zh">高考360(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208213000 +0800" stop="20260208224000 +0800">
+	<programme channel="SCTV科教" start="20260208213000 +0800" stop="20260208224000 +0800">
 		<title lang="zh">晚间剧场: 大西南剿匪记20</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208224000 +0800" stop="20260208233000 +0800">
+	<programme channel="SCTV科教" start="20260208224000 +0800" stop="20260208233000 +0800">
 		<title lang="zh">晚间剧场: 大西南剿匪记21</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260208233000 +0800" stop="20260209000000 +0800">
+	<programme channel="SCTV科教" start="20260208233000 +0800" stop="20260209000000 +0800">
 		<title lang="zh">科教节目:微讲堂</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209000000 +0800" stop="20260209003500 +0800">
+	<programme channel="SCTV科教" start="20260209000000 +0800" stop="20260209003500 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209003500 +0800" stop="20260209010000 +0800">
+	<programme channel="SCTV科教" start="20260209003500 +0800" stop="20260209010000 +0800">
 		<title lang="zh">科教节目:国宝时刻(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209010000 +0800" stop="20260209021500 +0800">
+	<programme channel="SCTV科教" start="20260209010000 +0800" stop="20260209021500 +0800">
 		<title lang="zh">科教节目:生态秘境(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209021500 +0800" stop="20260209040000 +0800">
+	<programme channel="SCTV科教" start="20260209021500 +0800" stop="20260209040000 +0800">
 		<title lang="zh">科教节目:奇趣大自然(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209040000 +0800" stop="20260209043000 +0800">
+	<programme channel="SCTV科教" start="20260209040000 +0800" stop="20260209043000 +0800">
 		<title lang="zh">科教节目:奇趣大自然</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209043000 +0800" stop="20260209053000 +0800">
+	<programme channel="SCTV科教" start="20260209043000 +0800" stop="20260209053000 +0800">
 		<title lang="zh">科教节目:微讲堂</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209053000 +0800" stop="20260209060000 +0800">
+	<programme channel="SCTV科教" start="20260209053000 +0800" stop="20260209060000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209060000 +0800" stop="20260209070500 +0800">
+	<programme channel="SCTV科教" start="20260209060000 +0800" stop="20260209070500 +0800">
 		<title lang="zh">科教节目:生态秘境</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209070500 +0800" stop="20260209072000 +0800">
+	<programme channel="SCTV科教" start="20260209070500 +0800" stop="20260209072000 +0800">
 		<title lang="zh">四川教育新闻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209072000 +0800" stop="20260209073000 +0800">
+	<programme channel="SCTV科教" start="20260209072000 +0800" stop="20260209073000 +0800">
 		<title lang="zh">高考360</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209073000 +0800" stop="20260209080000 +0800">
+	<programme channel="SCTV科教" start="20260209073000 +0800" stop="20260209080000 +0800">
 		<title lang="zh">校园全媒体</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209080000 +0800" stop="20260209083500 +0800">
+	<programme channel="SCTV科教" start="20260209080000 +0800" stop="20260209083500 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209083500 +0800" stop="20260209092000 +0800">
+	<programme channel="SCTV科教" start="20260209083500 +0800" stop="20260209092000 +0800">
 		<title lang="zh">科教节目:动物宝贝</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209092000 +0800" stop="20260209102000 +0800">
+	<programme channel="SCTV科教" start="20260209092000 +0800" stop="20260209102000 +0800">
 		<title lang="zh">科教剧场:苍狼34</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209102000 +0800" stop="20260209112000 +0800">
+	<programme channel="SCTV科教" start="20260209102000 +0800" stop="20260209112000 +0800">
 		<title lang="zh">科教剧场:苍狼35</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209112000 +0800" stop="20260209122000 +0800">
+	<programme channel="SCTV科教" start="20260209112000 +0800" stop="20260209122000 +0800">
 		<title lang="zh">科教剧场:苍狼36</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209122000 +0800" stop="20260209132000 +0800">
+	<programme channel="SCTV科教" start="20260209122000 +0800" stop="20260209132000 +0800">
 		<title lang="zh">科教剧场:苍狼37</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209132000 +0800" stop="20260209142000 +0800">
+	<programme channel="SCTV科教" start="20260209132000 +0800" stop="20260209142000 +0800">
 		<title lang="zh">科教剧场:苍狼38</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209142000 +0800" stop="20260209152000 +0800">
+	<programme channel="SCTV科教" start="20260209142000 +0800" stop="20260209152000 +0800">
 		<title lang="zh">科教剧场:苍狼39</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209152000 +0800" stop="20260209162000 +0800">
+	<programme channel="SCTV科教" start="20260209152000 +0800" stop="20260209162000 +0800">
 		<title lang="zh">科教剧场:苍狼40</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209162000 +0800" stop="20260209172000 +0800">
+	<programme channel="SCTV科教" start="20260209162000 +0800" stop="20260209172000 +0800">
 		<title lang="zh">科教剧场:苍狼41</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209172000 +0800" stop="20260209180000 +0800">
+	<programme channel="SCTV科教" start="20260209172000 +0800" stop="20260209180000 +0800">
 		<title lang="zh">科教剧场:苍狼42</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209180000 +0800" stop="20260209183000 +0800">
+	<programme channel="SCTV科教" start="20260209180000 +0800" stop="20260209183000 +0800">
 		<title lang="zh">科教节目:奇趣大自然</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209183000 +0800" stop="20260209190000 +0800">
+	<programme channel="SCTV科教" start="20260209183000 +0800" stop="20260209190000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209190000 +0800" stop="20260209193000 +0800">
+	<programme channel="SCTV科教" start="20260209190000 +0800" stop="20260209193000 +0800">
 		<title lang="zh">转播中央广播电视台新闻联播</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209193000 +0800" stop="20260209194500 +0800">
+	<programme channel="SCTV科教" start="20260209193000 +0800" stop="20260209194500 +0800">
 		<title lang="zh">四川教育新闻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209194500 +0800" stop="20260209200000 +0800">
+	<programme channel="SCTV科教" start="20260209194500 +0800" stop="20260209200000 +0800">
 		<title lang="zh">高考360</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209200000 +0800" stop="20260209202500 +0800">
+	<programme channel="SCTV科教" start="20260209200000 +0800" stop="20260209202500 +0800">
 		<title lang="zh">生态秘境</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209202500 +0800" stop="20260209205000 +0800">
+	<programme channel="SCTV科教" start="20260209202500 +0800" stop="20260209205000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209205000 +0800" stop="20260209210500 +0800">
+	<programme channel="SCTV科教" start="20260209205000 +0800" stop="20260209210500 +0800">
 		<title lang="zh">四川教育新闻(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209210500 +0800" stop="20260209213000 +0800">
+	<programme channel="SCTV科教" start="20260209210500 +0800" stop="20260209213000 +0800">
 		<title lang="zh">高考360(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209213000 +0800" stop="20260209224000 +0800">
+	<programme channel="SCTV科教" start="20260209213000 +0800" stop="20260209224000 +0800">
 		<title lang="zh">晚间剧场: 大西南剿匪记22</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209224000 +0800" stop="20260209233000 +0800">
+	<programme channel="SCTV科教" start="20260209224000 +0800" stop="20260209233000 +0800">
 		<title lang="zh">晚间剧场: 大西南剿匪记23</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260209233000 +0800" stop="20260210001000 +0800">
+	<programme channel="SCTV科教" start="20260209233000 +0800" stop="20260210001000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210001000 +0800" stop="20260210003500 +0800">
+	<programme channel="SCTV科教" start="20260210001000 +0800" stop="20260210003500 +0800">
 		<title lang="zh">科教节目:微讲堂(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210003500 +0800" stop="20260210010000 +0800">
+	<programme channel="SCTV科教" start="20260210003500 +0800" stop="20260210010000 +0800">
 		<title lang="zh">科教节目:国宝时刻(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210010000 +0800" stop="20260210040000 +0800">
+	<programme channel="SCTV科教" start="20260210010000 +0800" stop="20260210040000 +0800">
 		<title lang="zh">科教节目:生态秘境(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210040000 +0800" stop="20260210043000 +0800">
+	<programme channel="SCTV科教" start="20260210040000 +0800" stop="20260210043000 +0800">
 		<title lang="zh">科教节目:奇趣大自然</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210043000 +0800" stop="20260210053000 +0800">
+	<programme channel="SCTV科教" start="20260210043000 +0800" stop="20260210053000 +0800">
 		<title lang="zh">科教节目:微讲堂</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210053000 +0800" stop="20260210060000 +0800">
+	<programme channel="SCTV科教" start="20260210053000 +0800" stop="20260210060000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210060000 +0800" stop="20260210070500 +0800">
+	<programme channel="SCTV科教" start="20260210060000 +0800" stop="20260210070500 +0800">
 		<title lang="zh">科教节目:生态秘境</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210070500 +0800" stop="20260210072000 +0800">
+	<programme channel="SCTV科教" start="20260210070500 +0800" stop="20260210072000 +0800">
 		<title lang="zh">四川教育新闻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210072000 +0800" stop="20260210073000 +0800">
+	<programme channel="SCTV科教" start="20260210072000 +0800" stop="20260210073000 +0800">
 		<title lang="zh">高考360</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210073000 +0800" stop="20260210080000 +0800">
+	<programme channel="SCTV科教" start="20260210073000 +0800" stop="20260210080000 +0800">
 		<title lang="zh">你好，老同学</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210080000 +0800" stop="20260210083500 +0800">
+	<programme channel="SCTV科教" start="20260210080000 +0800" stop="20260210083500 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210083500 +0800" stop="20260210092000 +0800">
+	<programme channel="SCTV科教" start="20260210083500 +0800" stop="20260210092000 +0800">
 		<title lang="zh">科教节目:动物宝贝</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210092000 +0800" stop="20260210102000 +0800">
+	<programme channel="SCTV科教" start="20260210092000 +0800" stop="20260210102000 +0800">
 		<title lang="zh">科教剧场:苍狼43</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210102000 +0800" stop="20260210112000 +0800">
+	<programme channel="SCTV科教" start="20260210102000 +0800" stop="20260210112000 +0800">
 		<title lang="zh">科教剧场:苍狼44</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210112000 +0800" stop="20260210122000 +0800">
+	<programme channel="SCTV科教" start="20260210112000 +0800" stop="20260210122000 +0800">
 		<title lang="zh">科教剧场:苍狼45</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210122000 +0800" stop="20260210132000 +0800">
+	<programme channel="SCTV科教" start="20260210122000 +0800" stop="20260210132000 +0800">
 		<title lang="zh">科教剧场:苍狼46</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210132000 +0800" stop="20260210142000 +0800">
+	<programme channel="SCTV科教" start="20260210132000 +0800" stop="20260210142000 +0800">
 		<title lang="zh">科教剧场:战狼战狼01</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210142000 +0800" stop="20260210152000 +0800">
+	<programme channel="SCTV科教" start="20260210142000 +0800" stop="20260210152000 +0800">
 		<title lang="zh">科教剧场:战狼战狼02</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210152000 +0800" stop="20260210162000 +0800">
+	<programme channel="SCTV科教" start="20260210152000 +0800" stop="20260210162000 +0800">
 		<title lang="zh">科教剧场:战狼战狼03</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210162000 +0800" stop="20260210172000 +0800">
+	<programme channel="SCTV科教" start="20260210162000 +0800" stop="20260210172000 +0800">
 		<title lang="zh">科教剧场:战狼战狼04</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210172000 +0800" stop="20260210180000 +0800">
+	<programme channel="SCTV科教" start="20260210172000 +0800" stop="20260210180000 +0800">
 		<title lang="zh">科教剧场:战狼战狼05</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210180000 +0800" stop="20260210183000 +0800">
+	<programme channel="SCTV科教" start="20260210180000 +0800" stop="20260210183000 +0800">
 		<title lang="zh">科教节目:奇趣大自然</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210183000 +0800" stop="20260210190000 +0800">
+	<programme channel="SCTV科教" start="20260210183000 +0800" stop="20260210190000 +0800">
 		<title lang="zh">科教节目:国宝时刻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210190000 +0800" stop="20260210193000 +0800">
+	<programme channel="SCTV科教" start="20260210190000 +0800" stop="20260210193000 +0800">
 		<title lang="zh">转播中央广播电视台新闻联播</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210193000 +0800" stop="20260210194500 +0800">
+	<programme channel="SCTV科教" start="20260210193000 +0800" stop="20260210194500 +0800">
 		<title lang="zh">四川教育新闻</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210194500 +0800" stop="20260210200000 +0800">
+	<programme channel="SCTV科教" start="20260210194500 +0800" stop="20260210200000 +0800">
 		<title lang="zh">高考360</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210200000 +0800" stop="20260210202500 +0800">
+	<programme channel="SCTV科教" start="20260210200000 +0800" stop="20260210202500 +0800">
 		<title lang="zh">体育四川</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210202500 +0800" stop="20260210205000 +0800">
+	<programme channel="SCTV科教" start="20260210202500 +0800" stop="20260210205000 +0800">
 		<title lang="zh">生态秘境</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210205000 +0800" stop="20260210210500 +0800">
+	<programme channel="SCTV科教" start="20260210205000 +0800" stop="20260210210500 +0800">
 		<title lang="zh">四川教育新闻(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210210500 +0800" stop="20260210213000 +0800">
+	<programme channel="SCTV科教" start="20260210210500 +0800" stop="20260210213000 +0800">
 		<title lang="zh">高考360(重播)</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210213000 +0800" stop="20260210224000 +0800">
+	<programme channel="SCTV科教" start="20260210213000 +0800" stop="20260210224000 +0800">
 		<title lang="zh">晚间剧场: 大西南剿匪记24</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210224000 +0800" stop="20260210233000 +0800">
+	<programme channel="SCTV科教" start="20260210224000 +0800" stop="20260210233000 +0800">
 		<title lang="zh">晚间剧场: 大西南剿匪记25</title>
 	</programme>
-	<programme channel="SCTV科教高清" start="20260210233000 +0800" stop="20260211000000 +0800">
+	<programme channel="SCTV科教" start="20260210233000 +0800" stop="20260211000000 +0800">
 		<title lang="zh">体育四川</title>
 	</programme>
 	<channel id="三沙卫视">
@@ -76978,190 +76975,187 @@
 	<programme channel="欢笑剧场4K" start="20260210232100 +0800" stop="20260211000000 +0800">
 		<title lang="zh">4K_艺术大厅:京剧《佛手橘》(上)</title>
 	</programme>
-	<channel id="求索频道高清">
-		<display-name lang="zh">求索频道高清</display-name>
-	</channel>
-	<channel id="求索频道高清">
+	<channel id="求索频道">
 		<display-name lang="zh">求索频道</display-name>
 	</channel>
-	<programme channel="求索频道高清" start="20260209120500 +0800" stop="20260209125500 +0800">
+	<programme channel="求索频道" start="20260209120500 +0800" stop="20260209125500 +0800">
 		<title lang="zh">残酷厨房12-5</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260209125500 +0800" stop="20260209134500 +0800">
+	<programme channel="求索频道" start="20260209125500 +0800" stop="20260209134500 +0800">
 		<title lang="zh">顶级游泳胜地2-8</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260209134500 +0800" stop="20260209143500 +0800">
+	<programme channel="求索频道" start="20260209134500 +0800" stop="20260209143500 +0800">
 		<title lang="zh">守护悉尼港2</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260209143500 +0800" stop="20260209152500 +0800">
+	<programme channel="求索频道" start="20260209143500 +0800" stop="20260209152500 +0800">
 		<title lang="zh">圆满婚纱店2-11&amp;12</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260209152500 +0800" stop="20260209153000 +0800">
+	<programme channel="求索频道" start="20260209152500 +0800" stop="20260209153000 +0800">
 		<title lang="zh">5分钟宣传包</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260209153000 +0800" stop="20260209162000 +0800">
+	<programme channel="求索频道" start="20260209153000 +0800" stop="20260209162000 +0800">
 		<title lang="zh">取毒高手4</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260209162000 +0800" stop="20260209171000 +0800">
+	<programme channel="求索频道" start="20260209162000 +0800" stop="20260209171000 +0800">
 		<title lang="zh">抢标房地产5</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260209171000 +0800" stop="20260209180000 +0800">
+	<programme channel="求索频道" start="20260209171000 +0800" stop="20260209180000 +0800">
 		<title lang="zh">业余厨师大作战4-2</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260209180000 +0800" stop="20260209181000 +0800">
+	<programme channel="求索频道" start="20260209180000 +0800" stop="20260209181000 +0800">
 		<title lang="zh">5分钟宣传包</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260209181000 +0800" stop="20260209190000 +0800">
+	<programme channel="求索频道" start="20260209181000 +0800" stop="20260209190000 +0800">
 		<title lang="zh">富豪谷底求翻身 东山再起4</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260209190000 +0800" stop="20260209194500 +0800">
+	<programme channel="求索频道" start="20260209190000 +0800" stop="20260209194500 +0800">
 		<title lang="zh">再见灰熊6</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260209194500 +0800" stop="20260209203500 +0800">
+	<programme channel="求索频道" start="20260209194500 +0800" stop="20260209203500 +0800">
 		<title lang="zh">澳洲蛋白石猎人5-11</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260209203500 +0800" stop="20260209212500 +0800">
+	<programme channel="求索频道" start="20260209203500 +0800" stop="20260209212500 +0800">
 		<title lang="zh">生活科技大解密7-2</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260209212500 +0800" stop="20260209213000 +0800">
+	<programme channel="求索频道" start="20260209212500 +0800" stop="20260209213000 +0800">
 		<title lang="zh">5分钟宣传包</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260209213000 +0800" stop="20260209222000 +0800">
+	<programme channel="求索频道" start="20260209213000 +0800" stop="20260209222000 +0800">
 		<title lang="zh">惊喜五胞胎2-3</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260209222000 +0800" stop="20260209231000 +0800">
+	<programme channel="求索频道" start="20260209222000 +0800" stop="20260209231000 +0800">
 		<title lang="zh">荒野求生4-8</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260209231000 +0800" stop="20260210000000 +0800">
+	<programme channel="求索频道" start="20260209231000 +0800" stop="20260210000000 +0800">
 		<title lang="zh">伐木家族6</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210000000 +0800" stop="20260210000500 +0800">
+	<programme channel="求索频道" start="20260210000000 +0800" stop="20260210000500 +0800">
 		<title lang="zh">5分钟宣传包</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210000500 +0800" stop="20260210003000 +0800">
+	<programme channel="求索频道" start="20260210000500 +0800" stop="20260210003000 +0800">
 		<title lang="zh">我与大运河1</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210003000 +0800" stop="20260210005500 +0800">
+	<programme channel="求索频道" start="20260210003000 +0800" stop="20260210005500 +0800">
 		<title lang="zh">我与大运河2</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210005500 +0800" stop="20260210012000 +0800">
+	<programme channel="求索频道" start="20260210005500 +0800" stop="20260210012000 +0800">
 		<title lang="zh">我与大运河3</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210012000 +0800" stop="20260210014500 +0800">
+	<programme channel="求索频道" start="20260210012000 +0800" stop="20260210014500 +0800">
 		<title lang="zh">我与大运河4</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210014500 +0800" stop="20260210021000 +0800">
+	<programme channel="求索频道" start="20260210014500 +0800" stop="20260210021000 +0800">
 		<title lang="zh">我与大运河5</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210021000 +0800" stop="20260210023500 +0800">
+	<programme channel="求索频道" start="20260210021000 +0800" stop="20260210023500 +0800">
 		<title lang="zh">我与大运河6</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210023500 +0800" stop="20260210030000 +0800">
+	<programme channel="求索频道" start="20260210023500 +0800" stop="20260210030000 +0800">
 		<title lang="zh">发现南京1</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210030000 +0800" stop="20260210032500 +0800">
+	<programme channel="求索频道" start="20260210030000 +0800" stop="20260210032500 +0800">
 		<title lang="zh">发现南京1</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210032500 +0800" stop="20260210033000 +0800">
+	<programme channel="求索频道" start="20260210032500 +0800" stop="20260210033000 +0800">
 		<title lang="zh">5分钟宣传包</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210033000 +0800" stop="20260210035500 +0800">
+	<programme channel="求索频道" start="20260210033000 +0800" stop="20260210035500 +0800">
 		<title lang="zh">发现南京2</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210035500 +0800" stop="20260210042000 +0800">
+	<programme channel="求索频道" start="20260210035500 +0800" stop="20260210042000 +0800">
 		<title lang="zh">发现南京2</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210042000 +0800" stop="20260210044500 +0800">
+	<programme channel="求索频道" start="20260210042000 +0800" stop="20260210044500 +0800">
 		<title lang="zh">我家城墙五千岁1,2,3</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210044500 +0800" stop="20260210051000 +0800">
+	<programme channel="求索频道" start="20260210044500 +0800" stop="20260210051000 +0800">
 		<title lang="zh">我家城墙五千岁1,2,3</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210051000 +0800" stop="20260210053500 +0800">
+	<programme channel="求索频道" start="20260210051000 +0800" stop="20260210053500 +0800">
 		<title lang="zh">我家城墙五千岁4,5,6</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210053500 +0800" stop="20260210060000 +0800">
+	<programme channel="求索频道" start="20260210053500 +0800" stop="20260210060000 +0800">
 		<title lang="zh">我家城墙五千岁4,5,6</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210060000 +0800" stop="20260210060500 +0800">
+	<programme channel="求索频道" start="20260210060000 +0800" stop="20260210060500 +0800">
 		<title lang="zh">5分钟宣传包</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210060500 +0800" stop="20260210065500 +0800">
+	<programme channel="求索频道" start="20260210060500 +0800" stop="20260210065500 +0800">
 		<title lang="zh">富豪谷底求翻身 东山再起4</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210065500 +0800" stop="20260210074500 +0800">
+	<programme channel="求索频道" start="20260210065500 +0800" stop="20260210074500 +0800">
 		<title lang="zh">再见灰熊6</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210074500 +0800" stop="20260210083500 +0800">
+	<programme channel="求索频道" start="20260210074500 +0800" stop="20260210083500 +0800">
 		<title lang="zh">澳洲蛋白石猎人5-11</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210083500 +0800" stop="20260210092500 +0800">
+	<programme channel="求索频道" start="20260210083500 +0800" stop="20260210092500 +0800">
 		<title lang="zh">生活科技大解密7-2</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210092500 +0800" stop="20260210093000 +0800">
+	<programme channel="求索频道" start="20260210092500 +0800" stop="20260210093000 +0800">
 		<title lang="zh">5分钟宣传包</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210093000 +0800" stop="20260210102000 +0800">
+	<programme channel="求索频道" start="20260210093000 +0800" stop="20260210102000 +0800">
 		<title lang="zh">惊喜五胞胎2-3</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210102000 +0800" stop="20260210111000 +0800">
+	<programme channel="求索频道" start="20260210102000 +0800" stop="20260210111000 +0800">
 		<title lang="zh">荒野求生4-8</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210111000 +0800" stop="20260210120000 +0800">
+	<programme channel="求索频道" start="20260210111000 +0800" stop="20260210120000 +0800">
 		<title lang="zh">伐木家族6</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210120000 +0800" stop="20260210120500 +0800">
+	<programme channel="求索频道" start="20260210120000 +0800" stop="20260210120500 +0800">
 		<title lang="zh">5分钟宣传包</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210120500 +0800" stop="20260210125500 +0800">
+	<programme channel="求索频道" start="20260210120500 +0800" stop="20260210125500 +0800">
 		<title lang="zh">残酷厨房12-6</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210125500 +0800" stop="20260210134500 +0800">
+	<programme channel="求索频道" start="20260210125500 +0800" stop="20260210134500 +0800">
 		<title lang="zh">顶级游泳胜地2-9</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210134500 +0800" stop="20260210143500 +0800">
+	<programme channel="求索频道" start="20260210134500 +0800" stop="20260210143500 +0800">
 		<title lang="zh">航向南极洲1&amp;2</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210143500 +0800" stop="20260210152500 +0800">
+	<programme channel="求索频道" start="20260210143500 +0800" stop="20260210152500 +0800">
 		<title lang="zh">圆满婚纱店2-13&amp;14</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210152500 +0800" stop="20260210153000 +0800">
+	<programme channel="求索频道" start="20260210152500 +0800" stop="20260210153000 +0800">
 		<title lang="zh">5分钟宣传包</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210153000 +0800" stop="20260210162000 +0800">
+	<programme channel="求索频道" start="20260210153000 +0800" stop="20260210162000 +0800">
 		<title lang="zh">取毒高手5</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210162000 +0800" stop="20260210171000 +0800">
+	<programme channel="求索频道" start="20260210162000 +0800" stop="20260210171000 +0800">
 		<title lang="zh">抢标房地产6</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210171000 +0800" stop="20260210180000 +0800">
+	<programme channel="求索频道" start="20260210171000 +0800" stop="20260210180000 +0800">
 		<title lang="zh">业余厨师大作战4-3</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210180000 +0800" stop="20260210181000 +0800">
+	<programme channel="求索频道" start="20260210180000 +0800" stop="20260210181000 +0800">
 		<title lang="zh">5分钟宣传包</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210181000 +0800" stop="20260210190000 +0800">
+	<programme channel="求索频道" start="20260210181000 +0800" stop="20260210190000 +0800">
 		<title lang="zh">明星 荒野 美食1</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210190000 +0800" stop="20260210194500 +0800">
+	<programme channel="求索频道" start="20260210190000 +0800" stop="20260210194500 +0800">
 		<title lang="zh">对决黑鲔鱼5</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210194500 +0800" stop="20260210203500 +0800">
+	<programme channel="求索频道" start="20260210194500 +0800" stop="20260210203500 +0800">
 		<title lang="zh">宇航员的宝藏5</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210203500 +0800" stop="20260210212500 +0800">
+	<programme channel="求索频道" start="20260210203500 +0800" stop="20260210212500 +0800">
 		<title lang="zh">不乱搞实验室6</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210212500 +0800" stop="20260210213000 +0800">
+	<programme channel="求索频道" start="20260210212500 +0800" stop="20260210213000 +0800">
 		<title lang="zh">5分钟宣传包</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210213000 +0800" stop="20260210222000 +0800">
+	<programme channel="求索频道" start="20260210213000 +0800" stop="20260210222000 +0800">
 		<title lang="zh">美食天堂7-9</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210222000 +0800" stop="20260210231000 +0800">
+	<programme channel="求索频道" start="20260210222000 +0800" stop="20260210231000 +0800">
 		<title lang="zh">百万名车销售战1</title>
 	</programme>
-	<programme channel="求索频道高清" start="20260210231000 +0800" stop="20260211000000 +0800">
+	<programme channel="求索频道" start="20260210231000 +0800" stop="20260211000000 +0800">
 		<title lang="zh">标废车拼现金5</title>
 	</programme>
 	<channel id="江苏卫视">
